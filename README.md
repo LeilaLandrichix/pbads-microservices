@@ -2,11 +2,11 @@
 
 A comprehensive microservices architecture for detecting anomalies in personal daily behaviors using machine learning.
 
-## í³‹ Project Overview
+## [ ] Project Overview
 
 PBADS is a full-stack system that analyzes personal habit data (sleep, diet, activity, mood) to detect behavioral anomalies and provide insights. The system uses a 12-service microservices architecture with real-time inference capabilities.
 
-## í¿—ï¸ Architecture
+## [ ] Architecture
 
 The system follows a modular microservices architecture with the following layers:
 
@@ -31,7 +31,7 @@ The system follows a modular microservices architecture with the following layer
 - **Model Registry** (MLflow on 5000) - ML experiment tracking and model versioning
 - **Shared Libraries** - Common DTOs, exceptions, and utilities
 
-## íº€ Quick Start
+## [>] Quick Start
 
 ### Prerequisites
 - Docker & Docker Compose
@@ -41,7 +41,7 @@ The system follows a modular microservices architecture with the following layer
 
 ### Installation & Running
 
-\`\`\`bash
+```bash
 # 1. Clone the repository
 git clone <repository-url>
 cd pbads-microservices
@@ -61,4 +61,3 @@ make start-all
 cd frontend
 npm install
 npm start
-\`\`\`
