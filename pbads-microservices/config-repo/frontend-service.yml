@@ -1,0 +1,25 @@
+server:
+  port: 3000
+
+spring:
+  application:
+    name: frontend-service
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+# API Gateway URL for backend calls
+api:
+  gateway:
+    url: http://localhost:8080
+

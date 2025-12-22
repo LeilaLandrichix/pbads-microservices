@@ -1,1 +1,27 @@
-spring.application.name=model-service
+spring:
+  application:
+    name: model-service
+  config:
+    import: optional:configserver:http://localhost:8888
+  cloud:
+    config:
+      uri: http://localhost:8888
+      name: model-service
+      profile: default
+  ai:
+    vectorstore:
+      opensearch:
+        enabled: false
+
+server:
+  port: 8083
+
+# Model Training Configuration
+model:
+  training:
+    csv-path: "C:\\Users\\loula\\eclipse-newworkspace\\PBADS-PFA\\PFA documentation\\Daily_Habit_Tracker.csv"
+    output-dir: "./models/trained"
+    algorithm: "isolation-forest"  # Options: isolation-forest, one-class-svm
+    contamination: 0.1
+    n-estimators: 100
+    nu: 0.1

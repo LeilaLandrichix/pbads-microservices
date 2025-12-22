@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title != null ? title + ' - PBADS' : 'PBADS'}">PBADS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">PBADS</div>
+            <div class="nav-links">
+                <a th:href="@{/dashboard}" th:classappend="${activePage == 'dashboard' ? 'active' : ''}">DASHBOARD</a>
+                <a th:href="@{/data}" th:classappend="${activePage == 'data' ? 'active' : ''}">DATA ENTRY</a>
+                <a th:href="@{/alerts}" th:classappend="${activePage == 'alerts' ? 'active' : ''}">ALERTS</a>
+                <a th:href="@{/logout}" th:if="${session.username != null}">LOGOUT</a>
+                <a th:href="@{/login}" th:if="${session.username == null}">LOGIN</a>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="main-content">
+        <div th:replace="${content}"></div>
+    </main>
+</body>
+</html>
+

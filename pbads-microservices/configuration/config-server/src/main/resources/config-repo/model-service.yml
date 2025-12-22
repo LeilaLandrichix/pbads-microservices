@@ -1,0 +1,6 @@
+spring:
+  ai:
+    vectorstore:
+      opensearch:
+        enabled: false
+

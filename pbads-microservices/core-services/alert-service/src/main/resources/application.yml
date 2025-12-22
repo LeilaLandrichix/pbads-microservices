@@ -1,1 +1,42 @@
-spring.application.name=alert-service
+spring:
+  application:
+    name: alert-service
+  config:
+    import: optional:configserver:http://localhost:8888
+  cloud:
+    config:
+      uri: http://localhost:8888
+      name: alert-service
+      profile: default
+  # Fallback database configuration if config server is not available
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pbads_alert
+    username: ${DB_USERNAME:pbads}
+    password: ${DB_PASSWORD:pbads_password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  # Kafka Configuration
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: alert-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+server:
+  port: 8085
+
+# Kafka Topics
+kafka:
+  topics:
+    anomaly-detected: anomaly.detected.events

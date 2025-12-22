@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - PBADS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">PBADS</div>
+            <div class="nav-links">
+                <a href="/dashboard">DASHBOARD</a>
+                <a href="/data">DATA ENTRY</a>
+                <a href="/alerts">ALERTS</a>
+                <a href="/login" class="active">LOGIN</a>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="main-content">
+        <div class="login-container">
+            <div class="login-card">
+                <h1>Sign In</h1>
+                
+                <div th:if="${error}" class="alert alert-error" id="errorMessage">
+                    <span th:text="${error}">Error message</span>
+                </div>
+                <div th:if="${success}" class="alert alert-success" id="successMessage">
+                    <span th:text="${success}">Success message</span>
+                </div>
+                
+                <form th:action="@{/login}" method="post" class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username *</label>
+                        <input type="text" id="username" name="username" required autofocus>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password *</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">SIGN IN</button>
+                </form>
+                
+                <div style="margin-top: 20px; text-align: center;">
+                    <p>Don't have an account? <a href="/register" style="color: #3498db; text-decoration: underline;">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // Auto-submit form on page load ONLY if there's no error AND no success message
+        // This prevents auto-login after registration
+        window.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            // Only auto-submit if there's no error AND no success message
+            // This way, after registration, users must manually log in
+            if (form && !errorDiv && !successDiv) {
+                // Small delay to ensure form is ready
+                setTimeout(function() {
+                    form.submit();
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>
+

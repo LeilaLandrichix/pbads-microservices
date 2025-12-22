@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alerts & Notifications - PBADS</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">PBADS</div>
+            <div class="nav-links">
+                <span class="user-greeting" th:if="${session.firstName != null}">
+                    Hello, <strong th:text="${session.firstName}">User</strong>
+                </span>
+                <a href="/dashboard">DASHBOARD</a>
+                <a href="/data">DATA ENTRY</a>
+                <a href="/alerts" class="active">ALERTS</a>
+                <a th:if="${session.isAdmin}" href="/users">USERS</a>
+                <a href="/logout">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="main-content">
+        <div class="container">
+            <h1>Alerts & Notifications</h1>
+            
+            <div th:if="${!hasAlerts}" class="alert alert-info">
+                <strong>ℹ</strong> No alerts at this time. Your behavior patterns are normal.
+            </div>
+            
+            <div th:if="${hasAlerts}" class="card">
+                <h2>Active Alerts</h2>
+                <div class="alerts-list">
+                    <div th:each="alert : ${alerts}" class="alert-item">
+                        <div class="alert-content">
+                            <h3 th:text="${alert.message != null ? alert.message : 'Anomaly detected'}">Alert Message</h3>
+                            <p class="alert-time" th:text="${alert.createdAt != null ? alert.createdAt : (alert.timestamp != null ? alert.timestamp : 'Recent')}">Timestamp</p>
+                            <p th:if="${alert.anomalyLevel != null}" class="alert-level">
+                                Level: <strong th:text="${alert.anomalyLevel}">MEDIUM</strong> | 
+                                Score: <strong th:text="${alert.anomalyScore != null ? alert.anomalyScore : 'N/A'}">0.0</strong>
+                            </p>
+                        </div>
+                        <span th:if="${alert.anomalyLevel != null}" 
+                              th:class="'alert-badge ' + (${alert.anomalyLevel == 'HIGH'} ? 'badge-high' : (${alert.anomalyLevel == 'MEDIUM'} ? 'badge-medium' : 'badge-low'))"
+                              th:text="${alert.anomalyLevel}">Level</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+

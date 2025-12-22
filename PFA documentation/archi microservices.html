@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBADS - Architecture Visuelle</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .layers-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .layer {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .layer-title {
+            font-weight: bold;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .service-item {
+            background: #f8f9fa;
+            border-left: 4px solid #4CAF50;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .port {
+            display: inline-block;
+            background: #e3f2fd;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Couleurs par couche */
+        .client-layer .layer-title { background: #2196F3; }
+        .gateway-layer .layer-title { background: #9C27B0; }
+        .core-layer .layer-title { background: #F44336; }
+        .infra-layer .layer-title { background: #4CAF50; }
+        .data-layer .layer-title { background: #FF9800; }
+
+        /* Diagramme interactif */
+        .diagram-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        #interactive-diagram {
+            min-height: 800px;
+            overflow: auto;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .control-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 1200px) {
+            .layers-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .layers-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ Architecture PBADS - Vue d'Ensemble</h1>
+            <p class="subtitle">Système de Détection d'Anomalies dans les Comportements Personnels</p>
+        </div>
+
+        <!-- Vue par couches -->
+        <div class="layers-container">
+            <div class="layer client-layer">
+                <div class="layer-title">🎨 Couche Client</div>
+                <div class="service-item">
+                    Frontend React
+                    <span class="port">:3000</span>
+                </div>
+                <div class="service-item">
+                    WebSocket Client
+                    <span class="port">WS</span>
+                </div>
+            </div>
+
+            <div class="layer gateway-layer">
+                <div class="layer-title">🚪 API Gateway</div>
+                <div class="service-item">
+                    Spring Cloud Gateway
+                    <span class="port">:8080</span>
+                </div>
+                <div class="service-item">
+                    Authentification
+                </div>
+                <div class="service-item">
+                    Rate Limiting
+                </div>
+                <div class="service-item">
+                    Load Balancing
+                </div>
+            </div>
+
+            <div class="layer core-layer">
+                <div class="layer-title">⚙️ Services Métier</div>
+                <div class="service-item">
+                    Auth Service
+                    <span class="port">:8081</span>
+                </div>
+                <div class="service-item">
+                    Data Service
+                    <span class="port">:8082</span>
+                </div>
+                <div class="service-item">
+                    Model Service
+                    <span class="port">:8083</span>
+                </div>
+                <div class="service-item">
+                    Inference Service
+                    <span class="port">:8084</span>
+                </div>
+                <div class="service-item">
+                    Alert Service
+                    <span class="port">:8085</span>
+                </div>
+            </div>
+
+            <div class="layer infra-layer">
+                <div class="layer-title">🔧 Infrastructure</div>
+                <div class="service-item">
+                    Eureka Server
+                    <span class="port">:8761</span>
+                </div>
+                <div class="service-item">
+                    Config Server
+                    <span class="port">:8888</span>
+                </div>
+                <div class="service-item">
+                    Monitoring Service
+                    <span class="port">:8086</span>
+                </div>
+                <div class="service-item">
+                    Kafka
+                </div>
+                <div class="service-item">
+                    Redis
+                </div>
+            </div>
+
+            <div class="layer data-layer">
+                <div class="layer-title">💾 Données & ML</div>
+                <div class="service-item">
+                    PostgreSQL
+                </div>
+                <div class="service-item">
+                    MLflow Registry
+                    <span class="port">:5000</span>
+                </div>
+                <div class="service-item">
+                    Model Storage
+                </div>
+            </div>
+        </div>
+
+        <!-- Diagramme interactif -->
+        <div class="diagram-section">
+            <h2 style="text-align: center; margin-bottom: 1rem;">🔗 Diagramme d'Architecture Interactif</h2>
+            <div id="interactive-diagram"></div>
+            <div class="controls">
+                <button class="control-btn" onclick="showFlow('auth')">Flux d'Authentification</button>
+                <button class="control-btn" onclick="showFlow('data')">Flux des Données</button>
+                <button class="control-btn" onclick="showFlow('inference')">Flux d'Inférence</button>
+                <button class="control-btn" onclick="resetDiagram()">Vue d'Ensemble</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialiser Mermaid
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+
+        // Diagramme principal
+        const mainDiagram = `
+graph TB
+    %% Styles pour les nœuds
+    classDef frontend fill:#e1f5fe,stroke:#01579b
+    classDef gateway fill:#f3e5f5,stroke:#4a148c
+    classDef service fill:#e8f5e8,stroke:#1b5e20
+    classDef infra fill:#fff3e0,stroke:#e65100
+    classDef data fill:#e0f2f1,stroke:#004d40
+    classDef external fill:#fce4ec,stroke:#880e4f
+
+    %% Clients
+    FE[Frontend React<br/>Port: 3000]
+    MOB[App Mobile]
+    API[API Third-Party]
+    
+    class FE,MOB,API frontend
+
+    %% Gateway
+    GW[API Gateway<br/>Spring Cloud Gateway<br/>Port: 8080]
+    class GW gateway
+
+    %% Services Principaux
+    AS[Auth Service<br/>Port: 8081]
+    DS[Data Service<br/>Port: 8082]
+    MS[Model Service<br/>Port: 8083]
+    IS[Inference Service<br/>Port: 8084]
+    AL[Alert Service<br/>Port: 8085]
+    
+    class AS,DS,MS,IS,AL service
+
+    %% Infrastructure
+    EU[Eureka Server<br/>Port: 8761]
+    CF[Config Server<br/>Port: 8888]
+    MO[Monitoring Service<br/>Port: 8086]
+    KF[(Kafka<br/>Message Broker)]
+    RD[(Redis<br/>Cache)]
+    
+    class EU,CF,MO,KF,RD infra
+
+    %% Base de données & ML
+    PG[(PostgreSQL<br/>Database Cluster)]
+    ML[MLflow Registry<br/>Port: 5000]
+    ST[(S3/MinIO<br/>Model Storage)]
+    
+    class PG,ML,ST data
+
+    %% Connexions HTTP/WebSocket
+    FE -->|HTTP/WS| GW
+    MOB -->|HTTP| GW
+    API -->|HTTP| GW
+    
+    GW -->|REST| AS
+    GW -->|REST| DS
+    GW -->|REST| MS
+    GW -->|REST| IS
+    GW -->|REST| AL
+    GW -->|REST| MO
+
+    %% Service Discovery
+    AS -.->|Register| EU
+    DS -.->|Register| EU
+    MS -.->|Register| EU
+    IS -.->|Register| EU
+    AL -.->|Register| EU
+    MO -.->|Register| EU
+    GW -.->|Discover| EU
+    CF -.->|Register| EU
+
+    %% Configuration
+    AS -.->|Fetch Config| CF
+    DS -.->|Fetch Config| CF
+    MS -.->|Fetch Config| CF
+    IS -.->|Fetch Config| CF
+    AL -.->|Fetch Config| CF
+    MO -.->|Fetch Config| CF
+    GW -.->|Fetch Config| CF
+
+    %% Communication Asynchrone
+    DS -->|Publish Events| KF
+    KF -->|Consume| IS
+    IS -->|Publish Alerts| KF
+    KF -->|Consume| AL
+    MS -->|Model Updates| KF
+    KF -->|Model Updates| IS
+
+    %% Base de données
+    AS -->|JPA| PG
+    DS -->|JPA| PG
+    MS -->|JPA| PG
+    AL -->|JPA| PG
+    MO -->|JPA| PG
+
+    %% Cache
+    AS -->|Token Cache| RD
+    GW -->|Rate Limiting| RD
+    IS -->|Model Cache| RD
+    AL -->|Session Cache| RD
+
+    %% ML & Modèles
+    MS -->|Register Model| ML
+    MS -->|Store Model| ST
+    IS -->|Load Model| ML
+    IS -->|Download Model| ST
+
+    %% Monitoring
+    AS -->|Metrics| MO
+    DS -->|Metrics| MO
+    MS -->|Metrics| MO
+    IS -->|Metrics| MO
+    AL -->|Metrics| MO
+    GW -->|Metrics| MO
+`;
+
+        // Diagrammes spécifiques
+        const authFlow = `
+graph LR
+    FE[Frontend] -->|Credentials| GW[Gateway]
+    GW -->|Route| AS[Auth Service]
+    AS -->|Validate| PG[(PostgreSQL)]
+    PG -->|User Data| AS
+    AS -->|Generate JWT| GW
+    GW -->|Return JWT| FE
+    FE -->|Subsequent Requests| GW
+    GW -->|Validate JWT| RD[(Redis Cache)]
+    RD -->|Valid Token| GW
+    GW -->|Forward| DS[Data Service]
+`;
+
+        const dataFlow = `
+graph TB
+    FE[Frontend] -->|Submit Data| GW[Gateway]
+    GW -->|Authenticate| AS[Auth Service]
+    AS -->|Valid JWT| GW
+    GW -->|Forward| DS[Data Service]
+    DS -->|Persist Data| PG[(PostgreSQL)]
+    DS -->|Publish Event| KF[(Kafka)]
+    KF -->|Consume| IS[Inference Service]
+    IS -->|Load Model| ML[MLflow]
+    IS -->|Detect Anomalies| AN[Anomaly Detection]
+    AN -->|Anomaly Found| AL[Alert Service]
+    AL -->|Send Notification| FE
+    AL -->|Store Alert| PG
+`;
+
+        const inferenceFlow = `
+graph TB
+    KF[(Kafka)] -->|New Data| IS[Inference Service]
+    IS -->|Check Cache| RD[(Redis)]
+    RD -->|Model Cached| IS
+    RD -.->|Not Cached| IS
+    IS -->|Load Model| ML[MLflow Registry]
+    IS -->|Preprocess Data| PD[Preprocessing]
+    PD -->|Run Inference| INF[Inference Engine]
+    INF -->|Anomaly Score| DEC[Decision]
+    DEC -->|Above Threshold| AL[Alert Service]
+    DEC -->|Normal| DB[(Database)]
+    AL -->|WebSocket| FE[Frontend]
+    AL -->|Email/SMS| NOT[Notification]
+`;
+
+        function renderDiagram(diagramCode) {
+            const container = document.getElementById('interactive-diagram');
+            container.innerHTML = '<div class="mermaid">' + diagramCode + '</div>';
+            mermaid.init(undefined, container.querySelector('.mermaid'));
+        }
+
+        function showFlow(flowType) {
+            switch(flowType) {
+                case 'auth':
+                    renderDiagram(authFlow);
+                    break;
+                case 'data':
+                    renderDiagram(dataFlow);
+                    break;
+                case 'inference':
+                    renderDiagram(inferenceFlow);
+                    break;
+                default:
+                    resetDiagram();
+            }
+        }
+
+        function resetDiagram() {
+            renderDiagram(mainDiagram);
+        }
+
+        // Initialiser avec le diagramme principal
+        document.addEventListener('DOMContentLoaded', function() {
+            resetDiagram();
+        });
+    </script>
+</body>
+</html>

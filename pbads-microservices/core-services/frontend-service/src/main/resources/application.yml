@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: frontend-service
+  config:
+    import: optional:configserver:http://localhost:8888
+  cloud:
+    config:
+      uri: http://localhost:8888
+      name: frontend-service
+      profile: default
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+server:
+  port: 3000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+# API Gateway URL for backend calls
+api:
+  gateway:
+    url: http://localhost:8080
+
+# Direct service URLs (fallback when gateway fails)
+auth:
+  service:
+    url: http://localhost:8081
+data:
+  service:
+    url: http://localhost:8082
+alert:
+  service:
+    url: http://localhost:8085
+

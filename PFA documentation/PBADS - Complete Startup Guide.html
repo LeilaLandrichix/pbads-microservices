@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBADS - Complete Startup Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2563eb;
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e40af;
+            margin-top: 30px;
+            border-left: 4px solid #2563eb;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #3b82f6;
+            margin-top: 20px;
+        }
+        .step {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .step-number {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        code {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border-left: 4px solid #2563eb;
+        }
+        .terminal {
+            background: #0d1117;
+            color: #c9d1d9;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 10px 0;
+        }
+        .warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .info {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #2563eb;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li:before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 PBADS - Complete Startup Guide</h1>
+        <p><strong>Personal Behavior Anomaly Detection System</strong> - Microservices Architecture</p>
+
+        <div class="info">
+            <strong>📋 Overview:</strong> This guide will help you start all components of the PBADS system, including databases, message brokers, microservices, and the frontend.
+        </div>
+
+        <h2>📦 Step 0: Prerequisites Verification</h2>
+        <div class="step">
+            <p>Run this PowerShell script to verify all required tools are installed:</p>
+            <pre><code>Write-Host "=== PBADS PREREQUISITES VERIFICATION ===" -ForegroundColor Cyan
+
+# Test all commands
+Write-Host "`n1. Testing commands..." -ForegroundColor Yellow
+
+# Java
+Write-Host "Java: " -NoNewline
+java --version 2>&1 | Select-String -Pattern "version" | ForEach-Object { Write-Host "$_" -ForegroundColor Green }
+
+# Maven
+Write-Host "Maven: " -NoNewline
+mvn --version 2>&1 | Select-String -Pattern "Apache Maven" | ForEach-Object { Write-Host "$_" -ForegroundColor Green }
+
+# Node.js
+Write-Host "Node.js: " -NoNewline
+node --version | ForEach-Object { Write-Host "$_" -ForegroundColor Green }
+
+# PostgreSQL (use full path)
+Write-Host "PostgreSQL CLI: " -NoNewline
+& "C:\Program Files\PostgreSQL\14\bin\psql.exe" --version 2>&1 | ForEach-Object { Write-Host "$_" -ForegroundColor Green }
+
+# Python (if needed for ML components)
+Write-Host "Python: " -NoNewline
+python --version 2>&1 | ForEach-Object { Write-Host "$_" -ForegroundColor Green }
+
+# Check services
+Write-Host "`n2. Checking services..." -ForegroundColor Yellow
+
+# PostgreSQL service
+$postgresService = Get-Service -Name "postgresql-x64-14" -ErrorAction SilentlyContinue
+if ($postgresService) {
+    if ($postgresService.Status -eq 'Running') {
+        Write-Host "PostgreSQL service: RUNNING" -ForegroundColor Green
+    } else {
+        Write-Host "PostgreSQL service: $($postgresService.Status)" -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "PostgreSQL service: NOT FOUND" -ForegroundColor Red
+}
+
+Write-Host "`n=== VERIFICATION COMPLETE ===" -ForegroundColor Cyan</code></pre>
+        </div>
+
+        <h2>🗄️ Step 1: Database Setup (PostgreSQL)</h2>
+        <div class="step">
+            <h3><span class="step-number">1</span> Start PostgreSQL Service</h3>
+            <p>Ensure PostgreSQL service is running:</p>
+            <pre><code># Check if PostgreSQL is running
+Get-Service -Name "postgresql-x64-14"
+
+# If not running, start it:
+Start-Service -Name "postgresql-x64-14"</code></pre>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">2</span> Create Databases</h3>
+            <p>Create all required databases for the microservices:</p>
+            <pre><code># Connect as postgres superuser
+& "C:\Program Files\PostgreSQL\14\bin\psql.exe" -U postgres
+
+# In psql, run these commands:
+CREATE DATABASE pbads_auth;
+CREATE DATABASE pbads_data;
+CREATE DATABASE pbads_model;
+CREATE DATABASE pbads_alert;
+CREATE DATABASE pbads_monitoring;
+
+# Create user and set password
+CREATE USER pbads WITH PASSWORD 'pbads_password';
+ALTER USER pbads WITH PASSWORD 'pbads_password';
+
+# Grant privileges
+GRANT ALL PRIVILEGES ON DATABASE pbads_auth TO pbads;
+GRANT ALL PRIVILEGES ON DATABASE pbads_data TO pbads;
+GRANT ALL PRIVILEGES ON DATABASE pbads_model TO pbads;
+GRANT ALL PRIVILEGES ON DATABASE pbads_alert TO pbads;
+GRANT ALL PRIVILEGES ON DATABASE pbads_monitoring TO pbads;
+
+# Exit psql
+\q</code></pre>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">3</span> Verify Database Connection</h3>
+            <p>Test connection to each database:</p>
+            <pre><code># Test pbads_auth
+& "C:\Program Files\PostgreSQL\14\bin\psql.exe" -U pbads -d pbads_auth -h localhost -c "SELECT 'Connected to pbads_auth'"
+
+# Test pbads_data
+& "C:\Program Files\PostgreSQL\14\bin\psql.exe" -U pbads -d pbads_data -h localhost -c "SELECT 'Connected to pbads_data'"
+
+# Test pbads_model
+& "C:\Program Files\PostgreSQL\14\bin\psql.exe" -U pbads -d pbads_model -h localhost -c "SELECT 'Connected to pbads_model'"
+
+# Test pbads_alert
+& "C:\Program Files\PostgreSQL\14\bin\psql.exe" -U pbads -d pbads_alert -h localhost -c "SELECT 'Connected to pbads_alert'"
+
+# Test pbads_monitoring
+& "C:\Program Files\PostgreSQL\14\bin\psql.exe" -U pbads -d pbads_monitoring -h localhost -c "SELECT 'Connected to pbads_monitoring'"</code></pre>
+        </div>
+
+        <h2>📨 Step 2: Kafka Setup</h2>
+        <div class="step">
+            <h3><span class="step-number">1</span> Navigate to Kafka Directory</h3>
+            <pre><code>cd C:\kafka\kafka_2.13-4.1.1</code></pre>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">2</span> Format Kafka Storage (First Time Only)</h3>
+            <div class="warning">
+                <strong>⚠️ Important:</strong> Only run this command the first time you set up Kafka, or if you want to reset Kafka storage.
+            </div>
+            <pre><code>.\bin\windows\kafka-storage.bat format -t $(.\bin\windows\kafka-storage.bat random-uuid) -c .\config\kraft-server.properties</code></pre>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">3</span> Start Kafka Server</h3>
+            <p>Keep this terminal open - Kafka must stay running:</p>
+            <pre><code>.\bin\windows\kafka-server-start.bat .\config\kraft-server.properties</code></pre>
+            <div class="success">
+                <strong>✓ Success:</strong> You should see "Kafka Server started" messages. Keep this terminal running.
+            </div>
+        </div>
+
+        <h2>🔧 Step 3: Start Infrastructure Services</h2>
+        <p><strong>Start these services in order, waiting for each to fully start before moving to the next:</strong></p>
+
+        <div class="step">
+            <h3><span class="step-number">1</span> Terminal 1 - Eureka Server (Port 8761)</h3>
+            <p><strong>Service Discovery</strong> - Must start first!</p>
+            <pre><code>cd pbads-microservices\service-discovery\eureka-server
+mvn spring-boot:run</code></pre>
+            <div class="info">
+                <strong>⏱️ Wait for:</strong> "Started EurekaServerApplication" message<br>
+                <strong>🌐 Access:</strong> http://localhost:8761 (no login required after security fix)
+            </div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">2</span> Terminal 2 - Config Server (Port 8888)</h3>
+            <p><strong>Configuration Management</strong> - Start after Eureka</p>
+            <pre><code>cd pbads-microservices\configuration\config-server
+mvn spring-boot:run</code></pre>
+            <div class="info">
+                <strong>⏱️ Wait:</strong> ~15 seconds after Eureka starts<br>
+                <strong>⏱️ Wait for:</strong> "Started ConfigServerApplication" message
+            </div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">3</span> Terminal 3 - API Gateway (Port 8080)</h3>
+            <p><strong>API Gateway</strong> - Routes all requests</p>
+            <pre><code>cd pbads-microservices\gateway\api-gateway
+mvn spring-boot:run</code></pre>
+            <div class="info">
+                <strong>⏱️ Wait:</strong> ~15 seconds after Config Server starts<br>
+                <strong>⏱️ Wait for:</strong> "Started GatewayApplication" message<br>
+                <strong>🌐 Access:</strong> http://localhost:8080
+            </div>
+        </div>
+
+        <h2>⚙️ Step 4: Start Core Services</h2>
+        <p><strong>These services can be started in parallel (each in a separate terminal):</strong></p>
+
+        <div class="step">
+            <h3><span class="step-number">1</span> Terminal 4 - Auth Service (Port 8081)</h3>
+            <pre><code>cd pbads-microservices\core-services\auth-service
+mvn spring-boot:run</code></pre>
+            <div class="success">
+                <strong>✓ Default User Created:</strong> Username: <code>admin</code>, Password: <code>admin123</code>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">2</span> Terminal 5 - Data Service (Port 8082)</h3>
+            <pre><code>cd pbads-microservices\core-services\data-service
+mvn spring-boot:run</code></pre>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">3</span> Terminal 6 - Model Service (Port 8083)</h3>
+            <pre><code>cd pbads-microservices\core-services\model-service
+mvn spring-boot:run</code></pre>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">4</span> Terminal 7 - Inference Service (Port 8084)</h3>
+            <pre><code>cd pbads-microservices\core-services\inference-service
+mvn spring-boot:run</code></pre>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">5</span> Terminal 8 - Alert Service (Port 8085)</h3>
+            <pre><code>cd pbads-microservices\core-services\alert-service
+mvn spring-boot:run</code></pre>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">6</span> Terminal 9 - Monitoring Service (Port 8086)</h3>
+            <pre><code>cd pbads-microservices\observability\monitoring-service
+mvn spring-boot:run</code></pre>
+        </div>
+
+        <h2>💻 Step 5: Start Frontend</h2>
+        <div class="step">
+            <h3><span class="step-number">1</span> Terminal 10 - Frontend (Port 3000)</h3>
+            <pre><code>cd pbads-microservices\frontend
+npm install  # Only needed first time
+npm start</code></pre>
+            <div class="info">
+                <strong>⏱️ Wait for:</strong> "Compiled successfully!" message<br>
+                <strong>🌐 Access:</strong> http://localhost:3000<br>
+                <strong>🔐 Auto-login:</strong> Credentials are pre-filled (admin/admin123)
+            </div>
+        </div>
+
+        <h2>✅ Step 6: Verification</h2>
+        <div class="step">
+            <h3>Verify All Services</h3>
+            <p>Run the verification script:</p>
+            <pre><code>cd pbads-microservices
+scripts\verify-services.bat</code></pre>
+            
+            <h3>Or check manually:</h3>
+            <table>
+                <tr>
+                    <th>Service</th>
+                    <th>Port</th>
+                    <th>Health Check URL</th>
+                    <th>Dashboard URL</th>
+                </tr>
+                <tr>
+                    <td>Eureka Server</td>
+                    <td>8761</td>
+                    <td>http://localhost:8761</td>
+                    <td>http://localhost:8761</td>
+                </tr>
+                <tr>
+                    <td>Config Server</td>
+                    <td>8888</td>
+                    <td>http://localhost:8888/actuator/health</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>API Gateway</td>
+                    <td>8080</td>
+                    <td>http://localhost:8080/actuator/health</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Auth Service</td>
+                    <td>8081</td>
+                    <td>http://localhost:8081/actuator/health</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Data Service</td>
+                    <td>8082</td>
+                    <td>http://localhost:8082/actuator/health</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Model Service</td>
+                    <td>8083</td>
+                    <td>http://localhost:8083/actuator/health</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Inference Service</td>
+                    <td>8084</td>
+                    <td>http://localhost:8084/actuator/health</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Alert Service</td>
+                    <td>8085</td>
+                    <td>http://localhost:8085/actuator/health</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Monitoring Service</td>
+                    <td>8086</td>
+                    <td>http://localhost:8086/actuator/health</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Frontend</td>
+                    <td>3000</td>
+                    <td>http://localhost:3000</td>
+                    <td>http://localhost:3000</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>🔍 Quick Troubleshooting</h2>
+        <div class="step">
+            <h3>Common Issues</h3>
+            <ul class="checklist">
+                <li><strong>Port already in use:</strong> Stop the service using that port or change the port in application.yml</li>
+                <li><strong>Eureka 401 errors:</strong> Security is now disabled - restart Eureka server</li>
+                <li><strong>Database connection errors:</strong> Verify PostgreSQL is running and databases exist</li>
+                <li><strong>Kafka connection errors:</strong> Ensure Kafka is running and formatted</li>
+                <li><strong>Service not registering:</strong> Check Eureka dashboard at http://localhost:8761</li>
+                <li><strong>Login fails:</strong> Default credentials are admin/admin123 - check auth service logs</li>
+            </ul>
+        </div>
+
+        <h2>📝 Service Startup Order Summary</h2>
+        <div class="step">
+            <ol>
+                <li><strong>PostgreSQL</strong> - Database service</li>
+                <li><strong>Kafka</strong> - Message broker</li>
+                <li><strong>Eureka Server</strong> - Service discovery (Port 8761)</li>
+                <li><strong>Config Server</strong> - Configuration (Port 8888)</li>
+                <li><strong>API Gateway</strong> - Routing (Port 8080)</li>
+                <li><strong>Core Services</strong> - Can start in parallel:
+                    <ul>
+                        <li>Auth Service (8081)</li>
+                        <li>Data Service (8082)</li>
+                        <li>Model Service (8083)</li>
+                        <li>Inference Service (8084)</li>
+                        <li>Alert Service (8085)</li>
+                        <li>Monitoring Service (8086)</li>
+                    </ul>
+                </li>
+                <li><strong>Frontend</strong> - React app (Port 3000)</li>
+            </ol>
+        </div>
+
+        <div class="success">
+            <h3>🎉 You're All Set!</h3>
+            <p>Once all services are running:</p>
+            <ul>
+                <li>Access the frontend at: <strong>http://localhost:3000</strong></li>
+                <li>View Eureka dashboard at: <strong>http://localhost:8761</strong></li>
+                <li>Login credentials: <strong>admin / admin123</strong></li>
+            </ul>
+        </div>
+
+        <hr style="margin: 30px 0; border: none; border-top: 2px solid #e2e8f0;">
+        <p style="text-align: center; color: #64748b;">
+            <strong>PBADS Microservices Architecture</strong><br>
+            Last updated: December 2025
+        </p>
+    </div>
+</body>
+</html>

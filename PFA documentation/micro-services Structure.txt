@@ -1,0 +1,1158 @@
+Perfect! I'll provide a comprehensive file structure for **all recommended microservices** including dependencies for each. Let's build this step by step:
+
+## **📦 Complete Microservices Architecture with Dependencies**
+
+### **1. 🏛️ Eureka Server (Service Registry)**
+
+```
+eureka-server/
+├── pom.xml
+├── Dockerfile
+└── src/
+    └── main/
+        ├── java/com/pbads/eureka/
+        │   ├── EurekaServerApplication.java
+        │   └── config/
+        │       └── SecurityConfig.java
+        └── resources/
+            ├── application.yml
+            ├── application-dev.yml
+            └── application-prod.yml
+```
+
+**pom.xml Dependencies:**
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+</dependencies>
+```
+
+### **2. ⚙️ Config Server (Spring Cloud Config)**
+
+```
+config-server/
+├── pom.xml
+├── Dockerfile
+└── src/
+    └── main/
+        ├── java/com/pbads/config/
+        │   └── ConfigServerApplication.java
+        └── resources/
+            ├── application.yml
+            └── config-repo/
+                ├── application.yml
+                ├── data-service.yml
+                ├── model-service.yml
+                ├── inference-service.yml
+                ├── alert-service.yml
+                └── auth-service.yml
+```
+
+**pom.xml Dependencies:**
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-config-server</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <!-- Git backend for config -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-config</artifactId>
+    </dependency>
+</dependencies>
+```
+
+### **3. 🌉 API Gateway (Spring Cloud Gateway)**
+
+```
+api-gateway/
+├── pom.xml
+├── Dockerfile
+├── docker-compose-service.yml
+└── src/
+    └── main/
+        ├── java/com/pbads/gateway/
+        │   ├── GatewayApplication.java
+        │   ├── config/
+        │   │   ├── GatewayConfig.java
+        │   │   ├── RouteConfig.java
+        │   │   ├── RateLimiterConfig.java
+        │   │   └── CircuitBreakerConfig.java
+        │   ├── filter/
+        │   │   ├── AuthenticationFilter.java
+        │   │   ├── LoggingFilter.java
+        │   │   ├── CorrelationFilter.java
+        │   │   └── RequestValidationFilter.java
+        │   └── exception/
+        │       └── GlobalExceptionHandler.java
+        └── resources/
+            ├── application.yml
+            ├── routes/
+            │   ├── data-service-routes.yml
+            │   ├── model-service-routes.yml
+            │   └── auth-service-routes.yml
+            └── schema/
+                └── request-schema.json
+```
+
+**pom.xml Dependencies:**
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-gateway</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+    </dependency>
+    <!-- JWT for auth -->
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-api</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-impl</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-jackson</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+</dependencies>
+```
+
+### **4. 🔐 Auth Service (JWT/OAuth2)**
+
+```
+auth-service/
+├── pom.xml
+├── Dockerfile
+└── src/
+    └── main/
+        ├── java/com/pbads/auth/
+        │   ├── AuthApplication.java
+        │   ├── config/
+        │   │   ├── SecurityConfig.java
+        │   │   ├── JwtConfig.java
+        │   │   └── WebSecurityConfig.java
+        │   ├── controller/
+        │   │   ├── AuthController.java
+        │   │   └── UserController.java
+        │   ├── service/
+        │   │   ├── AuthService.java
+        │   │   ├── JwtService.java
+        │   │   ├── UserService.java
+        │   │   └── TokenService.java
+        │   ├── repository/
+        │   │   ├── UserRepository.java
+        │   │   └── RefreshTokenRepository.java
+        │   ├── model/
+        │   │   ├── entity/
+        │   │   │   ├── User.java
+        │   │   │   ├── Role.java
+        │   │   │   └── RefreshToken.java
+        │   │   ├── dto/
+        │   │   │   ├── AuthRequest.java
+        │   │   │   ├── AuthResponse.java
+        │   │   │   ├── RegisterRequest.java
+        │   │   │   └── UserProfile.java
+        │   │   └── enums/
+        │   │       └── RoleEnum.java
+        │   └── security/
+        │       ├── JwtAuthenticationFilter.java
+        │       ├── JwtAuthorizationFilter.java
+        │       └── CustomUserDetailsService.java
+        └── resources/
+            ├── application.yml
+            ├── db/
+            │   └── migration/
+            │       ├── V1__init_auth_schema.sql
+            │       └── V2__add_oauth_tables.sql
+            └── keystore/
+                └── jwt-key.jks
+```
+
+**pom.xml Dependencies:**
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    <!-- Database -->
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-core</artifactId>
+    </dependency>
+    <!-- JWT -->
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-api</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-impl</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-jackson</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+    <!-- Validation -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <!-- Redis for token blacklist -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+</dependencies>
+```
+
+### **5. 💾 Data Service**
+
+```
+data-service/
+├── pom.xml
+├── Dockerfile
+├── docker-compose-service.yml
+└── src/
+    └── main/
+        ├── java/com/pbads/data/
+        │   ├── DataApplication.java
+        │   ├── config/
+        │   │   ├── KafkaConfig.java
+        │   │   └── DataSourceConfig.java
+        │   ├── controller/
+        │   │   ├── DailyDataController.java
+        │   │   ├── UserDataController.java
+        │   │   └── AnalyticsController.java
+        │   ├── service/
+        │   │   ├── DailyDataService.java
+        │   │   ├── DataExportService.java
+        │   │   ├── EventPublisherService.java
+        │   │   └── DataValidationService.java
+        │   ├── repository/
+        │   │   ├── DailyDataRepository.java
+        │   │   ├── UserRepository.java
+        │   │   └── AnalyticsRepository.java
+        │   ├── model/
+        │   │   ├── entity/
+        │   │   │   ├── DailyData.java
+        │   │   │   ├── UserData.java
+        │   │   │   └── DataAuditLog.java
+        │   │   ├── dto/
+        │   │   │   ├── DailyDataDTO.java
+        │   │   │   ├── DataRequest.java
+        │   │   │   └── DataResponse.java
+        │   │   └── event/
+        │   │       └── DataLoggedEvent.java
+        │   ├── kafka/
+        │   │   ├── producer/
+        │   │   │   └── DataEventProducer.java
+        │   │   └── config/
+        │   │       └── KafkaProducerConfig.java
+        │   └── mapper/
+        │       └── DataMapper.java
+        └── resources/
+            ├── application.yml
+            ├── db/
+            │   └── migration/
+            │       ├── V1__init_data_schema.sql
+            │       └── V2__add_analytics_tables.sql
+            └── validation/
+                └── data-validation-rules.yml
+```
+
+**pom.xml Dependencies:**
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+    </dependency>
+    <!-- Database -->
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-core</artifactId>
+    </dependency>
+    <!-- MapStruct -->
+    <dependency>
+        <groupId>org.mapstruct</groupId>
+        <artifactId>mapstruct</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.mapstruct</groupId>
+        <artifactId>mapstruct-processor</artifactId>
+        <scope>provided</scope>
+    </dependency>
+    <!-- OpenFeign -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-openfeign</artifactId>
+    </dependency>
+    <!-- Validation -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <!-- Redis for caching -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+</dependencies>
+```
+
+### **6. 🧠 Model Service (Java + Python Hybrid)**
+
+```
+model-service/
+├── pom.xml
+├── Dockerfile
+├── Dockerfile.python
+├── docker-compose-ml.yml
+├── requirements.txt
+├── pyproject.toml
+└── src/
+    ├── main/
+    │   ├── java/com/pbads/model/
+    │   │   ├── ModelApplication.java
+    │   │   ├── config/
+    │   │   │   ├── MLConfig.java
+    │   │   │   └── ModelRegistryConfig.java
+    │   │   ├── controller/
+    │   │   │   ├── ModelController.java
+    │   │   │   ├── TrainingController.java
+    │   │   │   └── ModelAdminController.java
+    │   │   ├── service/
+    │   │   │   ├── ModelTrainingService.java
+    │   │   │   ├── ModelDeploymentService.java
+    │   │   │   ├── ModelRegistryService.java
+    │   │   │   └── ModelEvaluationService.java
+    │   │   ├── client/
+    │   │   │   ├── DataServiceClient.java
+    │   │   │   └── InferenceServiceClient.java
+    │   │   ├── model/
+    │   │   │   ├── dto/
+    │   │   │   │   ├── TrainingRequest.java
+    │   │   │   │   ├── TrainingResponse.java
+    │   │   │   │   └── ModelMetadata.java
+    │   │   │   ├── entity/
+    │   │   │   │   └── ModelVersion.java
+    │   │   │   └── enums/
+    │   │   │       └── ModelStatus.java
+    │   │   └── kafka/
+    │   │       └── producer/
+    │   │           └── ModelUpdateProducer.java
+    │   └── resources/
+    │       ├── application.yml
+    │       ├── ml/
+    │       │   ├── config/
+    │       │   │   ├── model-config.yaml
+    │       │   │   └── training-config.yaml
+    │       │   └── scripts/
+    │       │       ├── train_model.py
+    │       │       └── evaluate_model.py
+    │       └── db/
+    │           └── migration/
+    │               └── V1__init_model_schema.sql
+    └── python/
+        ├── ml_pipeline/
+        │   ├── __init__.py
+        │   ├── data_preprocessor.py
+        │   ├── model_trainer.py
+        │   ├── anomaly_detector.py
+        │   ├── feature_engineering.py
+        │   └── models/
+        │       ├── lstm_model.py
+        │       ├── isolation_forest.py
+        │       └── svm_model.py
+        ├── api/
+        │   ├── app.py
+        │   └── endpoints.py
+        ├── config/
+        │   ├── model_config.yaml
+        │   └── training_config.yaml
+        ├── utils/
+        │   ├── data_loader.py
+        │   └── metrics_calculator.py
+        └── tests/
+            └── test_models.py
+```
+
+**pom.xml Dependencies (Java):**
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-openfeign</artifactId>
+    </dependency>
+    <!-- Database -->
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+    <!-- Python Integration -->
+    <dependency>
+        <groupId>org.python</groupId>
+        <artifactId>jython-standalone</artifactId>
+    </dependency>
+    <!-- For model storage -->
+    <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-s3</artifactId>
+    </dependency>
+    <!-- MLflow client -->
+    <dependency>
+        <groupId>org.mlflow</groupId>
+        <artifactId>mlflow-client</artifactId>
+    </dependency>
+</dependencies>
+```
+
+**requirements.txt (Python):**
+```txt
+scikit-learn>=1.0.0
+tensorflow>=2.10.0
+pandas>=1.5.0
+numpy>=1.23.0
+fastapi>=0.95.0
+uvicorn>=0.21.0
+pydantic>=2.0.0
+mlflow>=2.0.0
+joblib>=1.2.0
+pyarrow>=12.0.0
+# Optional for time series
+prophet>=1.1.0
+statsmodels>=0.14.0
+```
+
+### **7. 🔍 Inference Service**
+
+```
+inference-service/
+├── pom.xml
+├── Dockerfile
+└── src/
+    └── main/
+        ├── java/com/pbads/inference/
+        │   ├── InferenceApplication.java
+        │   ├── config/
+        │   │   ├── KafkaConfig.java
+        │   │   ├── CacheConfig.java
+        │   │   └── ModelLoaderConfig.java
+        │   ├── kafka/
+        │   │   ├── consumer/
+        │   │   │   └── DataEventConsumer.java
+        │   │   └── producer/
+        │   │       └── AnomalyEventProducer.java
+        │   ├── service/
+        │   │   ├── InferenceService.java
+        │   │   ├── ModelLoaderService.java
+        │   │   ├── AnomalyDetectorService.java
+        │   │   └── RuleBasedService.java
+        │   ├── client/
+        │   │   ├── AlertServiceClient.java
+        │   │   └── ModelServiceClient.java
+        │   ├── model/
+        │   │   ├── dto/
+        │   │   │   ├── InferenceRequest.java
+        │   │   │   ├── AnomalyResult.java
+        │   │   │   └── ModelUpdateEvent.java
+        │   │   ├── cache/
+        │   │   │   └── ModelCache.java
+        │   │   └── enums/
+        │   │       └── AnomalyLevel.java
+        │   └── python/
+        │       ├── inference_engine.py
+        │       └── model_loader.py
+        └── resources/
+            ├── application.yml
+            ├── models/
+            │   └── cache/
+            ├── rules/
+            │   └── anomaly_rules.json
+            └── thresholds/
+                └── anomaly_thresholds.yml
+```
+
+**pom.xml Dependencies:**
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-openfeign</artifactId>
+    </dependency>
+    <!-- Caching -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.github.ben-manes.caffeine</groupId>
+        <artifactId>caffeine</artifactId>
+    </dependency>
+    <!-- Python integration -->
+    <dependency>
+        <groupId>org.python</groupId>
+        <artifactId>jython-standalone</artifactId>
+    </dependency>
+    <!-- JSON processing -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.jayway.jsonpath</groupId>
+        <artifactId>json-path</artifactId>
+    </dependency>
+</dependencies>
+```
+
+### **8. 🚨 Alert Service**
+
+```
+alert-service/
+├── pom.xml
+├── Dockerfile
+└── src/
+    └── main/
+        ├── java/com/pbads/alert/
+        │   ├── AlertApplication.java
+        │   ├── config/
+        │   │   ├── WebSocketConfig.java
+        │   │   ├── NotificationConfig.java
+        │   │   └── EmailConfig.java
+        │   ├── controller/
+        │   │   ├── AlertController.java
+        │   │   └── NotificationController.java
+        │   ├── service/
+        │   │   ├── AlertService.java
+        │   │   ├── RecommendationService.java
+        │   │   ├── NotificationService.java
+        │   │   └── WebSocketService.java
+        │   ├── repository/
+        │   │   ├── AlertRepository.java
+        │   │   └── NotificationRepository.java
+        │   ├── model/
+        │   │   ├── entity/
+        │   │   │   ├── Alert.java
+        │   │   │   ├── Notification.java
+        │   │   │   └── UserPreferences.java
+        │   │   ├── dto/
+        │   │   │   ├── AlertRequest.java
+        │   │   │   ├── AlertResponse.java
+        │   │   │   └── WebSocketMessage.java
+        │   │   └── enums/
+        │   │       ├── AlertSeverity.java
+        │   │       ├── AlertStatus.java
+        │   │       └── NotificationChannel.java
+        │   ├── websocket/
+        │   │   ├── WebSocketHandler.java
+        │   │   ├── WebSocketInterceptor.java
+        │   │   └── WebSocketSessionManager.java
+        │   └── notification/
+        │       ├── EmailNotifier.java
+        │       ├── PushNotifier.java
+        │       └── SMSNotifier.java
+        └── resources/
+            ├── application.yml
+            ├── templates/
+            │   ├── email/
+            │   │   ├── alert_email.html
+            │   │   └── alert_email.txt
+            │   └── push/
+            │       └── alert_notification.json
+            └── recommendations/
+                ├── rules.json
+                └── templates.yml
+```
+
+**pom.xml Dependencies:**
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-websocket</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+    </dependency>
+    <!-- Database -->
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <!-- Email -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+    <!-- Redis for WebSocket session management -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+    <!-- JSON processing -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+    </dependency>
+</dependencies>
+```
+
+### **9. 📊 Monitoring Service**
+
+```
+monitoring-service/
+├── pom.xml
+├── Dockerfile
+├── prometheus.yml
+├── grafana/
+│   ├── provisioning/
+│   │   ├── dashboards/
+│   │   │   └── pbads-dashboard.yml
+│   │   └── datasources/
+│   │       └── prometheus.yml
+│   └── dashboards/
+│       ├── system-metrics.json
+│       ├── ml-metrics.json
+│       └── business-metrics.json
+└── src/
+    └── main/
+        ├── java/com/pbads/monitoring/
+        │   ├── MonitoringApplication.java
+        │   ├── config/
+        │   │   ├── PrometheusConfig.java
+        │   │   ├── MetricsConfig.java
+        │   │   └── AlertingConfig.java
+        │   ├── controller/
+        │   │   ├── MetricsController.java
+        │   │   └── HealthController.java
+        │   ├── service/
+        │   │   ├── MetricsCollectorService.java
+        │   │   ├── AlertingService.java
+        │   │   ├── DashboardService.java
+        │   │   └── LogAggregatorService.java
+        │   ├── model/
+        │   │   ├── dto/
+        │   │   │   ├── SystemMetrics.java
+        │   │   │   ├── ModelMetrics.java
+        │   │   │   └── BusinessMetrics.java
+        │   │   └── entity/
+        │   │       └── MetricThreshold.java
+        │   └── client/
+        │       ├── EurekaClient.java
+        │       └── KafkaMetricsClient.java
+        └── resources/
+            ├── application.yml
+            └── metrics/
+                ├── custom-metrics.yml
+                └── alert-rules.yml
+```
+
+**pom.xml Dependencies:**
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <!-- Micrometer for metrics -->
+    <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-registry-prometheus</artifactId>
+    </dependency>
+    <!-- Database for metrics storage -->
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <!-- Kafka for metrics streaming -->
+    <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+    </dependency>
+    <!-- Redis for metrics caching -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+</dependencies>
+```
+
+### **10. 🗄️ Model Registry (MLflow)**
+
+```
+model-registry/
+├── docker-compose.yml
+├── mlflow/
+│   ├── Dockerfile
+│   ├── mlflow-tracking-server.ini
+│   └── artifacts/
+├── src/
+│   └── main/
+│       ├── java/com/pbads/registry/
+│       │   ├── RegistryApplication.java
+│       │   ├── config/
+│       │   │   └── MLflowConfig.java
+│       │   ├── controller/
+│       │   │   └── RegistryController.java
+│       │   ├── service/
+│       │   │   └── RegistryService.java
+│       │   └── client/
+│       │       └── MLflowClient.java
+│       └── resources/
+│           └── application.yml
+└── requirements.txt
+```
+
+**docker-compose.yml for MLflow:**
+```yaml
+version: '3.8'
+services:
+  mlflow:
+    build: ./mlflow
+    ports:
+      - "5000:5000"
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
+    volumes:
+      - ./mlflow/artifacts:/mlflow/artifacts
+      - ./mlflow/mlflow-tracking-server.ini:/etc/mlflow/mlflow-tracking-server.ini
+    networks:
+      - pbads-network
+```
+
+### **11. 🎨 Frontend (React)**
+
+```
+frontend/
+├── package.json
+├── Dockerfile
+├── docker-compose-frontend.yml
+├── nginx.conf
+├── public/
+│   ├── index.html
+│   ├── favicon.ico
+│   └── manifest.json
+└── src/
+    ├── App.js
+    ├── index.js
+    ├── App.css
+    ├── index.css
+    ├── routes/
+    │   ├── AppRoutes.js
+    │   └── PrivateRoute.js
+    ├── services/
+    │   ├── api/
+    │   │   ├── axiosConfig.js
+    │   │   ├── authApi.js
+    │   │   ├── dataApi.js
+    │   │   ├── modelApi.js
+    │   │   └── alertApi.js
+    │   ├── websocket/
+    │   │   ├── websocketService.js
+    │   │   └── notificationService.js
+    │   └── storage/
+    │       ├── authStorage.js
+    │       └── localStorage.js
+    ├── components/
+    │   ├── layout/
+    │   │   ├── Header/
+    │   │   ├── Sidebar/
+    │   │   ├── Footer/
+    │   │   └── Layout.js
+    │   ├── common/
+    │   │   ├── LoadingSpinner/
+    │   │   ├── ErrorBoundary/
+    │   │   ├── Notification/
+    │   │   └── Modal/
+    │   ├── dashboard/
+    │   │   ├── MetricsChart/
+    │   │   ├── TrendsChart/
+    │   │   ├── AnomalyHistory/
+    │   │   └── HealthScore/
+    │   ├── data/
+    │   │   ├── DataEntryForm/
+    │   │   ├── DataHistory/
+    │   │   └── DataExport/
+    │   ├── alerts/
+    │   │   ├── AlertList/
+    │   │   ├── AlertItem/
+    │   │   └── NotificationBell/
+    │   └── auth/
+    │       ├── LoginForm/
+    │       ├── RegisterForm/
+    │       └── Profile/
+    ├── pages/
+    │   ├── HomePage/
+    │   ├── DashboardPage/
+    │   ├── DataPage/
+    │   ├── AlertsPage/
+    │   ├── HistoryPage/
+    │   ├── SettingsPage/
+    │   └── AuthPage/
+    ├── context/
+    │   ├── AuthContext.js
+    │   ├── AlertContext.js
+    │   └── ThemeContext.js
+    ├── hooks/
+    │   ├── useAuth.js
+    │   ├── useWebSocket.js
+    │   └── useApi.js
+    ├── utils/
+    │   ├── dateUtils.js
+    │   ├── validation.js
+    │   ├── constants.js
+    │   └── helpers.js
+    ├── styles/
+    │   ├── variables.scss
+    │   ├── mixins.scss
+    │   └── global.scss
+    └── assets/
+        ├── images/
+        ├── icons/
+        └── fonts/
+```
+
+**package.json Dependencies:**
+```json
+{
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.0",
+    "axios": "^1.3.0",
+    "recharts": "^2.4.0",
+    "chart.js": "^4.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "date-fns": "^2.29.3",
+    "formik": "^2.2.9",
+    "yup": "^1.0.0",
+    "material-ui": "^5.11.0",
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "socket.io-client": "^4.5.0",
+    "react-query": "^3.39.0",
+    "react-hook-form": "^7.43.0",
+    "zustand": "^4.3.0",
+    "react-hot-toast": "^2.4.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^13.4.0",
+    "jest": "^29.3.0",
+    "eslint": "^8.33.0",
+    "prettier": "^2.8.0",
+    "sass": "^1.58.0",
+    "webpack": "^5.75.0"
+  }
+}
+```
+
+### **12. 📦 Shared Libraries**
+
+```
+shared-libs/
+├── pom.xml
+└── src/main/java/com/pbads/common/
+    ├── dto/
+    │   ├── BaseResponse.java
+    │   ├── ErrorResponse.java
+    │   └── PaginatedResponse.java
+    ├── exception/
+    │   ├── PBADSException.java
+    │   ├── ValidationException.java
+    │   └── GlobalExceptionHandler.java
+    ├── config/
+    │   ├── FeignConfig.java
+    │   ├── KafkaConfig.java
+    │   └── RedisConfig.java
+    ├── constants/
+    │   ├── AppConstants.java
+    │   ├── KafkaTopics.java
+    │   └── ErrorCodes.java
+    ├── utils/
+    │   ├── DateUtils.java
+    │   ├── ValidationUtils.java
+    │   └── SecurityUtils.java
+    └── annotations/
+        ├── ValidateRequest.java
+        └── LogExecutionTime.java
+```
+
+**pom.xml Dependencies (Shared):**
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+        <optional>true</optional>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-openfeign</artifactId>
+        <optional>true</optional>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+        <optional>true</optional>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <optional>true</optional>
+    </dependency>
+</dependencies>
+```
+
+## **📋 Infrastructure Services (Docker Compose)**
+
+### **docker-compose-infra.yml**
+```yaml
+version: '3.8'
+services:
+  # Databases
+  postgres-data:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: pbads_data
+      POSTGRES_USER: pbads
+      POSTGRES_PASSWORD: pbads_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  
+  postgres-auth:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: pbads_auth
+      POSTGRES_USER: pbads
+      POSTGRES_PASSWORD: pbads_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_auth:/var/lib/postgresql/data
+
+  # Kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+
+  # Monitoring Stack
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring-service/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./monitoring-service/grafana:/etc/grafana/provisioning
+
+  # MLflow
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    volumes:
+      - mlflow_artifacts:/mlflow/artifacts
+
+volumes:
+  postgres_data:
+  postgres_auth:
+  mlflow_artifacts:
+```
+
+## **🔑 Key Points to Remember:**
+
+1. **Service Communication**:
+   - HTTP/REST via Feign clients
+   - Async events via Kafka
+   - Real-time via WebSocket
+
+2. **Database Strategy**:
+   - Each service has its own database/schema
+   - Shared user data via auth service
+
+3. **Security**:
+   - JWT tokens for authentication
+   - API Gateway validates tokens
+   - Service-to-service auth via service accounts
+
+4. **Monitoring**:
+   - Prometheus for metrics
+   - Grafana for dashboards
+   - ELK stack for logs (optional)
+
+5. **MLOps**:
+   - MLflow for experiment tracking
+   - Model registry for versioning
+   - Automated retraining pipelines
+
+This architecture is **production-ready** and follows **best practices** for microservices, MLOps, and cloud-native development. Each service is independently deployable, scalable, and maintainable.

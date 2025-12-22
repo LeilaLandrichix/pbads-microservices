@@ -1,0 +1,557 @@
+📁 Overall Project Structure
+text
+pbads-microservices/
+├── docker-compose.yml
+├── README.md
+├── pom.xml (optional Maven parent)
+├── config-repo/ (Spring Cloud Config if needed)
+│
+├── eureka-server/
+├── api-gateway/
+├── data-service/
+├── model-service/
+├── inference-service/
+├── alert-service/
+└── shared-libs/ (shared DTOs, exceptions, etc.)
+1. 🏛️ Eureka Server (Service Registry)
+text
+eureka-server/
+├── src/
+│   ├── main/
+│   │   ├── java/com/pbads/eureka/
+│   │   │   ├── EurekaServerApplication.java
+│   │   │   └── config/
+│   │   │       └── SecurityConfig.java (if secured)
+│   │   └── resources/
+│   │       ├── application.yml
+│   │       └── application-prod.yml
+│   └── test/
+│       └── java/com/pbads/eureka/
+├── Dockerfile
+└── pom.xml
+Key Files:
+
+application.yml:
+
+yaml
+server:
+  port: 8761
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 15000
+2. 🌉 API Gateway (Spring Cloud Gateway)
+text
+api-gateway/
+├── src/
+│   ├── main/
+│   │   ├── java/com/pbads/gateway/
+│   │   │   ├── GatewayApplication.java
+│   │   │   ├── config/
+│   │   │   │   ├── GatewayConfig.java
+│   │   │   │   ├── RateLimiterConfig.java
+│   │   │   │   └── CircuitBreakerConfig.java
+│   │   │   ├── filter/
+│   │   │   │   ├── AuthenticationFilter.java
+│   │   │   │   ├── LoggingFilter.java
+│   │   │   │   └── CorrelationFilter.java
+│   │   │   └── exception/
+│   │   │       └── GlobalExceptionHandler.java
+│   │   └── resources/
+│   │       ├── application.yml
+│   │       └── routes-config.yml
+│   └── test/
+├── Dockerfile
+└── pom.xml
+Key Files:
+
+application.yml:
+
+yaml
+server:
+  port: 8080
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: data-service
+          uri: lb://DATA-SERVICE
+          predicates:
+            - Path=/api/data/**
+          filters:
+            - StripPrefix=1
+        - id: model-service
+          uri: lb://MODEL-SERVICE
+          predicates:
+            - Path=/api/admin/model/**
+          filters:
+            - StripPrefix=2
+3. 💾 Data Service
+text
+data-service/
+├── src/
+│   ├── main/
+│   │   ├── java/com/pbads/data/
+│   │   │   ├── DataServiceApplication.java
+│   │   │   ├── controller/
+│   │   │   │   ├── DataController.java
+│   │   │   │   └── HistoryController.java
+│   │   │   ├── service/
+│   │   │   │   ├── DataService.java
+│   │   │   │   ├── impl/
+│   │   │   │   │   └── DataServiceImpl.java
+│   │   │   │   └── EventPublisherService.java
+│   │   │   ├── repository/
+│   │   │   │   ├── DailyDataRepository.java
+│   │   │   │   └── UserRepository.java
+│   │   │   ├── model/
+│   │   │   │   ├── entity/
+│   │   │   │   │   ├── DailyData.java
+│   │   │   │   │   ├── User.java
+│   │   │   │   │   └── Auditable.java (base entity)
+│   │   │   │   ├── dto/
+│   │   │   │   │   ├── DailyDataDTO.java
+│   │   │   │   │   ├── DataRequest.java
+│   │   │   │   │   └── DataResponse.java
+│   │   │   │   └── event/
+│   │   │   │       └── DataLoggedEvent.java
+│   │   │   ├── kafka/
+│   │   │   │   ├── producer/
+│   │   │   │   │   └── DataEventProducer.java
+│   │   │   │   └── config/
+│   │   │   │       └── KafkaProducerConfig.java
+│   │   │   └── exception/
+│   │   │       └── DataValidationException.java
+│   │   └── resources/
+│   │       ├── application.yml
+│   │       ├── db/
+│   │       │   └── migration/
+│   │       │       └── V1__init_schema.sql (Flyway)
+│   │       └── data.sql (sample data)
+│   └── test/
+│       ├── java/com/pbads/data/
+│       │   └── service/
+│       │       └── DataServiceTest.java
+│       └── resources/
+│           └── application-test.yml
+├── Dockerfile
+├── docker-compose-service.yml
+└── pom.xml
+Key Files:
+
+application.yml:
+
+yaml
+spring:
+  application:
+    name: data-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pbads_data
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+4. 🧠 Model Service (Python/Spring Boot Hybrid)
+text
+model-service/
+├── src/
+│   ├── main/
+│   │   ├── java/com/pbads/model/
+│   │   │   ├── ModelServiceApplication.java
+│   │   │   ├── controller/
+│   │   │   │   ├── ModelController.java
+│   │   │   │   └── TrainingController.java
+│   │   │   ├── service/
+│   │   │   │   ├── ModelTrainingService.java
+│   │   │   │   ├── ModelDeploymentService.java
+│   │   │   │   └── ModelRegistryService.java
+│   │   │   ├── model/
+│   │   │   │   ├── dto/
+│   │   │   │   │   ├── TrainingRequest.java
+│   │   │   │   │   ├── ModelMetadata.java
+│   │   │   │   │   └── TrainingResponse.java
+│   │   │   │   └── entity/
+│   │   │   │       └── ModelVersion.java
+│   │   │   └── client/
+│   │   │       └── DataServiceClient.java (Feign Client)
+│   │   └── resources/
+│   │       ├── application.yml
+│   │       └── mlflow/
+│   │           └── Dockerfile.mlflow
+│   │
+│   └── python-ml/ (Python ML Module)
+│       ├── app.py (FastAPI/Flask)
+│       ├── requirements.txt
+│       ├── ml_pipeline/
+│       │   ├── __init__.py
+│       │   ├── data_preprocessor.py
+│       │   ├── model_trainer.py
+│       │   ├── anomaly_detector.py
+│       │   └── models/
+│       │       ├── lstm_model.py
+│       │       └── svm_model.py
+│       ├── config/
+│       │   ├── model_config.yaml
+│       │   └── training_config.yaml
+│       └── storage/
+│           └── models/ (model artifacts)
+│
+├── Dockerfile
+├── Dockerfile.python
+├── docker-compose-ml.yml
+└── pom.xml
+Key Files:
+
+application.yml:
+
+yaml
+spring:
+  application:
+    name: model-service
+  cloud:
+    openfeign:
+      client:
+        config:
+          data-service:
+            url: http://data-service:8081
+
+mlflow:
+  tracking-uri: http://localhost:5000
+  artifact-store: s3://pbads-models/  # or local path
+5. 🔍 Inference Service
+text
+inference-service/
+├── src/
+│   ├── main/
+│   │   ├── java/com/pbads/inference/
+│   │   │   ├── InferenceServiceApplication.java
+│   │   │   ├── kafka/
+│   │   │   │   ├── consumer/
+│   │   │   │   │   └── DataEventConsumer.java
+│   │   │   │   └── config/
+│   │   │   │       └── KafkaConsumerConfig.java
+│   │   │   ├── service/
+│   │   │   │   ├── InferenceService.java
+│   │   │   │   ├── ModelLoaderService.java
+│   │   │   │   └── AnomalyDetectorService.java
+│   │   │   ├── client/
+│   │   │   │   ├── AlertServiceClient.java
+│   │   │   │   └── ModelServiceClient.java
+│   │   │   ├── model/
+│   │   │   │   ├── dto/
+│   │   │   │   │   ├── InferenceRequest.java
+│   │   │   │   │   ├── AnomalyResult.java
+│   │   │   │   │   └── ModelUpdateEvent.java
+│   │   │   │   └── cache/
+│   │   │   │       └── ModelCache.java (Caffeine cache)
+│   │   │   └── config/
+│   │   │       ├── InferenceConfig.java
+│   │   │       └── CacheConfig.java
+│   │   └── resources/
+│   │       ├── application.yml
+│   │       ├── model/
+│   │       │   └── config.json (thresholds, etc.)
+│   │       └── rules/ (rule-based fallback)
+│   │           └── anomaly_rules.json
+│   └── test/
+├── Dockerfile
+└── pom.xml
+Key Files:
+
+application.yml:
+
+yaml
+spring:
+  application:
+    name: inference-service
+  kafka:
+    consumer:
+      group-id: inference-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.pbads.data.model.event"
+
+inference:
+  model:
+    cache-ttl: 3600 # seconds
+    default-threshold: 0.95
+  fallback:
+    enabled: true
+    rule-based-thresholds:
+      sleep_hours: {min: 6, max: 9}
+      mood_score: {min: 3, max: 5}
+6. 🚨 Alert Service
+text
+alert-service/
+├── src/
+│   ├── main/
+│   │   ├── java/com/pbads/alert/
+│   │   │   ├── AlertServiceApplication.java
+│   │   │   ├── controller/
+│   │   │   │   └── AlertController.java
+│   │   │   ├── service/
+│   │   │   │   ├── AlertService.java
+│   │   │   │   ├── RecommendationService.java
+│   │   │   │   ├── NotificationService.java
+│   │   │   │   └── WebSocketService.java (for real-time)
+│   │   │   ├── model/
+│   │   │   │   ├── entity/
+│   │   │   │   │   ├── Alert.java
+│   │   │   │   │   └── Notification.java
+│   │   │   │   ├── dto/
+│   │   │   │   │   ├── AlertRequest.java
+│   │   │   │   │   ├── AlertResponse.java
+│   │   │   │   │   └── WebSocketMessage.java
+│   │   │   │   └── enums/
+│   │   │   │       ├── AlertSeverity.java
+│   │   │   │       └── AlertStatus.java
+│   │   │   ├── repository/
+│   │   │   │   └── AlertRepository.java
+│   │   │   └── websocket/
+│   │   │       ├── WebSocketConfig.java
+│   │   │       └── AlertWebSocketHandler.java
+│   │   └── resources/
+│   │       ├── application.yml
+│   │       ├── recommendations/
+│   │       │   └── rules.json (recommendation rules)
+│   │       └── templates/ (email templates if needed)
+│   │           └── alert_email.html
+│   └── test/
+├── Dockerfile
+└── pom.xml
+Key Files:
+
+application.yml:
+
+yaml
+spring:
+  application:
+    name: alert-service
+  websocket:
+    allowed-origins: "*"
+
+alert:
+  notification:
+    channels: ["websocket", "email"]
+    cooldown-period: 3600 # seconds between similar alerts
+  recommendations:
+    rules-file: classpath:recommendations/rules.json
+7. 🎨 Frontend (React)
+text
+frontend/
+├── public/
+│   ├── index.html
+│   └── favicon.ico
+├── src/
+│   ├── App.js
+│   ├── index.js
+│   ├── App.css
+│   ├── index.css
+│   ├── services/
+│   │   ├── api.js (axios configuration)
+│   │   ├── dataService.js
+│   │   ├── alertService.js
+│   │   └── websocketService.js
+│   ├── components/
+│   │   ├── Layout/
+│   │   │   ├── Header.js
+│   │   │   ├── Sidebar.js
+│   │   │   └── Layout.js
+│   │   ├── Dashboard/
+│   │   │   ├── Dashboard.js
+│   │   │   ├── MetricsChart.js
+│   │   │   ├── TrendsChart.js
+│   │   │   └── AnomalyHistory.js
+│   │   ├── DataEntry/
+│   │   │   ├── DataForm.js
+│   │   │   └── DailyLog.js
+│   │   ├── Alerts/
+│   │   │   ├── AlertList.js
+│   │   │   ├── AlertItem.js
+│   │   │   └── NotificationBell.js
+│   │   └── Common/
+│   │       ├── LoadingSpinner.js
+│   │       └── ErrorBoundary.js
+│   ├── pages/
+│   │   ├── HomePage.js
+│   │   ├── DashboardPage.js
+│   │   ├── HistoryPage.js
+│   │   └── SettingsPage.js
+│   ├── context/
+│   │   └── AlertContext.js (for WebSocket alerts)
+│   ├── utils/
+│   │   ├── dateUtils.js
+│   │   └── validation.js
+│   └── assets/
+│       └── images/
+├── package.json
+├── Dockerfile
+└── nginx.conf (for production)
+8. 📦 Shared Libraries (Common Module)
+text
+shared-libs/
+├── src/main/java/com/pbads/common/
+│   ├── dto/
+│   │   ├── BaseResponse.java
+│   │   └── ErrorResponse.java
+│   ├── exception/
+│   │   ├── PBADSException.java
+│   │   └── GlobalExceptionHandler.java
+│   ├── config/
+│   │   └── FeignConfig.java
+│   └── constants/
+│       └── AppConstants.java
+└── pom.xml
+9. 🐳 Docker & Orchestration
+text
+docker-compose.yml
+yaml
+version: '3.8'
+
+services:
+  eureka-server:
+    build: ./eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - pbads-network
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    networks:
+      - pbads-network
+
+  data-service:
+    build: ./data-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+      - postgres-db
+      - kafka
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/pbads_data
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    networks:
+      - pbads-network
+
+  # ... other services similar
+
+  postgres-db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: pbads_data
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pbads-network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    networks:
+      - pbads-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - pbads-network
+
+networks:
+  pbads-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+🎯 Key Configuration Points:
+Eureka Integration: Each service needs @EnableEurekaClient annotation
+
+Feign Clients: For service-to-service communication
+
+Kafka Topics: Define topics in a shared configuration:
+
+data.logged.events
+
+model.updated.events
+
+anomaly.detected.events
+
+Service Ports:
+
+Eureka: 8761
+
+Gateway: 8080
+
+Data Service: 8081
+
+Model Service: 8082
+
+Inference Service: 8083
+
+Alert Service: 8084
+
+Database Per Service: Each service should have its own database schema
+
+This structure follows Domain-Driven Design principles with clear separation of concerns, making it easy to scale, test, and maintain each microservice independently.
+
+
+
+1. Eureka Server (Service Discovery)
+2. Config Server (Configuration)
+3. API Gateway (Routing + Security)
+4. Auth Service (JWT/OAuth2)
+5. Data Service (PostgreSQL)
+6. Model Service (Python/Java hybrid)
+7. Inference Service (Redis cache for models)
+8. Alert Service (WebSocket + Email)
+9. Monitoring Service (Prometheus + Grafana)
+10. Model Registry (MLflow)
+11. Message Broker (Kafka)
+12. Frontend (React + WebSocket)
+
+

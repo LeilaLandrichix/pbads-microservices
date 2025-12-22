@@ -2,8 +2,9 @@ package com.pbdas.model;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.ai.vectorstore.opensearch.autoconfigure.OpenSearchVectorStoreAutoConfiguration;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {OpenSearchVectorStoreAutoConfiguration.class})
 public class ModelApplication {
 
 	public static void main(String[] args) {

@@ -1,1 +1,47 @@
-spring.application.name=inference-service
+spring:
+  application:
+    name: inference-service
+  config:
+    import: optional:configserver:http://localhost:8888
+  cloud:
+    config:
+      uri: http://localhost:8888
+      name: inference-service
+      profile: default
+  # Kafka Configuration
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: inference-service-group
+      auto-offset-reset: earliest
+
+server:
+  port: 8084
+
+# Inference Configuration
+inference:
+  model:
+    default-threshold: 0.5  # Lower threshold to catch more anomalies
+  rule-based:
+    enabled: true  # Ensure rule-based detection is enabled
+  thresholds:
+    anomaly-score:
+      low: 0.3
+      medium: 0.6
+      high: 0.85
+  service:
+    direct-alert: true  # Enable direct HTTP calls when Kafka fails
+
+# Kafka Topics
+kafka:
+  topics:
+    data-logged: data.logged.events
+    anomaly-detected: anomaly.detected.events
+
+# Direct Alert Service Call (fallback when Kafka is not available)
+alert:
+  service:
+    url: http://localhost:8085
