@@ -1,0 +1,9 @@
+This work presents the design and implementation of a \textbf{Personal Behavior Anomaly Detection System (PBADS)} based on a microservices architecture. The system analyzes users' daily data (sleep, physical activity, diet, mood) and detects behavioral anomalies in real-time using unsupervised machine learning algorithms.
+
+The solution is built on a \textbf{microservices architecture} with 13 distinct services, including an authentication service (JWT), a data service, an ML model service, an inference service for anomaly detection, an alert service, and a recommendation service powered by Google Gemini AI. Inter-service communication uses Kafka for asynchronous messaging and HTTP/REST for synchronous calls, with a fallback mechanism to ensure resilience.
+
+The data model structures the main entities: \textit{User}, \textit{DailyData}, \textit{Alert} and \textit{Recommendation}. The system uses anomaly detection algorithms (Isolation Forest and One-Class SVM) to identify deviations from normal behaviors, generates alerts with severity levels (NORMAL, LOW, MEDIUM, HIGH), and provides personalized recommendations through integration with Google Gemini AI.
+
+The observed benefits include: \textbf{automatic anomaly detection}, \textbf{personalized recommendations}, \textbf{real-time notifications}, and \textbf{interactive visualization} of behavioral data through a dashboard with temporal filters. The system offers high scalability through the microservices architecture and fault tolerance via Resilience4j.
+
+\textbf{Keywords:} Anomaly Detection, Machine Learning, Microservices, Spring Boot, Kafka, PostgreSQL, Isolation Forest, One-Class SVM, Google Gemini AI, Personalized Recommendations, Microservices Architecture.

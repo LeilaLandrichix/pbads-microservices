@@ -29,6 +29,12 @@ public class AlertService {
     @Transactional
     public Alert createAlert(String userId, String date, Double anomalyScore, 
                            String anomalyLevel, String message, Map<String, Object> contributingFactors) {
+        return createAlert(userId, date, anomalyScore, anomalyLevel, message, contributingFactors, null);
+    }
+    
+    @Transactional
+    public Alert createAlert(String userId, String date, Double anomalyScore, 
+                           String anomalyLevel, String message, Map<String, Object> contributingFactors, String recommendation) {
         try {
             Alert alert = new Alert();
             alert.setUserId(userId);
@@ -46,6 +52,11 @@ public class AlertService {
                     logger.warn("Failed to serialize contributing factors", e);
                     alert.setContributingFactors(contributingFactors.toString());
                 }
+            }
+            
+            // Set recommendation if provided
+            if (recommendation != null && !recommendation.isEmpty()) {
+                alert.setRecommendation(recommendation);
             }
             
             Alert saved = alertRepository.save(alert);

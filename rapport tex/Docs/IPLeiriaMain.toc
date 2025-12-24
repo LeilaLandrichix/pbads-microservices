@@ -1,0 +1,63 @@
+\xpg@aux {}{french}
+\contentsline {chapter}{Dédicace}{1}{chapter*.1}%
+\contentsline {chapter}{Remerciements}{2}{chapter*.2}%
+\contentsline {chapter}{Acknowledgments}{3}{chapter*.3}%
+\contentsline {chapter}{Résumé}{4}{chapter*.4}%
+\contentsline {chapter}{Abstract}{5}{chapter*.5}%
+\contentsline {chapter}{Table des matières}{7}{chapter*.5}%
+\contentsline {chapter}{Liste des Figures}{8}{chapter*.5}%
+\contentsline {chapter}{Liste des Tableaux}{9}{chapter*.5}%
+\contentsline {chapter}{Liste des abréviations}{11}{table.0.1}%
+\contentsline {chapter}{Introduction générale}{12}{table.0.1}%
+\contentsline {chapter}{\numberline {1}Contexte général et planification du projet}{15}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Introduction}{16}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Contexte général}{16}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Environnement et motivation}{16}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Situation initiale et problématique}{16}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Objectif de la solution}{17}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}Architecture microservices}{18}{subsection.1.2.4}%
+\contentsline {section}{\numberline {1.3}Conclusion}{18}{section.1.3}%
+\contentsline {chapter}{\numberline {2}Modélisation}{19}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Modélisation du système}{20}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Contexte général}{20}{subsection.2.1.1}%
+\contentsline {subsubsection}{Situation actuelle et pratique existante}{20}{section*.7}%
+\contentsline {subsection}{\numberline {2.1.2}Enjeux et objectifs}{21}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Méthodologie adoptée}{21}{subsection.2.1.3}%
+\contentsline {section}{\numberline {2.2}Étude Conceptuelle}{22}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Méthodologie}{22}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Les acteurs principaux}{23}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Le diagramme de cas d'utilisation}{23}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}Diagramme de classes}{25}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}Les diagrammes de séquence}{27}{subsection.2.2.5}%
+\contentsline {subsubsection}{Scénario : Administrateur interagissant avec la plateforme}{28}{section*.11}%
+\contentsline {subsubsection}{Scénario : Modèle ML interagissant avec la base de données et la plateforme}{29}{section*.13}%
+\contentsline {section}{\numberline {2.3}Conclusion}{30}{section.2.3}%
+\contentsline {chapter}{\numberline {3}Interfaces et Réalisation de l'application}{31}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Technologies et Architecture}{32}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Architecture microservices}{32}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Technologies Frontend}{32}{subsection.3.1.2}%
+\contentsline {subsubsection}{Thymeleaf}{32}{section*.15}%
+\contentsline {subsubsection}{Chart.js}{33}{section*.16}%
+\contentsline {subsection}{\numberline {3.1.3}Technologies Backend}{33}{subsection.3.1.3}%
+\contentsline {subsubsection}{Spring Boot Framework}{33}{section*.17}%
+\contentsline {subsubsection}{Kafka}{34}{section*.18}%
+\contentsline {subsubsection}{PostgreSQL Database}{34}{section*.19}%
+\contentsline {subsection}{\numberline {3.1.4}Machine Learning}{34}{subsection.3.1.4}%
+\contentsline {subsubsection}{scikit-learn}{34}{section*.20}%
+\contentsline {subsubsection}{MLflow}{34}{section*.21}%
+\contentsline {section}{\numberline {3.2}Interfaces Utilisateur}{35}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Vue Utilisateur}{35}{subsection.3.2.1}%
+\contentsline {subsubsection}{Page d'inscription}{35}{section*.22}%
+\contentsline {subsubsection}{Page de connexion}{36}{section*.24}%
+\contentsline {subsubsection}{Tableau de bord - Graphiques}{37}{section*.26}%
+\contentsline {subsubsection}{Tableau de bord - Alertes et Recommandations}{38}{section*.28}%
+\contentsline {subsubsection}{Saisie de données quotidiennes}{39}{section*.30}%
+\contentsline {subsubsection}{Notification push d'alerte}{40}{section*.32}%
+\contentsline {subsubsection}{Page des alertes}{41}{section*.34}%
+\contentsline {subsection}{\numberline {3.2.2}Vue Administrateur}{42}{subsection.3.2.2}%
+\contentsline {subsubsection}{Gestion des utilisateurs}{42}{section*.36}%
+\contentsline {section}{\numberline {3.3}Conclusion}{43}{section.3.3}%
+\contentsline {chapter}{Conclusion générale}{44}{section.3.3}%
+\contentsline {chapter}{Bibliographie}{47}{chapter*.38}%
+\xpg@aux {}{english}
+\xpg@aux {}{french}

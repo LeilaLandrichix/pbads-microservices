@@ -1,0 +1,111 @@
+# ============================================
+# PBADS - Environment Variables Configuration
+# ============================================
+# Copy this file to .env and fill in your actual values
+# DO NOT commit the .env file to version control!
+
+# ============================================
+# Google Gemini AI API (Required for Recommendation Service)
+# ============================================
+# Get your API key from: https://makersuite.google.com/app/apikey
+GEMINI_API_KEY="your_api_key_here"
+
+# ============================================
+# PostgreSQL Database Configuration
+# ============================================
+# Database credentials for all services
+DB_USERNAME="pbads"
+DB_PASSWORD="pbads_password"
+
+# ============================================
+# Kafka Configuration
+# ============================================
+# Kafka broker address
+KAFKA_BOOTSTRAP_SERVERS="localhost:9092"
+
+# ============================================
+# JWT Token Configuration
+# ============================================
+# Secret key for JWT token generation (use a strong random string in production)
+# Minimum 64 characters recommended for security
+JWT_SECRET="mySecretKeyForJWTTokenGeneration12345678901234567890"
+
+# ============================================
+# Email Configuration (Optional - for Alert Service)
+# ============================================
+# SMTP settings for email notifications
+# Leave empty if you don't want to use email notifications
+MAIL_USERNAME=""
+MAIL_PASSWORD=""
+
+# ============================================
+# Service URLs (Optional - defaults provided)
+# ============================================
+# These are optional as services have default URLs configured
+# Only override if you're running services on different ports/hosts
+
+# API Gateway
+API_GATEWAY_URL="http://localhost:8080"
+
+# Auth Service
+AUTH_SERVICE_URL="http://localhost:8081"
+
+# Data Service
+DATA_SERVICE_URL="http://localhost:8082"
+
+# Model Service
+MODEL_SERVICE_URL="http://localhost:8083"
+
+# Inference Service
+INFERENCE_SERVICE_URL="http://localhost:8084"
+
+# Alert Service
+ALERT_SERVICE_URL="http://localhost:8085"
+
+# Monitoring Service
+MONITORING_SERVICE_URL="http://localhost:8086"
+
+# Recommendation Service
+RECOMMENDATION_SERVICE_URL="http://localhost:8087"
+
+# Frontend Service
+FRONTEND_SERVICE_URL="http://localhost:3000"
+
+# Eureka Server
+EUREKA_SERVER_URL="http://localhost:8761"
+
+# Config Server
+CONFIG_SERVER_URL="http://localhost:8888"
+
+# ============================================
+# Redis Configuration (Optional)
+# ============================================
+REDIS_HOST="localhost"
+REDIS_PORT="6379"
+
+# ============================================
+# Model Training Configuration (Optional)
+# ============================================
+# Path to CSV file for model training
+MODEL_TRAINING_CSV_PATH="C:\\Users\\loula\\eclipse-newworkspace\\PBADS-PFA\\PFA documentation\\Daily_Habit_Tracker.csv"
+
+# Model output directory
+MODEL_OUTPUT_DIR="./models/trained"
+
+# Model algorithm (isolation-forest or one-class-svm)
+MODEL_ALGORITHM="isolation-forest"
+
+# Model hyperparameters
+MODEL_CONTAMINATION="0.1"
+MODEL_N_ESTIMATORS="100"
+MODEL_NU="0.1"
+
+# ============================================
+# Notes
+# ============================================
+# 1. GEMINI_API_KEY is REQUIRED for the recommendation service to work
+# 2. DB_USERNAME and DB_PASSWORD are used by all services that connect to PostgreSQL
+# 3. JWT_SECRET should be changed to a secure random string in production
+# 4. MAIL_USERNAME and MAIL_PASSWORD are optional - only needed if using email alerts
+# 5. Most other variables have sensible defaults and can be left as-is for local development
+

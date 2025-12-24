@@ -40,4 +40,52 @@ data:
 alert:
   service:
     url: http://localhost:8085
+recommendation:
+  service:
+    url: http://localhost:8087
+
+# Resilience4j Configuration
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+    instances:
+      apiService:
+        baseConfig: default
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 1000
+        enableExponentialBackoff: false
+        retryExceptions:
+          - org.springframework.web.client.RestClientException
+          - java.net.ConnectException
+          - java.net.SocketTimeoutException
+    instances:
+      apiService:
+        baseConfig: default
+        enableExponentialBackoff: false
+
+# Actuator endpoints for monitoring Resilience4j
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,circuitbreakers,circuitbreakerevents,retryevents,metrics
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: false
 

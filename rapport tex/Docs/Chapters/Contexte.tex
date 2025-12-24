@@ -1,0 +1,52 @@
+\section{Introduction}
+Ce chapitre présente le contexte et la problématique du \textbf{Personal Behavior Anomaly Detection System (PBADS)}, un système de détection d'anomalies comportementales conçu pour analyser les habitudes quotidiennes des utilisateurs et identifier les écarts par rapport aux comportements normaux. Cette solution technologique a été développée pour répondre au besoin croissant d'outils intelligents permettant de comprendre et d'améliorer nos modes de vie à travers l'analyse de données comportementales et la génération de recommandations personnalisées.
+
+\section{Contexte général}
+
+\subsection{Environnement et motivation}
+Dans un monde où la santé et le bien-être personnel deviennent des priorités croissantes, la capacité à suivre et analyser nos comportements quotidiens représente un enjeu majeur. Les habitudes de vie telles que la qualité du sommeil, le niveau d'activité physique, l'alimentation, l'hydratation, le temps consacré à l'étude ou au travail, et l'état émotionnel influencent significativement notre santé physique et mentale, notre productivité et notre qualité de vie globale.
+
+Cependant, identifier les anomalies dans ces comportements et comprendre leurs causes reste un défi complexe. Les méthodes traditionnelles d'auto-évaluation sont souvent subjectives et peu fiables, tandis que l'analyse manuelle de grandes quantités de données comportementales est fastidieuse et sujette à l'erreur humaine. Il existe donc un besoin réel d'outils automatisés capables de détecter les anomalies comportementales de manière objective, de fournir des insights actionnables, et de générer des recommandations personnalisées pour améliorer les habitudes de vie.
+
+\subsection{Situation initiale et problématique}
+Avant le développement de PBADS, l'analyse des comportements personnels reposait principalement sur des méthodes manuelles et fragmentées. Les utilisateurs devaient consigner leurs données quotidiennes dans des tableurs Excel ou des applications mobiles isolées, sans capacité d'analyse approfondie ni de détection automatique des anomalies. Cette approche présentait plusieurs limitations critiques :
+
+\textbf{Limitations observées :}
+
+\begin{itemize}
+    \item \textbf{Absence de détection automatique :} Les utilisateurs devaient identifier manuellement les anomalies dans leurs données, ce qui est subjectif et peu fiable, surtout pour des patterns complexes ou subtils.
+    \item \textbf{Manque d'analyse prédictive :} Aucun système ne permettait d'anticiper les tendances comportementales ou d'identifier les facteurs contribuant aux anomalies.
+    \item \textbf{Recommandations génériques :} Les conseils fournis étaient souvent génériques et non adaptés au profil spécifique de chaque utilisateur.
+    \item \textbf{Fragmentation des données :} Les données étaient dispersées dans différents outils sans vue d'ensemble cohérente.
+    \item \textbf{Absence de notifications proactives :} Les utilisateurs n'étaient pas alertés en temps réel des anomalies détectées.
+    \item \textbf{Manque de visualisation interactive :} Les outils existants offraient peu de capacités de visualisation et de filtrage temporel des données.
+\end{itemize}
+
+\subsection{Objectif de la solution}
+L'objectif principal est de fournir un \textbf{système intégré de détection d'anomalies comportementales} qui automatise l'analyse des données quotidiennes des utilisateurs et génère des insights actionnables. La solution PBADS doit permettre :
+
+\begin{itemize}
+    \item \textbf{Saisie structurée des données quotidiennes :} Interface intuitive pour enregistrer les habitudes de vie (sommeil, activité physique, alimentation, hydratation, étude, humeur).
+    \item \textbf{Détection automatique des anomalies :} Utilisation d'algorithmes d'apprentissage automatique non supervisés (Isolation Forest, One-Class SVM) pour identifier les écarts par rapport aux comportements normaux sans nécessiter de données étiquetées.
+    \item \textbf{Classification des anomalies :} Attribution d'un score d'anomalie (0-1) et d'un niveau de sévérité (NORMAL, LOW, MEDIUM, HIGH) pour chaque détection.
+    \item \textbf{Génération d'alertes intelligentes :} Création automatique d'alertes avec identification des facteurs contribuant à l'anomalie.
+    \item \textbf{Recommandations personnalisées :} Intégration avec Google Gemini AI pour générer des suggestions adaptées au profil et aux habitudes spécifiques de chaque utilisateur.
+    \item \textbf{Visualisation interactive :} Tableau de bord moderne avec graphiques interactifs (Chart.js) et filtres temporels (semaine, mois, année, tout).
+    \item \textbf{Notifications en temps réel :} Système de notifications push (toast) pour alerter les utilisateurs immédiatement lorsqu'une nouvelle anomalie est détectée.
+    \item \textbf{Gestion des utilisateurs :} Interface d'administration pour la gestion des comptes utilisateurs avec contrôle d'accès basé sur les rôles (ADMIN, USER).
+\end{itemize}
+
+\subsection{Architecture microservices}
+Pour répondre à ces objectifs, PBADS suit une \textbf{architecture microservices} avec 13 services distincts, permettant une séparation claire des responsabilités, une scalabilité élevée et une tolérance aux pannes. Cette architecture comprend :
+
+\begin{itemize}
+    \item \textbf{Couche Frontend :} Service frontend (Thymeleaf) pour l'interface utilisateur
+    \item \textbf{Couche API Gateway :} Point d'entrée unique pour toutes les requêtes client
+    \item \textbf{Couche Infrastructure :} Eureka (découverte de services), Config Server (configuration centralisée), Kafka (messagerie asynchrone), PostgreSQL (bases de données), Redis (cache), MLflow (gestion des modèles ML)
+    \item \textbf{Couche Services Métier :} Auth Service, Data Service, Model Service, Inference Service, Alert Service, Monitoring Service, Recommendation Service
+\end{itemize}
+
+La communication entre services utilise Kafka pour la messagerie asynchrone et HTTP/REST pour les appels synchrones, avec un mécanisme de fallback pour garantir la résilience en cas de panne de Kafka.
+
+\section{Conclusion}
+Ce chapitre a présenté le contexte et les motivations derrière le développement du système PBADS. L'analyse de la situation existante a révélé des lacunes significatives en termes de détection automatique des anomalies, d'analyse prédictive, et de génération de recommandations personnalisées. Ces constats ont motivé le développement d'une solution intégrée basée sur une architecture microservices qui automatise l'analyse des comportements quotidiens et fournit des insights actionnables pour améliorer la qualité de vie des utilisateurs. La méthodologie de développement agile et la planification structurée permettront de répondre efficacement aux enjeux de détection d'anomalies, de personnalisation des recommandations, et de scalabilité du système.

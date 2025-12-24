@@ -1,0 +1,50 @@
+Ce chapitre présente les différentes technologies et outils utilisés dans le développement de notre plateforme de gestion de projets.
+
+\section{Frontend}
+
+L'architecture frontend de la plateforme s'appuie sur Angular \cite{google2023} en mode standalone, offrant une approche moderne et performante pour le développement d'applications web complexes. Cette architecture standalone permet une meilleure optimisation du bundle et une gestion plus fine des dépendances, tout en conservant la puissance et la flexibilité du framework Angular. L'application utilise SCSS pour le styling, offrant des fonctionnalités avancées de préprocesseur CSS comme les variables, les mixins, et l'imbrication, facilitant ainsi la maintenance et la cohérence visuelle.
+
+La modélisation TypeScript constitue le fondement de la robustesse de l'application frontend. Le système définit des interfaces strictes pour toutes les entités métier : \texttt{Projet}, \texttt{Sprint}, \texttt{UserStory}, \texttt{Tache}, \texttt{Ressource}, \texttt{Affectation}, \texttt{Livrable}, et bien d'autres. Ces interfaces garantissent la cohérence des données entre le frontend et le backend, tout en offrant une expérience de développement optimale avec l'autocomplétion et la détection d'erreurs en temps réel. Le système intègre également des enums partagés pour les états, priorités, et rôles, assurant ainsi une standardisation des valeurs dans toute l'application.
+
+Les services Angular encapsulent la logique métier et la communication avec le backend. Le système de notifications temps réel utilise WebSocket pour maintenir une synchronisation en continu entre les utilisateurs, permettant des mises à jour instantanées lors des changements d'état des tâches ou des projets. Les services de gestion des ressources, d'erreurs, et de chargement offrent une abstraction propre pour les opérations courantes, améliorant la maintenabilité et la réutilisabilité du code. L'intégration Power BI est gérée par un service dédié qui encapsule la complexité de l'API Microsoft.
+
+L'interface utilisateur privilégie l'expérience utilisateur avec des composants spécialisés pour chaque fonctionnalité. Les tableaux Kanban pour les sprints et tâches offrent une visualisation intuitive de l'avancement avec support du glisser-déposer. Les formulaires réactifs intègrent une validation en temps réel et des messages d'erreur contextuels. Les tableaux de données incluent pagination, tri, et filtrage avancés. Les graphiques et visualisations sont générés dynamiquement pour les tableaux de bord et les rapports analytiques.
+
+\section{Backend}
+
+L'architecture backend repose sur Spring Boot 3 \cite{pivotal2023} avec Java 17, offrant une base solide et moderne pour le développement d'APIs REST robustes et performantes. Spring Boot simplifie considérablement la configuration et le déploiement, tout en fournissant un écosystème complet de modules intégrés. Le module Web gère les endpoints REST avec support automatique de la sérialisation JSON, le module Data JPA facilite l'accès aux données avec des repositories générés automatiquement, le module Validation assure la cohérence des données avec des annotations déclaratives, le module Security gère l'authentification et l'autorisation, et le module WebSocket permet la communication temps réel avec les clients.
+
+La sécurité constitue un aspect critique de l'architecture backend, implémentée via Spring Security avec une approche multicouche. L'authentification JWT utilise la bibliothèque JJWT pour la génération et la validation des jetons, offrant une solution stateless et scalable. L'intégration OAuth2 Client permet l'authentification via Microsoft Azure AD, facilitant le Single Sign-On pour les organisations utilisant l'écosystème Microsoft. Le système de rôles et permissions est implémenté à plusieurs niveaux : annotations de sécurité sur les contrôleurs, guards personnalisés pour la logique métier, et validation des permissions au niveau des services.
+
+La persistance des données s'appuie sur MySQL \cite{microsoft2023} comme base de données relationnelle, avec Hibernate comme couche d'ORM pour simplifier les opérations de base de données. Le système utilise Spring Data JPA pour générer automatiquement les repositories et les requêtes de base, tout en permettant l'implémentation de requêtes personnalisées pour les cas complexes. La pagination Spring est intégrée nativement pour optimiser les performances lors de la récupération de grandes quantités de données. Les entités métier sont alignées sur le domaine projet avec des relations bien définies : \texttt{Projet}, \texttt{Phase}, \texttt{Sprint}, \texttt{UserStory}, \texttt{Tache}, \texttt{Livrable}, \texttt{Validation}, \texttt{Changement}, \texttt{Ressource}, \texttt{Affectation}, etc.
+
+Les intégrations externes enrichissent les fonctionnalités de la plateforme. L'intégration Power BI permet la génération de rapports analytiques avancés et leur intégration dans l'interface utilisateur. La bibliothèque PDFBox est utilisée pour la génération et la manipulation de documents PDF, notamment pour les rapports et les livrables. Les WebSockets assurent la communication temps réel pour les notifications, permettant des mises à jour instantanées de l'interface utilisateur lors des changements d'état des projets, tâches, ou autres entités métier.
+
+\section{Infrastructure et Configuration}
+\begin{itemize}
+  \item \textbf{Configuration} : Fichier \texttt{application.properties} avec CORS (\texttt{http://localhost:4200}), port 8081, identifiants Power BI, Microsoft OAuth2 et clé API Gemini.
+  \item \textbf{Build} : Maven (plugin Spring Boot) pour empaquetage JAR exécutable.
+  \item \textbf{Conteneurisation} : Dockerfiles frontend et backend, Nginx pour le déploiement frontend.
+\end{itemize}
+
+\section{Qualité et Observabilité}
+\begin{itemize}
+  \item \textbf{Validation} : Contraintes côté serveur (Bean Validation) et côté client (services de validation et formulaires).
+  \item \textbf{Gestion des erreurs} : Intercepteurs HTTP et service de gestion des erreurs.
+  \item \textbf{Logs} : Journalisation backend et traces d’authentification côté client.
+\end{itemize}
+
+\section{Périmètre Fonctionnel Couvert}
+\begin{itemize}
+  \item Gestion des projets, phases, jalons, backlogs, contrats et parties prenantes.
+  \item Gestion agile : sprints, user stories, tâches, planification et Kanban.
+  \item Changements, livrables, validations, commentaires.
+  \item Ressources, affectations et notifications temps réel.
+  \item Tableau de bord, analytics et intégration Power BI.
+\end{itemize}
+
+\section{Conclusion}
+
+Le choix des technologies pour cette plateforme de gestion de projets a été guidé par les principes de performance, de maintenabilité et d'évolutivité. L'écosystème Spring Boot + Angular + MySQL offre une base technique solide et moderne, parfaitement adaptée aux exigences de l'application.
+
+L'intégration d'outils avancés comme Power BI pour l'analytics, WebSocket pour les notifications temps réel, et OAuth2 Microsoft pour l'authentification, enrichit considérablement les capacités de la plateforme. Cette combinaison technologique permet de répondre efficacement aux besoins complexes de gestion de projets tout en offrant une expérience utilisateur moderne et intuitive. L'architecture modulaire et les bonnes pratiques de développement adoptées facilitent la maintenance et l'évolution future de la solution. 

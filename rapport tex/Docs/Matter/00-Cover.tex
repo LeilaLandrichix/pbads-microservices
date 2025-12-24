@@ -1,0 +1,57 @@
+\usepackage{rotating}
+
+\ifthenelse{\equal{\CoverOption}{classic}}{
+    \newcommand\BackgroundPicCover{%
+    \put(0,0){%
+    \parbox[b][\paperheight]{\paperwidth}{%
+    \vfill
+    \centering
+    \vfill
+    }}}
+}{
+    \newcommand\BackgroundPicCover{%
+    \put(0,0){%
+    \parbox[b][\paperheight]{\paperwidth}{%
+    \vfill
+    \centering
+    \vfill
+    }}}
+}
+
+\AddToShipoutPictureBG*{\BackgroundPicCover}
+
+% Place header image as a true background at the very top
+\AddToShipoutPictureBG*{
+  \put(0,0){
+    \parbox[t][2.5cm][t]{\paperwidth}{%
+      \includegraphics[width=\paperwidth,height=2.5cm,keepaspectratio]{Figures/header.jpg}
+    }
+  }
+}
+
+\newgeometry{top=0cm, left=1.98cm, right=1.98cm, bottom=1.47cm}
+\begin{titlepage}
+    % Green vertical bar on the left
+    \begin{tikzpicture}[remember picture,overlay]
+        \fill[fill=green!70!black] (current page.north west) rectangle ([xshift=1.2cm]current page.south west);
+    \end{tikzpicture}
+    \begin{center}
+        {\large 5ème année Ingénierie Informatique et Réseaux}\\[1.2cm]
+        {\Huge \textbf{RAPPORT PROJET FIN D'ANNÉE}}\\[1.2cm]
+        {\large Sous le thème}\\[0.5cm]
+        {\huge \textbf{Personal Behavior Anomaly Detection System (PBADS)}}\\[1.5cm]
+    \end{center}
+    \vspace{1.5cm}
+    \begin{center}
+        \begin{tabular}{p{0.45\textwidth}p{0.45\textwidth}}
+            \textbf{Réalisé par :} & \textbf{Encadré par :} \\[0.8cm]
+            EL ALAMI Mohamed Majd \& LANDRICHI Leila & Pr. Benyoussef Marwa \\[0.8cm]
+        \end{tabular}
+    \end{center}
+    \vfill
+    \begin{center}
+        Année universitaire : 2025/2026
+    \end{center}
+\end{titlepage}
+\restoregeometry
+\MediaOptionLogicBlank

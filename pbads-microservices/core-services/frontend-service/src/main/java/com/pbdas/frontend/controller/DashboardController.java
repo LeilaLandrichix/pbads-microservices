@@ -37,15 +37,52 @@ public class DashboardController {
             ? data.subList(0, Math.min(5, data.size())) 
             : (data != null ? data : List.of());
         
+        // Generate data summary for recommendations
+        String dataSummary = generateDataSummary(data);
+        
+        // Get recommendation
+        String recommendation = apiService.getRecommendation(userId, dataSummary, token);
+        
         model.addAttribute("data", data);
         model.addAttribute("username", username);
         model.addAttribute("hasData", data != null && !data.isEmpty());
         model.addAttribute("alerts", alerts);
         model.addAttribute("alertCount", alerts != null ? alerts.size() : 0);
         model.addAttribute("recentActivity", recentActivity);
+        model.addAttribute("recommendation", recommendation);
         model.addAttribute("activePage", "dashboard");
         
         return "dashboard";
+    }
+    
+    private String generateDataSummary(List<Map<String, Object>> data) {
+        if (data == null || data.isEmpty()) {
+            return "No data available for analysis.";
+        }
+        
+        StringBuilder summary = new StringBuilder();
+        summary.append("Recent habit data:\n");
+        
+        int count = Math.min(7, data.size());
+        for (int i = 0; i < count; i++) {
+            Map<String, Object> entry = data.get(i);
+            summary.append(String.format("Date: %s - ", entry.get("date")));
+            if (entry.get("sleepHours") != null) {
+                summary.append(String.format("Sleep: %.1fh, ", entry.get("sleepHours")));
+            }
+            if (entry.get("steps") != null) {
+                summary.append(String.format("Steps: %s, ", entry.get("steps")));
+            }
+            if (entry.get("waterIntakeMl") != null) {
+                summary.append(String.format("Water: %sml, ", entry.get("waterIntakeMl")));
+            }
+            if (entry.get("moodScore") != null) {
+                summary.append(String.format("Mood: %s/10", entry.get("moodScore")));
+            }
+            summary.append("\n");
+        }
+        
+        return summary.toString();
     }
 }
 

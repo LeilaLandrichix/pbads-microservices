@@ -1,0 +1,413 @@
+Ce chapitre détaille les fonctionnalités clés et les capacités de la plateforme de gestion de projets, démontrant comment elle répond aux besoins des différents rôles utilisateurs et couvre l'ensemble du cycle de vie d'un projet (projets, phases, sprints, user stories, tâches, livrables, validations, changements, ressources, affectations, notifications, rapports).
+
+\section{Bloc fonctionnel : Gestion des Utilisateurs et Authentification}
+
+\subsection{1.1. Authentification Utilisateur}
+\textbf{Description :} Permettre aux utilisateurs de se connecter au système via authentification locale ou OAuth2 Microsoft.
+\textbf{Entrée(s) :} Email/identifiant et mot de passe, ou bouton OAuth2 Microsoft.
+\textbf{Sortie(s) :} Jeton JWT valide et redirection vers le tableau de bord.
+\textbf{Importance de réalisation :} Haute
+
+\subsection{1.2. Gestion des Rôles et Permissions}
+\textbf{Description :} Attribuer et gérer les rôles utilisateurs (ADMIN, MANAGER, DÉVELOPPEUR, PRODUCT\_OWNER, SCRUM\_MASTER, etc.).
+\textbf{Entrée(s) :} Sélection de rôles système et rôles projet par utilisateur.
+\textbf{Sortie(s) :} Permissions d'accès configurées et contrôlées.
+\textbf{Importance de réalisation :} Haute
+
+\subsection{1.3. Gestion du Profil Utilisateur}
+\textbf{Description :} Consulter et modifier les informations personnelles et préférences de notification.
+\textbf{Entrée(s) :} Champs éditables (nom, email, téléphone, préférences).
+\textbf{Sortie(s) :} Confirmation de mise à jour et profil actualisé.
+\textbf{Importance de réalisation :} Moyenne
+
+\subsection{1.4. Déconnexion Sécurisée}
+\textbf{Description :} Fermer la session utilisateur et invalider les jetons d'authentification.
+\textbf{Entrée(s) :} Bouton de déconnexion.
+\textbf{Sortie(s) :} Session fermée et redirection vers la page de connexion.
+\textbf{Importance de réalisation :} Haute
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|p{1.5cm}|p{3.5cm}|p{1.5cm}|p{1.5cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Règle} & \textbf{Description} & \textbf{Type} & \textbf{Priorité} & \textbf{Validation} & \textbf{Message d'erreur} \\
+\hline
+RG-AUTH-01 & L'email doit être unique dans le système & Référentiel & Haute & Backend + Frontend & «Email déjà utilisé» \\
+\hline
+RG-AUTH-02 & Les mots de passe doivent respecter la politique de sécurité & Sécurité & Haute & Frontend + Backend & «Mot de passe non conforme» \\
+\hline
+RG-AUTH-03 & Seul un administrateur peut créer des comptes utilisateur & Contrôle d'accès & Haute & Backend & «Création non autorisée» \\
+\hline
+RG-AUTH-04 & Les jetons JWT doivent être valides et non expirés & Sécurité & Haute & Backend & «Token invalide ou expiré» \\
+\hline
+RG-AUTH-05 & La déconnexion doit invalider tous les jetons actifs & Sécurité & Haute & Backend & «Déconnexion échouée» \\
+\hline
+\end{tabular}
+\caption{Règles de gestion - Gestion des Utilisateurs et Authentification}
+\label{tab:rg_auth}
+\end{table}
+
+\section{Bloc fonctionnel : Gestion des Projets}
+
+\subsection{2.1. Création de Projet}
+\textbf{Description :} Créer un nouveau projet avec ses paramètres de base et méthodologie.
+\textbf{Entrée(s) :} Nom, type de méthodologie (SCRUM/Itératif), dates, budget, description, client associé.
+\textbf{Sortie(s) :} Projet créé avec identifiant unique et état initial.
+\textbf{Importance de réalisation :} Haute
+
+\subsection{2.2. Gestion des Phases}
+\textbf{Description :} Organiser le cycle de vie du projet en phases (Initialisation, Planification, Exécution, Maîtrise, Clôture).
+\textbf{Entrée(s) :} Dates de début/fin par phase et tâches associées.
+\textbf{Sortie(s) :} Planning structuré avec suivi d'avancement par phase.
+\textbf{Importance de réalisation :} Haute
+
+\subsection{2.3. Gestion du Backlog}
+\textbf{Description :} Créer et maintenir le backlog produit avec versioning des exigences.
+\textbf{Entrée(s) :} User stories, critères d'acceptation, priorités et versions.
+\textbf{Sortie(s) :} Backlog versionné avec traçabilité des évolutions.
+\textbf{Importance de réalisation :} Haute
+
+\subsection{2.4. Gestion des Jalons}
+\textbf{Description :} Définir et suivre les points de contrôle critiques du projet.
+\textbf{Entrée(s) :} Date prévue, description du jalon et critères de validation.
+\textbf{Sortie(s) :} Jalons avec statut d'atteinte et alertes de retard.
+\textbf{Importance de réalisation :} Moyenne
+
+\subsection{2.5. Gestion des Parties Prenantes}
+\textbf{Description :} Centraliser les informations de contact et rôles des acteurs du projet.
+\textbf{Entrée(s) :} Informations de contact, rôles et responsabilités.
+\textbf{Sortie(s) :} Répertoire des parties prenantes avec rôles définis.
+\textbf{Importance de réalisation :} Moyenne
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|p{1.5cm}|p{3.5cm}|p{1.5cm}|p{1.5cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Règle} & \textbf{Description} & \textbf{Type} & \textbf{Priorité} & \textbf{Validation} & \textbf{Message d'erreur} \\
+\hline
+RG-PROJ-01 & Un projet doit avoir un nom unique & Référentiel & Haute & Backend + Frontend & «Nom de projet déjà existant» \\
+\hline
+RG-PROJ-02 & Les dates de fin doivent être postérieures aux dates de début & Cohérence & Haute & Frontend + Backend & «Date de fin invalide» \\
+\hline
+RG-PROJ-03 & Le budget doit être positif & Cohérence & Haute & Frontend + Backend & «Budget invalide» \\
+\hline
+RG-PROJ-04 & Les phases doivent se succéder dans l'ordre logique & Cohérence & Haute & Backend & «Ordre des phases invalide» \\
+\hline
+RG-PROJ-05 & Les jalons doivent avoir des dates cohérentes avec les phases & Cohérence & Moyenne & Backend & «Date de jalon incohérente» \\
+\hline
+\end{tabular}
+\caption{Règles de gestion - Gestion des Projets}
+\label{tab:rg_projets}
+\end{table}
+
+\section{Bloc fonctionnel : Gestion Agile}
+
+\subsection{3.1. Gestion des Sprints}
+\textbf{Description :} Créer et planifier les sprints avec objectifs, dates et capacité d'équipe.
+\textbf{Entrée(s) :} Objectifs du sprint, dates de début/fin, user stories sélectionnées.
+\textbf{Sortie(s) :} Sprint planifié avec vélocité estimée et charge d'équipe.
+\textbf{Importance de réalisation :} Haute
+
+\subsection{3.2. Gestion des User Stories}
+\textbf{Description :} Créer et gérer les user stories avec critères d'acceptation et priorités.
+\textbf{Entrée(s) :} Titre, description, critères d'acceptation, priorité, estimation en points.
+\textbf{Sortie(s) :} User story avec état de progression et rattachement au sprint.
+\textbf{Importance de réalisation :} Haute
+
+\subsection{3.3. Gestion des Tâches}
+\textbf{Description :} Créer et assigner des tâches avec suivi d'état et gestion des obstacles.
+\textbf{Entrée(s) :} Description, durée estimée, priorité, assignation utilisateur.
+\textbf{Sortie(s) :} Tâche avec état de progression et suivi des obstacles.
+\textbf{Importance de réalisation :} Haute
+
+\subsection{3.4. Tableau Kanban}
+\textbf{Description :} Visualiser et gérer les tâches et user stories par état avec glisser-déposer.
+\textbf{Entrée(s) :} Filtres par projet, sprint, utilisateur, priorité.
+\textbf{Sortie(s) :} Vue Kanban interactive avec colonnes configurables.
+\textbf{Importance de réalisation :} Haute
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|p{1.5cm}|p{3.5cm}|p{1.5cm}|p{1.5cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Règle} & \textbf{Description} & \textbf{Type} & \textbf{Priorité} & \textbf{Validation} & \textbf{Message d'erreur} \\
+\hline
+RG-AGILE-01 & La date de fin d'un sprint doit être postérieure à sa date de début & Cohérence & Haute & Frontend + Backend & «Date de fin invalide» \\
+\hline
+RG-AGILE-02 & Une user story doit avoir au moins un critère d'acceptation & Cohérence & Haute & Frontend + Backend & «Critères d'acceptation manquants» \\
+\hline
+RG-AGILE-03 & Les tâches doivent être assignées à un utilisateur valide & Cohérence & Haute & Backend & «Utilisateur invalide» \\
+\hline
+RG-AGILE-04 & Les transitions d'état doivent respecter le workflow défini & Cohérence & Haute & Backend & «Transition d'état invalide» \\
+\hline
+RG-AGILE-05 & Les estimations doivent être des nombres entiers positifs & Cohérence & Moyenne & Frontend + Backend & «Estimation invalide» \\
+\hline
+\end{tabular}
+\caption{Règles de gestion - Gestion Agile}
+\label{tab:rg_agile}
+\end{table}
+
+\section{Bloc fonctionnel : Gestion des Ressources et Affectations}
+
+\subsection{4.1. Gestion des Ressources}
+\textbf{Description :} Gérer les ressources humaines, matérielles et financières du projet.
+\textbf{Entrée(s) :} Type de ressource, disponibilité, compétences, contraintes d'utilisation.
+\textbf{Sortie(s) :} Catalogue de ressources avec planification et optimisation des coûts.
+\textbf{Importance de réalisation :} Haute
+
+\subsection{4.2. Affectation des Rôles Projet}
+\textbf{Description :} Attribuer des rôles spécifiques aux utilisateurs selon le contexte du projet.
+\textbf{Entrée(s) :} Sélection utilisateur et rôle projet (MOA, MOE, PO, SM, DEV, etc.).
+\textbf{Sortie(s) :} Affectations avec permissions d'accès et responsabilités définies.
+\textbf{Importance de réalisation :} Haute
+
+\subsection{4.3. Gestion d'Équipe}
+\textbf{Description :} Constituer et organiser les équipes projet avec recherche de compétences.
+\textbf{Entrée(s) :} Critères de recherche (compétences, disponibilité, charge de travail).
+\textbf{Sortie(s) :} Équipe constituée avec planification des charges et suivi de disponibilité.
+\textbf{Importance de réalisation :} Moyenne
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|p{1.5cm}|p{3.5cm}|p{1.5cm}|p{1.5cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Règle} & \textbf{Description} & \textbf{Type} & \textbf{Priorité} & \textbf{Validation} & \textbf{Message d'erreur} \\
+\hline
+RG-RESS-01 & Les ressources doivent avoir un type valide & Référentiel & Haute & Frontend + Backend & «Type de ressource invalide» \\
+\hline
+RG-RESS-02 & Un utilisateur ne peut avoir qu'un rôle par projet & Cohérence & Haute & Backend & «Rôle déjà attribué» \\
+\hline
+RG-RESS-03 & Les affectations doivent respecter les contraintes de disponibilité & Cohérence & Moyenne & Backend & «Ressource non disponible» \\
+\hline
+RG-RESS-04 & Les compétences doivent être validées avant affectation & Cohérence & Moyenne & Backend & «Compétence non validée» \\
+\hline
+RG-RESS-05 & La charge de travail ne peut dépasser 100\% & Cohérence & Haute & Backend & «Surcharge de travail» \\
+\hline
+\end{tabular}
+\caption{Règles de gestion - Gestion des Ressources et Affectations}
+\label{tab:rg_ressources}
+\end{table}
+
+\section{Bloc fonctionnel : Livrables et Validations}
+
+\subsection{5.1. Gestion des Livrables}
+\textbf{Description :} Dépôt et versionnement des livrables par type avec états de validation.
+\textbf{Entrée(s) :} Fichier, type de livrable (document, charte, PoC), description.
+\textbf{Sortie(s) :} Livrable versionné avec statut de validation (en attente, approuvé, rejeté).
+\textbf{Importance de réalisation :} Haute
+
+\subsection{5.2. Workflow de Validation}
+\textbf{Description :} Circuit de validation et suivi des statuts par les parties habilitées.
+\textbf{Entrée(s) :} Livrable à valider, validateur assigné, commentaires.
+\textbf{Sortie(s) :} Statut de validation et notifications aux parties concernées.
+\textbf{Importance de réalisation :} Haute
+
+\subsection{5.3. Gestion des Commentaires}
+\textbf{Description :} Ajout de commentaires typés pour tracer les échanges et retours.
+\textbf{Entrée(s) :} Commentaire, type (retour, observation, recommandation), objet concerné.
+\textbf{Sortie(s) :} Commentaire enregistré avec traçabilité et historique.
+\textbf{Importance de réalisation :} Moyenne
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|p{1.5cm}|p{3.5cm}|p{1.5cm}|p{1.5cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Règle} & \textbf{Description} & \textbf{Type} & \textbf{Priorité} & \textbf{Validation} & \textbf{Message d'erreur} \\
+\hline
+RG-LIV-01 & Les livrables doivent avoir un type valide & Référentiel & Haute & Frontend + Backend & «Type de livrable invalide» \\
+\hline
+RG-LIV-02 & Les versions doivent être incrémentales & Cohérence & Haute & Backend & «Version invalide» \\
+\hline
+RG-LIV-03 & Seuls les rôles habilités peuvent valider & Sécurité & Haute & Backend & «Validation non autorisée» \\
+\hline
+RG-LIV-04 & Les commentaires doivent être typés & Cohérence & Moyenne & Frontend + Backend & «Type de commentaire manquant» \\
+\hline
+RG-LIV-05 & Les fichiers doivent respecter les formats autorisés & Sécurité & Haute & Backend & «Format de fichier non autorisé» \\
+\hline
+\end{tabular}
+\caption{Règles de gestion - Livrables et Validations}
+\label{tab:rg_livrables}
+\end{table}
+
+\section{Bloc fonctionnel : Gestion des Changements}
+
+\subsection{6.1. Demandes de Changement}
+\textbf{Description :} Créer et suivre les demandes de changement avec analyse d'impact.
+\textbf{Entrée(s) :} Description du changement, impact, coûts et délais estimés, priorité.
+\textbf{Sortie(s) :} Demande de changement avec statut (proposé, approuvé, rejeté).
+\textbf{Importance de réalisation :} Haute
+
+\subsection{6.2. Traçabilité des Changements}
+\textbf{Description :} Associer les changements au projet et tracer l'implémentation.
+\textbf{Entrée(s) :} Changement, projet associé, utilisateur demandeur, dates clés.
+\textbf{Sortie(s) :} Historique complet des changements avec traçabilité.
+\textbf{Importance de réalisation :} Moyenne
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|p{1.5cm}|p{3.5cm}|p{1.5cm}|p{1.5cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Règle} & \textbf{Description} & \textbf{Type} & \textbf{Priorité} & \textbf{Validation} & \textbf{Message d'erreur} \\
+\hline
+RG-CHG-01 & Les demandes de changement doivent avoir une description détaillée & Cohérence & Haute & Frontend + Backend & «Description manquante» \\
+\hline
+RG-CHG-02 & L'impact doit être évalué avant approbation & Cohérence & Haute & Backend & «Évaluation d'impact requise» \\
+\hline
+RG-CHG-03 & Seule la Direction peut approuver les changements critiques & Sécurité & Haute & Backend & «Approbation Direction requise» \\
+\hline
+RG-CHG-04 & Les changements doivent être associés à un projet valide & Cohérence & Haute & Backend & «Projet invalide» \\
+\hline
+RG-CHG-05 & L'historique des changements doit être conservé & Fonctionnel & Moyenne & Backend & «Historique non sauvegardé» \\
+\hline
+\end{tabular}
+\caption{Règles de gestion - Gestion des Changements}
+\label{tab:rg_changements}
+\end{table}
+
+\section{Bloc fonctionnel : Demandes Client et Contrats}
+
+\subsection{7.1. Gestion des Demandes Client}
+\textbf{Description :} Traiter les demandes entrantes des clients avec suivi de statut.
+\textbf{Entrée(s) :} Informations client, description de la demande, documents joints.
+\textbf{Sortie(s) :} Demande enregistrée avec statut (en attente, revue, contrat créé, complété).
+\textbf{Importance de réalisation :} Haute
+
+\subsection{7.2. Gestion des Contrats}
+\textbf{Description :} Créer et associer des contrats aux projets.
+\textbf{Entrée(s) :} Informations contractuelles, projet associé, dates, montants.
+\textbf{Sortie(s) :} Contrat créé et associé au projet avec suivi.
+\textbf{Importance de réalisation :} Haute
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|p{1.5cm}|p{3.5cm}|p{1.5cm}|p{1.5cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Règle} & \textbf{Description} & \textbf{Type} & \textbf{Priorité} & \textbf{Validation} & \textbf{Message d'erreur} \\
+\hline
+RG-CLIENT-01 & Les demandes doivent avoir un email valide & Cohérence & Haute & Frontend + Backend & «Email invalide» \\
+\hline
+RG-CLIENT-02 & Les statuts doivent suivre le workflow défini & Cohérence & Haute & Backend & «Transition de statut invalide» \\
+\hline
+RG-CLIENT-03 & Seule la Direction peut approuver les demandes & Sécurité & Haute & Backend & «Approbation non autorisée» \\
+\hline
+RG-CLIENT-04 & Les contrats doivent être liés à une demande validée & Cohérence & Haute & Backend & «Demande non validée» \\
+\hline
+RG-CLIENT-05 & Les montants doivent être positifs & Cohérence & Haute & Frontend + Backend & «Montant invalide» \\
+\hline
+\end{tabular}
+\caption{Règles de gestion - Demandes Client et Contrats}
+\label{tab:rg_client}
+\end{table}
+
+\section{Bloc fonctionnel : Tableau de Bord et Analytics}
+
+\subsection{8.1. Tableau de Bord Principal}
+\textbf{Description :} Afficher les indicateurs clés d'avancement et KPI en temps réel.
+\textbf{Entrée(s) :} Filtres par projet, période, utilisateur.
+\textbf{Sortie(s) :} Dashboard avec KPI, burndown charts, répartition des tâches.
+\textbf{Importance de réalisation :} Haute
+
+\subsection{8.2. Intégration Power BI}
+\textbf{Description :} Intégrer des rapports Power BI pour analyses décisionnelles avancées.
+\textbf{Entrée(s) :} Données projet exportées vers Power BI.
+\textbf{Sortie(s) :} Rapports Power BI intégrés dans la plateforme.
+\textbf{Importance de réalisation :} Moyenne
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|p{1.5cm}|p{3.5cm}|p{1.5cm}|p{1.5cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Règle} & \textbf{Description} & \textbf{Type} & \textbf{Priorité} & \textbf{Validation} & \textbf{Message d'erreur} \\
+\hline
+RG-DASH-01 & Les KPI doivent être calculés en temps réel & Performance & Haute & Backend & «Calcul KPI en cours» \\
+\hline
+RG-DASH-02 & Les données doivent être actualisées automatiquement & Cohérence & Haute & Backend & «Données non actualisées» \\
+\hline
+RG-DASH-03 & L'accès aux rapports est contrôlé par les rôles & Sécurité & Haute & Backend & «Accès non autorisé» \\
+\hline
+RG-DASH-04 & Les exports doivent respecter les formats standards & Cohérence & Moyenne & Backend & «Format d'export invalide» \\
+\hline
+RG-DASH-05 & Les visualisations doivent être interactives & Fonctionnel & Moyenne & Frontend & «Visualisation non interactive» \\
+\hline
+\end{tabular}
+\caption{Règles de gestion - Tableau de Bord et Analytics}
+\label{tab:rg_dashboard}
+\end{table}
+
+\section{Bloc fonctionnel : Notifications}
+
+\subsection{9.1. Notifications Temps Réel}
+\textbf{Description :} Envoyer des notifications en temps réel pour événements critiques.
+\textbf{Entrée(s) :} Événement déclencheur (validation, assignation, changement d'état).
+\textbf{Sortie(s) :} Notification WebSocket envoyée aux utilisateurs concernés.
+\textbf{Importance de réalisation :} Moyenne
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|p{1.5cm}|p{3.5cm}|p{1.5cm}|p{1.5cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Règle} & \textbf{Description} & \textbf{Type} & \textbf{Priorité} & \textbf{Validation} & \textbf{Message d'erreur} \\
+\hline
+RG-NOTIF-01 & Les notifications doivent être envoyées aux utilisateurs concernés & Fonctionnel & Haute & Backend & «Notification non envoyée» \\
+\hline
+RG-NOTIF-02 & Les notifications critiques doivent être prioritaires & Fonctionnel & Haute & Backend & «Priorité non respectée» \\
+\hline
+RG-NOTIF-03 & Les préférences utilisateur doivent être respectées & Fonctionnel & Moyenne & Backend & «Préférence non appliquée» \\
+\hline
+RG-NOTIF-04 & Les notifications doivent être persistées & Fonctionnel & Moyenne & Backend & «Notification non sauvegardée» \\
+\hline
+RG-NOTIF-05 & Les WebSockets doivent être fiables & Performance & Haute & Backend & «Connexion WebSocket perdue» \\
+\hline
+\end{tabular}
+\caption{Règles de gestion - Notifications}
+\label{tab:rg_notifications}
+\end{table}
+
+\section{Règles de Gestion}
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{|p{1.5cm}|p{3.5cm}|p{1.5cm}|p{1.5cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Règle} & \textbf{Description} & \textbf{Type} & \textbf{Priorité} & \textbf{Validation} & \textbf{Message d'erreur} \\
+\hline
+RG-AUTH-01 & L'authentification requiert un email valide ou un identifiant unique & Sécurité & Haute & Frontend + Backend & «Identifiant invalide» \\
+\hline
+RG-AUTH-02 & Les mots de passe doivent contenir 8 caractères minimum, avec un chiffre et une majuscule & Sécurité & Haute & Frontend + Backend & «Mot de passe non conforme» \\
+\hline
+RG-AUTH-03 & Seul un administrateur peut créer ou modifier un compte utilisateur ou affecter des rôles & Contrôle d'accès & Haute & Backend & «Opération non autorisée» \\
+\hline
+RG-PROJ-01 & Un utilisateur ne peut être assigné qu'à un nombre limité de projets simultanés & Fonctionnel & Moyenne & Backend & «Limite de projets atteinte» \\
+\hline
+RG-PROJ-02 & Un projet suspendu ne peut pas avoir de nouvelles tâches assignées & Fonctionnel & Haute & Backend & «Projet suspendu» \\
+\hline
+RG-SPRINT-01 & La date de fin d'un sprint doit être postérieure à sa date de début & Cohérence & Haute & Frontend + Backend & «Date de fin invalide» \\
+\hline
+RG-US-01 & Une user story doit avoir au moins un critère d'acceptation défini & Cohérence & Haute & Frontend + Backend & «Critères d'acceptation manquants» \\
+\hline
+RG-TASK-01 & Une tâche critique ne peut pas être supprimée sans validation du responsable & Fonctionnel & Haute & Backend & «Suppression non autorisée» \\
+\hline
+RG-LIV-01 & Un livrable doit être validé avant d'être marqué comme approuvé & Fonctionnel & Haute & Backend & «Validation requise» \\
+\hline
+RG-CHG-01 & Un changement de priorité critique nécessite l'approbation de la Direction & Fonctionnel & Haute & Backend & «Approbation Direction requise» \\
+\hline
+\end{tabular}
+\caption{Règles de gestion générales}
+\label{tab:rg_generales}
+\end{table}
+
+\section{Conclusion}
+
+Cette solution constitue une plateforme complète de gestion de projets, couvrant la planification, l'exécution et le contrôle, avec des modules extensibles et une intégration analytique pour la prise de décision. Elle s'aligne avec les entités et contrôleurs observés dans le code source (\texttt{Projet, Phase, Sprint, UserStory, Tache, Livrable, Validation, Changement, Ressource, Affectation, Notification, Dashboard, Analytics, PowerBI}). 
+
+La définition détaillée des blocs fonctionnels et des règles de gestion garantit une implémentation cohérente et robuste de la plateforme. Chaque module répond à des besoins métier spécifiques tout en s'intégrant harmonieusement dans l'écosystème global de la SGP. Cette approche modulaire facilite la maintenance, l'évolution et l'adaptation de la solution aux besoins changeants de l'organisation. 

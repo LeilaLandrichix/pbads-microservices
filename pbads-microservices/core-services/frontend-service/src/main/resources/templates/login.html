@@ -9,11 +9,11 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-brand">PBADS</div>
+            <div class="nav-brand">
+                <img th:src="@{/image/pbads_icon.png}" alt="PBADS Icon">
+                PBADS
+            </div>
             <div class="nav-links">
-                <a href="/dashboard">DASHBOARD</a>
-                <a href="/data">DATA ENTRY</a>
-                <a href="/alerts">ALERTS</a>
                 <a href="/login" class="active">LOGIN</a>
             </div>
         </div>
@@ -46,7 +46,7 @@
                 </form>
                 
                 <div style="margin-top: 20px; text-align: center;">
-                    <p>Don't have an account? <a href="/register" style="color: #3498db; text-decoration: underline;">Register here</a></p>
+                    <p>Don't have an account? <a href="/register" style="color: #8E1616; text-decoration: underline;">Register here</a></p>
                 </div>
             </div>
         </div>

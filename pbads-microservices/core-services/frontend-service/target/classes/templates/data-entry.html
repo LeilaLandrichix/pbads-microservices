@@ -9,7 +9,10 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-brand">PBADS</div>
+            <div class="nav-brand">
+                <img th:src="@{/image/pbads_icon.png}" alt="PBADS Icon">
+                PBADS
+            </div>
             <div class="nav-links">
                 <span class="user-greeting" th:if="${session.firstName != null}">
                     Hello, <strong th:text="${session.firstName}">User</strong>

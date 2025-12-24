@@ -1,0 +1,29 @@
+\ifthenelse{\equal{\MediaOption}{paper}}{\blankpage}{}
+
+\clearpage
+\null
+\thispagestyle{empty}
+
+\ifthenelse{\equal{\CoverOption}{classic}}{
+    \newcommand\BackgroundPicBackPage{%
+    \put(0,0){%
+    \parbox[b][\paperheight]{\paperwidth}{%
+    \vfill
+    \centering
+    \vfill
+    }}}
+}{
+    \newcommand\BackgroundPicBackPage{%
+    \put(0,0){%
+    \parbox[b][\paperheight]{\paperwidth}{%
+    \vfill
+    \centering
+    \vfill
+    }}}
+}
+
+\AddToShipoutPictureBG*{\BackgroundPicBackPage}
+
+\newgeometry{margin=1.98cm, top=1.47cm, bottom=1.47cm}
+\noindent\clearpage
+\restoregeometry

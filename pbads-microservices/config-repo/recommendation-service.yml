@@ -1,0 +1,27 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: recommendation-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pbads_recommendation
+    username: pbads
+    password: pbads_password
+    driver-class-name: org.postgresql.Driver
+
+gemini:
+  api:
+    key: ${GEMINI_API_KEY:}
+    model: gemini-2.5-flash
+    timeout: 30000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+logging:
+  level:
+    com.pbdas.recommendation: DEBUG
+

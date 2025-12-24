@@ -1,0 +1,372 @@
+%!TEX program = xelatex
+%%% Document Options %%%
+\documentclass[
+    12pt,
+    a4paper,
+    oneside
+]{report}
+
+% --- Packages Essentiels ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% --- Packages pour le multilingue (Français, Anglais) ---
+\usepackage{fontspec}   % Requis pour XeLaTeX et les polices \usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{french}
+\setotherlanguage{english}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{ragged2e}
+\usepackage{colortbl}
+\usepackage{rotating}
+\usepackage{tikz} %<-- Package déplacé ici, dans le préambule.
+\usepackage[skins]{tcolorbox}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{tocloft}
+
+% --- Configuration pour la table des matières ---
+% Ajoute le mot "Chapitre" avant le numéro
+\renewcommand{\cftchappresnum}{Chapitre } 
+% Ajoute un point et un espace après le numéro du chapitre
+\cftsetindents{chapter}{0em}{6em}
+\renewcommand{\cftchapaftersnum}{. }
+\usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
+\addbibresource{Bibliography/Bibliography.bib}
+% \usepackage{pdflscape}
+% --- Géométrie de la page ---
+\geometry{
+    a4paper,
+    top=3.5cm,
+    bottom=4cm,
+    left=2.5cm,
+    right=2.5cm
+}
+\setlength{\footskip}{1.5cm}
+\setlength{\headheight}{16pt} % Taille ajustée pour un en-tête simple
+
+% --- Configuration Hyperref ---
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!60!black,
+    filecolor=magenta!60!black,
+    urlcolor=cyan!60!black,
+    citecolor=green!60!black,
+    pdftitle={Personal Behavior Anomaly Detection System (PBADS)},
+    pdfauthor={EL ALAMI Mohamed Majd \& LANDRICHI Leila},
+    pdfsubject={Rapport Projet fin d'année},
+    pdfkeywords={Détection d'anomalies, Machine Learning, Microservices, Spring Boot, Kafka, PostgreSQL, Gemini AI}
+}
+
+% --- Configuration des légendes ---
+\captionsetup[figure]{font=small, labelfont=bf, skip=10pt}
+\captionsetup[table]{font=small, labelfont=bf, skip=10pt}
+\captionsetup[longtable]{font=small, labelfont=bf, skip=10pt}
+\setlength{\abovecaptionskip}{15pt}
+
+% --- Configuration des tableaux ---
+% Amélioration de la visibilité des bordures
+\setlength{\arrayrulewidth}{0.5pt}
+\renewcommand{\arraystretch}{1.2}
+
+% --- Configuration des en-têtes et pieds de page pour tout le document ---
+\pagestyle{fancy}
+\fancyhf{}
+% \fancyhead[L]{Rapport de stage} % En-tête gauche simplifié
+\fancyhead[R]{\leftmark}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyfoot[C]{\thepage}
+\renewcommand{\footrulewidth}{0pt}
+
+\fancypagestyle{plain}{ % Style pour les débuts de chapitre
+\fancyhf{}
+% \fancyhead[L]{Rapport de stage}
+\fancyhead[R]{\leftmark}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyfoot[C]{\thepage}
+\renewcommand{\footrulewidth}{0pt}
+}
+
+\begin{document}
+
+% Justification globale
+\justifying
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+\raggedbottom
+
+% --- NOUVELLE PAGE DE GARDE ---
+\begin{titlepage}
+\thispagestyle{empty} % Aucune en-tête ni pied de page sur cette page
+
+% Définition de la couleur de l'accent (vert profond)
+\definecolor{mydeepgreen}{RGB}{16,94,50}
+
+% Structure de la page avec TikZ pour les éléments graphiques
+\begin{tikzpicture}[remember picture, overlay]
+    % Barre verticale vert profond sur la gauche
+    \fill[mydeepgreen] (current page.north west) rectangle ([xshift=1.2cm]current page.south west);
+
+    % Logos en haut de page (centrés)
+    \node[anchor=north, yshift=-1.5cm] at (current page.north) {
+        \includegraphics[height=2cm]{Figures/logo-emsi-honoris.jpg}
+    };
+
+    % Année universitaire en bas de page
+    \node[anchor=south, yshift=1.5cm] at (current page.south) {
+        \large\bfseries Année universitaire 2025/2026
+    };
+\end{tikzpicture}
+
+% Contenu textuel de la page de garde
+\begin{center}
+    \hspace*{1.5cm} % Décalage pour ne pas superposer la barre
+    \begin{minipage}[c][0.8\textheight][c]{\dimexpr\textwidth-1.5cm\relax}
+        \centering
+        \vspace*{3cm}
+        {\LARGE\bfseries Rapport Projet fin d'année}\\[2cm]
+        {\Large 5ème année Ingénierie Informatique et Réseaux}\\[1.5cm]
+        {\large Sous le thème}\\[0.5cm]
+        {\huge\bfseries Système de Détection d'Anomalies Comportementales Personnelles (PBADS)}\\[2cm]
+        {\large Année universitaire 2025/2026}\\[3cm]
+        \vfill
+        \raggedright
+        \large
+        {\bfseries Réalisé par :}\\[0.5cm]
+        EL ALAMI Mohamed Majd \& LANDRICHI Leila \\[1.5cm]
+        {\bfseries Encadré par :}\\[0.5cm]
+        Pr. Benyoussef Marwa \\
+    \end{minipage}
+\end{center}
+\end{titlepage}
+% --- PAGE POUR LES REMARQUES DE L'ENCADRANT ---
+\cleardoublepage % Crée une nouvelle page bien distincte
+\thispagestyle{empty}  % Applique un style de page simple (numéro en bas)
+
+
+% Vous pouvez laisser cette page vide pour que l'encadrant puisse écrire.
+
+% --- Début du contenu du rapport ---
+
+% Dedication
+\clearpage
+\markboth{DÉDICACE}{DÉDICACE}
+\chapter*{DÉDICACE}
+\input{Chapters/Dedicace}
+\addcontentsline{toc}{chapter}{Dédicace}
+
+% Acknowledgments
+\clearpage
+\markboth{REMERCIEMENTS}{REMERCIEMENTS}
+\chapter*{REMERCIEMENTS}
+\input{Chapters/Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+% Acknowledgments (English)
+\clearpage
+\markboth{ACKNOWLEDGMENTS}{ACKNOWLEDGMENTS}
+\chapter*{ACKNOWLEDGMENTS}
+\input{Chapters/Acknowledgments-EN.tex}
+\addcontentsline{toc}{chapter}{Acknowledgments}
+
+
+% Abstract (French)
+\clearpage
+\markboth{RÉSUMÉ}{RÉSUMÉ}
+\chapter*{Résumé}
+\input{Chapters/Resume}
+\addcontentsline{toc}{chapter}{Résumé}
+
+% Abstract (English)
+\clearpage
+\markboth{ABSTRACT}{ABSTRACT}
+\chapter*{Abstract}
+\input{Chapters/Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+% --- Table des matières ---
+\clearpage
+% On s'assure que l'en-tête de la ToC est correct jusqu'au bout
+\markboth{TABLE DES MATIÈRES}{TABLE DES MATIÈRES} 
+\tableofcontents
+\addcontentsline{toc}{chapter}{Table des matières}
+
+% --- Liste des figures ---
+\clearpage
+\markboth{LISTE DES FIGURES}{LISTE DES FIGURES}
+\listoffigures
+\addcontentsline{toc}{chapter}{Liste des Figures}
+
+% --- Liste des tableaux ---
+\clearpage
+\markboth{LISTE DES TABLEAUX}{LISTE DES TABLEAUX}
+\listoftables
+\addcontentsline{toc}{chapter}{Liste des Tableaux}
+% Définition de la couleur pour les titres et résumés de chapitre
+\definecolor{chapterblue}{RGB}{60, 90, 120} % Une couleur bleu-gris foncé
+
+% --- NOUVEAU CODE (CORRIGÉ) ---
+
+% Commande pour les pages de titre de chapitre SANS numéro (ex: Introduction)
+\newcommand{\chaptertitlepagenonum}[1]{
+  \clearpage
+  \addcontentsline{toc}{chapter}{#1}
+  \thispagestyle{plain}
+  \markboth{#1}{}
+  \begingroup % On ouvre un groupe pour contenir l'effet de \raggedright
+  \raggedright % Aligner à gauche
+  \vspace*{0.20\textheight}
+  {\fontsize{28}{34}\selectfont\color{chapterblue}\bfseries #1\par}
+  \vspace*{2cm}
+  \endgroup % On ferme le groupe, la justification redevient la norme
+}
+
+% Commande pour les pages de titre de chapitre AVEC numéro
+\newcommand{\chaptertitlepage}[1]{
+  \clearpage
+  \refstepcounter{chapter}
+  \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#1}
+  \thispagestyle{plain}
+  \markboth{\chaptername\ \thechapter: #1}{#1}
+  \begingroup % On ouvre un groupe pour contenir l'effet de \raggedright
+  \raggedright % Aligner à gauche
+  \vspace*{0.20\textheight}
+  {\fontsize{28}{34}\selectfont\color{chapterblue}\bfseries Chapitre \thechapter{} : #1\par}
+  \vspace*{2cm}
+  \endgroup % On ferme le groupe, la justification redevient la norme
+}
+% --- Liste des abréviations (SOLUTION DÉFINITIVE) ---
+\clearpage
+% ÉTAPE 1: On modifie l'en-tête pour les pages standards ('fancy')
+\fancyhead[R]{LISTE DES ABRÉVIATIONS}
+
+% ÉTAPE 2: On modifie AUSSI l'en-tête pour la PREMIÈRE page du chapitre ('plain')
+\fancypagestyle{plain}{
+    \fancyhf{}
+    % \fancyhead[L]{Rapport de stage}
+    \fancyhead[R]{LISTE DES ABRÉVIATIONS} % <-- Modification cruciale ici
+    \renewcommand{\headrulewidth}{0.4pt}
+    \fancyfoot[C]{\thepage}
+    \renewcommand{\footrulewidth}{0pt}
+}
+
+% Maintenant que les DEUX styles sont prêts, on peut lancer le chapitre.
+\chapter*{Liste des abréviations}
+\input{Chapters/Abbreviations}
+\addcontentsline{toc}{chapter}{Liste des abréviations}
+
+% --- Restauration du comportement normal pour TOUT le reste du document ---
+\clearpage
+% ÉTAPE 3: On restaure l'en-tête pour les pages standards ('fancy')
+\fancyhead[R]{\leftmark}
+
+% ÉTAPE 4: On restaure l'en-tête pour les premières pages de chapitre ('plain')
+\fancypagestyle{plain}{
+    \fancyhf{}
+    % \fancyhead[L]{Rapport de stage}
+    \fancyhead[R]{\leftmark} % <-- On remet la version automatique
+    \renewcommand{\headrulewidth}{0.4pt}
+    \fancyfoot[C]{\thepage}
+    \renewcommand{\footrulewidth}{0pt}
+}
+\chaptertitlepagenonum{Introduction générale}
+% Résumé pour l'Introduction générale
+% \begin{flushright}
+% \begin{minipage}{0.6\textwidth}
+% Ce rapport documente notre projet de fin d'année, axé sur le développement d'un système de détection d'anomalies comportementales personnelles (PBADS). Face aux défis croissants de l'analyse des comportements quotidiens et de l'amélioration de la qualité de vie, notre objectif est de proposer une solution innovante basée sur l'apprentissage automatique et l'intelligence artificielle. Nous détaillerons dans les chapitres suivants l'approche méthodologique, les choix techniques, la conception et l'implémentation de notre solution microservices.
+% \end{minipage}
+% \end{flushright}
+\clearpage
+\input{Chapters/Introduction}
+
+% --- Chapter 1 ---
+\chaptertitlepage{Contexte général et planification du projet}
+% Résumé pour la page de titre du chapitre 1
+\begin{flushright}
+\begin{minipage}{0.6\textwidth}
+Ce chapitre établit les fondations du projet PBADS en détaillant le contexte général et les problématiques spécifiques liées à la détection d'anomalies comportementales. Nous y exposerons les objectifs clairs du projet, la méthodologie de développement agile choisie, et le plan de travail détaillé. Une analyse des besoins utilisateurs et une stratégie d'architecture microservices seront également abordées pour garantir une exécution robuste et une scalabilité élevée.
+\end{minipage}
+\end{flushright}
+\clearpage
+\input{Chapters/Contexte}
+
+% --- Chapter 2 ---
+\chaptertitlepage{Modélisation}
+% Résumé pour la page de titre du chapitre 2
+\begin{flushright}
+\begin{minipage}{0.6\textwidth}
+Ce chapitre présente la modélisation complète du système PBADS, incluant l'analyse des besoins utilisateurs, la définition des objectifs, la méthodologie agile adoptée, et la modélisation conceptuelle avec les diagrammes UML (cas d'utilisation, classes, séquences). L'étude des lacunes des solutions existantes a permis d'identifier les besoins critiques en matière de détection automatique d'anomalies, de génération de recommandations personnalisées, et de visualisation interactive des données.
+\end{minipage}
+\end{flushright}
+\clearpage
+\input{Chapters/Chapitre2_Modelisation}
+
+% --- Chapter 3 ---
+\chaptertitlepage{Interfaces et Réalisation de l'application}
+% Résumé pour la page de titre du chapitre 3
+\begin{flushright}
+\begin{minipage}{0.6\textwidth}
+Ce chapitre présente les technologies utilisées, l'architecture microservices, et les interfaces développées pour le système PBADS. Il détaille l'implémentation technique des microservices, les choix technologiques (Spring Boot, Kafka, PostgreSQL, scikit-learn, Google Gemini AI), et les interfaces utilisateur avec thème sombre moderne. Cette approche modulaire facilite la maintenance, l'évolution et la scalabilité de la solution.
+\end{minipage}
+\end{flushright}
+\clearpage
+\input{Chapters/Chapitre3_Interfaces_Realisation}
+% --- FIN DU BLOC AJOUTÉ POUR LE CHAPITRE 4 ---
+% Conclusion
+\chaptertitlepagenonum{Conclusion générale}
+\clearpage
+\input{Chapters/Conclusion}
+% --- BIBLIOGRAPHIE ---
+\clearpage
+\nocite{*}
+\printbibliography[heading=bibintoc, title={Bibliographie}]
+%======================================================================
+%    PAGE BLANCHE ET RÉSUMÉ FINAL TRILINGUE
+%======================================================================
+
+% --- Début de la page de résumé final (Nouveau style) ---
+\clearpage
+\thispagestyle{empty} % On supprime l'en-tête et le pied de page
+
+% --- Version Française ---
+\begin{center}
+    {\large\bfseries Résumé}
+\end{center}
+\vspace{0.5em}
+\justifying
+Ce projet a été réalisé dans le cadre du développement d'un système de détection d'anomalies comportementales personnelles (PBADS). Il vise à analyser les habitudes quotidiennes des utilisateurs et à détecter automatiquement les anomalies à l'aide d'algorithmes d'apprentissage automatique non supervisés. Basé sur une architecture microservices avec 13 services distincts, le système combine performance, évolutivité et sécurité. Sa réalisation avec Spring Boot (backend), Thymeleaf (frontend), Kafka (messagerie), PostgreSQL (bases de données), scikit-learn (ML), et Google Gemini AI (recommandations) permet d'offrir une solution intuitive, fiable et adaptée aux besoins de suivi comportemental personnel.
+
+\bigskip
+\hrule
+\bigskip
+
+% --- Version Anglaise ---
+\begin{english}
+    \begin{center}
+        {\large\bfseries Abstract}
+    \end{center}
+    \vspace{0.5em}
+    \justifying
+    This project was carried out within the framework of developing a Personal Behavior Anomaly Detection System (PBADS). Its objective is to analyze users' daily habits and automatically detect anomalies using unsupervised machine learning algorithms. Built on a microservices architecture with 13 distinct services, the system ensures performance, scalability, and security. Developed using Spring Boot (backend), Thymeleaf (frontend), Kafka (messaging), PostgreSQL (databases), scikit-learn (ML), and Google Gemini AI (recommendations), it provides an intuitive, reliable, and efficient solution tailored to the needs of personal behavioral tracking.
+\end{english}
+
+\bigskip
+\hrule
+\bigskip
+
+
+
+\end{document}
+% --- Fin du document ---

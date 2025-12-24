@@ -1,0 +1,23 @@
+PWD c:\wamp64\www\projectsreport2025\rapport tex\Docs
+INPUT C:\Users\loula\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
+INPUT c:\wamp64\www\projectsreport2025\rapport tex\Docs\IPLeiriaMain.tex
+OUTPUT IPLeiriaMain.log
+INPUT C:\Program Files\MiKTeX\tex\latex\base\report.cls
+INPUT C:\Program Files\MiKTeX\tex\latex\base\report.cls
+INPUT C:\Program Files\MiKTeX\tex\latex\base\size12.clo
+INPUT C:\Program Files\MiKTeX\tex\latex\base\size12.clo
+INPUT C:\Program Files\MiKTeX\tex\latex\base\size12.clo
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmr12.tfm
+INPUT C:\Program Files\MiKTeX\tex\latex\base\inputenc.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\base\inputenc.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\base\fontenc.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\base\fontenc.sty
+INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecrm1200.tfm
+INPUT C:\Program Files\MiKTeX\tex\latex\fontspec\fontspec.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\fontspec\fontspec.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\l3packages\xparse\xparse.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\l3packages\xparse\xparse.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\l3kernel\expl3.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\l3kernel\expl3.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
+INPUT C:\Program Files\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def

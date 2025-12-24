@@ -1,0 +1,15 @@
+[0] Config.pm:308> INFO - This is Biber 2.20
+[1] Config.pm:311> INFO - Logfile is 'IPLeiriaMain.blg'
+[151] biber-MSWIN64:340> INFO - === 
+[196] Biber.pm:420> INFO - Reading 'IPLeiriaMain.bcf'
+[318] Biber.pm:991> INFO - Using all citekeys in bib section 0
+[336] Biber.pm:4463> INFO - Processing section 0
+[352] Biber.pm:4654> INFO - Looking for bibtex file 'Bibliography/Bibliography.bib' for section 0
+[405] bibtex.pm:1713> INFO - LaTeX decoding ...
+[463] bibtex.pm:1519> INFO - Found BibTeX data source 'Bibliography/Bibliography.bib'
+[678] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[679] UCollate.pm:68> INFO - Overriding locale 'fr-FR' defaults 'variable = shifted' with 'variable = non-ignorable'
+[679] Biber.pm:4283> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'fr-FR'
+[680] Biber.pm:4289> INFO - No sort tailoring available for locale 'fr-FR'
+[731] bbl.pm:676> INFO - Writing 'IPLeiriaMain.bbl' with encoding 'UTF-8'
+[768] bbl.pm:779> INFO - Output to IPLeiriaMain.bbl

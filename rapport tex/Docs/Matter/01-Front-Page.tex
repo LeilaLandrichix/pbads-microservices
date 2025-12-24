@@ -1,0 +1,82 @@
+% Full-height deep green stripe on the left
+\usepackage{tikz}
+\AddToShipoutPictureBG*{
+    \begin{tikzpicture}[remember picture,overlay]
+        \fill[fill=frontpagedark] (0,0) rectangle (1.5cm,\paperheight);
+    \end{tikzpicture}
+}
+
+\newgeometry{margin=1.98cm, top=2.15cm, bottom=1.47cm}
+\begin{titlepage}
+    \latofont
+    \color{frontpagedark}
+    \vspace*{\baselineskip}
+
+
+    % Header with EMSI and ECS logos
+    \begin{minipage}{\textwidth}
+        \vspace*{0.5cm}
+        \begin{minipage}{0.49\textwidth}
+            \includegraphics[height=1.5cm]{Figures/emsi-logo.png}
+        \end{minipage}%
+        \hfill
+        \begin{minipage}{0.49\textwidth}
+            \raggedleft
+            \includegraphics[height=1.5cm]{Figures/ecs-logo.png}
+        \end{minipage}
+    \end{minipage}
+
+    \vspace{3.5\baselineskip}
+
+    % Title.
+	\noindent
+    \makebox[\textwidth][l]{%
+        \parbox{\dimexpr\textwidth-2.5cm\relax}{
+
+
+            % Title and custom info block
+            \noindent
+            \makebox[\textwidth][l]{%
+                \parbox{\dimexpr\textwidth-2.5cm\relax}{
+                    \vspace{2cm}
+                    % Title
+                    {\centering
+                    \textbf{RAPPORT PROJET FIN D'ANNÉE} \\[0.5cm]
+                    \textbf{5ème année Ingénierie Informatique et Réseaux} \\[0.5cm]
+                    \textbf{Personal Behavior Anomaly Detection System (PBADS)}
+                    \par}
+
+                    \vspace{1.5cm}
+                    {\noindent\textbf{Réalisé par :} \\EL ALAMI Mohamed Majd \& LANDRICHI Leila}
+
+                    \vspace{1cm}
+                    {\noindent\textbf{Encadré par :}}
+                    \\[0.2cm]
+                    Pr. Benyoussef Marwa
+                }
+            }
+    % Department.
+	{\noindent\fontsize{10}{12}\selectfont\GetDepartment}
+
+    % Degree.
+	{\noindent\fontsize{10}{12}\selectfont\GetDegree}
+
+    % Course.
+    \ifdefined\GetCourse
+        {\noindent\fontsize{10}{12}\selectfont\GetCourse}
+	\fi
+
+    \vspace{45pt}
+
+    % Thesis option.
+	{\noindent\fontsize{10}{12}\itshape\selectfont\GetThesisType}
+
+    \vspace{45pt}
+
+    % Local and date.
+	{\noindent\fontsize{10}{12}\selectfont\GetDate}
+
+    \vspace{68pt}
+\end{titlepage}
+\restoregeometry
+\MediaOptionLogicBlank

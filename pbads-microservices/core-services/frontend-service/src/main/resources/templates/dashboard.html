@@ -6,11 +6,99 @@
     <title>Dashboard - PBADS</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background: #1a1a1a;
+            border-left: 4px solid #8E1616;
+            color: #EEEEEE;
+            padding: 16px 20px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            min-width: 300px;
+            max-width: 400px;
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .toast.high { border-left-color: #8E1616; }
+        .toast.medium { border-left-color: #C890A7; }
+        .toast.low { border-left-color: #A6B28B; }
+        .toast-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .toast-content {
+            flex: 1;
+        }
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #EEEEEE;
+        }
+        .toast-message {
+            font-size: 14px;
+            color: #CCCCCC;
+            line-height: 1.4;
+        }
+        .toast-close {
+            background: none;
+            border: none;
+            color: #EEEEEE;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .toast-close:hover {
+            opacity: 1;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        .toast.hiding {
+            animation: slideOut 0.3s ease-in forwards;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-brand">PBADS</div>
+            <div class="nav-brand">
+                <img th:src="@{/image/pbads_icon.png}" alt="PBADS Icon">
+                PBADS
+            </div>
             <div class="nav-links">
                 <span class="user-greeting" th:if="${session.firstName != null}">
                     Hello, <strong th:text="${session.firstName}">User</strong>
@@ -24,6 +112,9 @@
         </div>
     </nav>
     
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
     <main class="main-content">
         <div class="container">
             <h1>Dashboard</h1>
@@ -33,14 +124,22 @@
             </div>
             
             <div class="card">
-                <h2>Behavior Trends</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0;">Behavior Trends</h2>
+                    <div class="filter-buttons" style="display: flex; gap: 10px;">
+                        <button class="filter-btn" data-period="week" onclick="filterData('week', this)">Week</button>
+                        <button class="filter-btn" data-period="month" onclick="filterData('month', this)">Month</button>
+                        <button class="filter-btn" data-period="year" onclick="filterData('year', this)">Year</button>
+                        <button class="filter-btn active" data-period="all" onclick="filterData('all', this)">All</button>
+                    </div>
+                </div>
                 <div class="chart-container">
                     <canvas id="trendsChart"></canvas>
                 </div>
                 <div class="chart-legend">
-                    <span class="legend-item" style="color: #8884d8;">→ Sleep Hours</span>
-                    <span class="legend-item" style="color: #82ca9d;">→ Steps</span>
-                    <span class="legend-item" style="color: #ffc658;">→ Mood Score</span>
+                    <span class="legend-item" style="color: #D9CFC7;">→ Sleep Hours</span>
+                    <span class="legend-item" style="color: #A6B28B;">→ Steps</span>
+                    <span class="legend-item" style="color: #C890A7;">→ Mood Score</span>
                 </div>
             </div>
             
@@ -49,85 +148,317 @@
                     <h3>Recent Activity</h3>
                     <div th:if="${recentActivity != null && !recentActivity.isEmpty()}">
                         <ul style="list-style: none; padding: 0;">
-                            <li th:each="entry : ${recentActivity}" style="margin-bottom: 10px; padding: 8px; background: #f5f5f5; border-radius: 4px;">
-                                <strong th:text="${entry.date}">Date</strong><br>
-                                <span th:if="${entry.steps != null}">Steps: <strong th:text="${entry.steps}">0</strong></span>
-                                <span th:if="${entry.sleepHours != null}"> | Sleep: <strong th:text="${entry.sleepHours}">0</strong>h</span>
-                                <span th:if="${entry.moodScore != null}"> | Mood: <strong th:text="${entry.moodScore}">0</strong>/10</span>
+                            <li th:each="entry : ${recentActivity}" style="margin-bottom: 10px; padding: 8px; background: rgba(170, 170, 170, 0.1); border-radius: 4px; border: 1px solid rgba(170, 170, 170, 0.2);">
+                                <strong style="color: #EEEEEE;" th:text="${entry.date}">Date</strong><br>
+                                <span style="color: #EEEEEE;" th:if="${entry.steps != null}">Steps: <strong style="color: #A6B28B;" th:text="${entry.steps}">0</strong></span>
+                                <span style="color: #EEEEEE;" th:if="${entry.sleepHours != null}"> | Sleep: <strong style="color: #D9CFC7;" th:text="${entry.sleepHours}">0</strong>h</span>
+                                <span style="color: #EEEEEE;" th:if="${entry.moodScore != null}"> | Mood: <strong style="color: #C890A7;" th:text="${entry.moodScore}">0</strong>/10</span>
                             </li>
                         </ul>
                     </div>
-                    <p th:if="${recentActivity == null || recentActivity.isEmpty()}" style="color: #999;">
+                    <p th:if="${recentActivity == null || recentActivity.isEmpty()}" style="color: #EEEEEE;">
                         No recent activity. Start tracking your daily habits!
                     </p>
                 </div>
                 <div class="card-small">
                     <h3>Anomaly Alerts</h3>
                     <div th:if="${alertCount > 0}">
-                        <div style="font-size: 2em; font-weight: bold; color: #e74c3c;" th:text="${alertCount}">0</div>
-                        <p>Active alerts detected</p>
-                        <a href="/alerts" style="color: #3498db; text-decoration: underline;">View all alerts →</a>
+                        <div style="font-size: 2em; font-weight: bold; color: #8E1616;" th:text="${alertCount}">0</div>
+                        <p style="color: #EEEEEE;">Active alerts detected</p>
+                        <a href="/alerts" style="color: #C890A7; text-decoration: underline;">View all alerts →</a>
                     </div>
                     <div th:if="${alertCount == 0}">
-                        <p style="color: #27ae60; font-weight: bold;">✓ All clear!</p>
-                        <p style="color: #999; font-size: 0.9em;">No anomalies detected in your behavior patterns.</p>
+                        <p style="color: #A6B28B; font-weight: bold;">✓ All clear!</p>
+                        <p style="color: #EEEEEE; font-size: 0.9em;">No anomalies detected in your behavior patterns.</p>
                     </div>
                 </div>
                 <div class="card-small">
                     <h3>Recommendations</h3>
-                    <p style="color: #999;">Coming soon: Personalized recommendations based on your data patterns.</p>
+                    <div th:if="${recommendation != null && !recommendation.isEmpty()}">
+                        <p style="color: #EEEEEE; white-space: pre-wrap;" th:text="${recommendation}">Loading recommendations...</p>
+                    </div>
+                    <div th:if="${recommendation == null || recommendation.isEmpty()}">
+                        <p style="color: #EEEEEE;">No recommendations available at this time.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
     
     <script th:inline="javascript">
-        const chartData = /*[[${data}]]*/ [];
+        let chart = null;
+        const allChartData = /*[[${data}]]*/ [];
         
-        if (chartData && chartData.length > 0) {
-            const ctx = document.getElementById('trendsChart').getContext('2d');
-            const dates = chartData.map(d => d.date);
-            const sleepHours = chartData.map(d => d.sleepHours || 0);
-            const steps = chartData.map(d => d.steps || 0);
-            const moodScore = chartData.map(d => d.moodScore || 0);
+        // Simple date parser - converts YYYY-MM-DD to Date object
+        function parseDate(dateValue) {
+            if (!dateValue) return null;
             
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: dates,
-                    datasets: [{
-                        label: 'Sleep Hours',
-                        data: sleepHours,
-                        borderColor: '#8884d8',
-                        backgroundColor: 'rgba(136, 132, 216, 0.1)',
-                        tension: 0.4
-                    }, {
-                        label: 'Steps',
-                        data: steps,
-                        borderColor: '#82ca9d',
-                        backgroundColor: 'rgba(130, 202, 157, 0.1)',
-                        tension: 0.4
-                    }, {
-                        label: 'Mood Score',
-                        data: moodScore,
-                        borderColor: '#ffc658',
-                        backgroundColor: 'rgba(255, 198, 88, 0.1)',
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+            let dateStr = String(dateValue);
+            // Handle object format {year: 2025, month: 12, day: 23}
+            if (typeof dateValue === 'object' && dateValue.year) {
+                return new Date(dateValue.year, dateValue.month - 1, dateValue.day);
+            }
+            
+            // Remove time part if present
+            dateStr = dateStr.split('T')[0];
+            const parts = dateStr.split('-');
+            
+            if (parts.length === 3) {
+                const year = parseInt(parts[0], 10);
+                const month = parseInt(parts[1], 10) - 1;
+                const day = parseInt(parts[2], 10);
+                return new Date(year, month, day);
+            }
+            
+            return new Date(dateStr);
+        }
+        
+        // Get date timestamp for comparison (normalized to start of day)
+        function getDateTimestamp(dateValue) {
+            const date = parseDate(dateValue);
+            if (!date) return 0;
+            date.setHours(0, 0, 0, 0);
+            return date.getTime();
+        }
+        
+        function filterData(period, button) {
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+            
+            let filteredData = [];
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const todayTimestamp = today.getTime();
+            
+            if (period === 'all') {
+                filteredData = allChartData;
+            } else {
+                let cutoffDate = new Date(today);
+                
+                if (period === 'week') {
+                    cutoffDate.setDate(today.getDate() - 7);
+                } else if (period === 'month') {
+                    cutoffDate.setMonth(today.getMonth() - 1);
+                } else if (period === 'year') {
+                    cutoffDate.setFullYear(today.getFullYear() - 1);
+                }
+                
+                cutoffDate.setHours(0, 0, 0, 0);
+                const cutoffTimestamp = cutoffDate.getTime();
+                
+                filteredData = allChartData.filter(d => {
+                    const dateTimestamp = getDateTimestamp(d.date);
+                    return dateTimestamp >= cutoffTimestamp && dateTimestamp <= todayTimestamp;
+                });
+            }
+            
+            // Update chart with filtered data
+            updateChart(filteredData);
+        }
+        
+        function updateChart(chartData) {
+            const chartElement = document.getElementById('trendsChart');
+            
+            if (!chartData || chartData.length === 0) {
+                chartElement.style.display = 'none';
+                if (chart) {
+                    chart.destroy();
+                    chart = null;
+                }
+                const container = chartElement.parentElement;
+                let messageDiv = container.querySelector('.no-data-message');
+                if (!messageDiv) {
+                    messageDiv = document.createElement('div');
+                    messageDiv.className = 'no-data-message';
+                    messageDiv.style.cssText = 'padding: 20px; text-align: center; color: #EEEEEE;';
+                    messageDiv.textContent = 'No data available for the selected time period.';
+                    container.appendChild(messageDiv);
+                }
+                return;
+            }
+            
+            // Remove no-data message if present
+            const container = chartElement.parentElement;
+            const messageDiv = container.querySelector('.no-data-message');
+            if (messageDiv) {
+                messageDiv.remove();
+            }
+            
+            chartElement.style.display = 'block';
+            
+            // Sort data by date
+            const sortedData = [...chartData].sort((a, b) => {
+                const tsA = getDateTimestamp(a.date);
+                const tsB = getDateTimestamp(b.date);
+                return tsA - tsB;
+            });
+            
+            // Prepare data arrays
+            const labels = [];
+            const sleepData = [];
+            const stepsData = [];
+            const moodData = [];
+            
+            sortedData.forEach(d => {
+                const date = parseDate(d.date);
+                if (date) {
+                    labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                    sleepData.push(d.sleepHours || 0);
+                    stepsData.push(d.steps || 0);
+                    moodData.push(d.moodScore || 0);
                 }
             });
+            
+            // If chart exists, update it instead of destroying
+            if (chart) {
+                chart.data.labels = labels;
+                chart.data.datasets[0].data = sleepData;
+                chart.data.datasets[1].data = stepsData;
+                chart.data.datasets[2].data = moodData;
+                chart.update('active');
+            } else {
+                // Create new chart only if it doesn't exist
+                const ctx = chartElement.getContext('2d');
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Sleep Hours',
+                            data: sleepData,
+                            borderColor: '#D9CFC7',
+                            backgroundColor: 'rgba(217, 207, 199, 0.1)',
+                            tension: 0.4
+                        }, {
+                            label: 'Steps',
+                            data: stepsData,
+                            borderColor: '#A6B28B',
+                            backgroundColor: 'rgba(166, 178, 139, 0.1)',
+                            tension: 0.4
+                        }, {
+                            label: 'Mood Score',
+                            data: moodData,
+                            borderColor: '#C890A7',
+                            backgroundColor: 'rgba(200, 144, 167, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 300
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#EEEEEE'
+                                },
+                                grid: {
+                                    color: 'rgba(238, 238, 238, 0.1)'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#EEEEEE'
+                                },
+                                grid: {
+                                    color: 'rgba(238, 238, 238, 0.1)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#EEEEEE'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        // Initialize chart with all data
+        if (allChartData && allChartData.length > 0) {
+            updateChart(allChartData);
         } else {
             document.getElementById('trendsChart').style.display = 'none';
         }
+        
+        // ========== PUSH NOTIFICATION SYSTEM ==========
+        let lastAlertCheck = null;
+        const userId = /*[[${session.username}]]*/ 'admin';
+        const token = /*[[${session.token}]]*/ '';
+        
+        // Toast notification function
+        function showToast(alert) {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + (alert.anomalyLevel ? alert.anomalyLevel.toLowerCase() : 'medium');
+            
+            const level = alert.anomalyLevel || 'MEDIUM';
+            const icon = level === 'HIGH' ? '🔴' : level === 'MEDIUM' ? '🟡' : '🟢';
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${icon}</div>
+                <div class="toast-content">
+                    <div class="toast-title">Alert: ${level}</div>
+                    <div class="toast-message">${alert.message || 'Anomaly detected'}</div>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Auto-remove after 8 seconds
+            setTimeout(() => {
+                toast.classList.add('hiding');
+                setTimeout(() => toast.remove(), 300);
+            }, 8000);
+        }
+        
+        // Check for new alerts
+        async function checkForNewAlerts() {
+            if (!userId || !token) return;
+            
+            try {
+                const response = await fetch('/api/alerts?userId=' + userId, {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                
+                if (response.ok) {
+                    const alerts = await response.json();
+                    if (alerts && alerts.length > 0) {
+                        // Get the most recent alert
+                        const latestAlert = alerts[0];
+                        const alertTime = new Date(latestAlert.createdAt || latestAlert.timestamp);
+                        
+                        // Only show if it's newer than last check
+                        if (!lastAlertCheck || alertTime > lastAlertCheck) {
+                            showToast(latestAlert);
+                            lastAlertCheck = alertTime;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking for alerts:', error);
+            }
+        }
+        
+        // Poll for new alerts every 5 seconds
+        setInterval(checkForNewAlerts, 5000);
+        
+        // Initial check after 2 seconds
+        setTimeout(checkForNewAlerts, 2000);
     </script>
 </body>
 </html>

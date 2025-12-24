@@ -1,0 +1,97 @@
+\section{Structure du Projet}
+
+L'architecture du projet suit une organisation modulaire et structurée, facilitant la maintenance et l'évolution du code. Voici la structure détaillée des répertoires et fichiers principaux :
+
+% Placeholder de structure (les figures seront remplacées ultérieurement)
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Figures/placeholder.png}
+\caption{Structure générale du projet PM-app (remplacer par capture réelle)}
+\label{fig:pmapp_structure}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Figures/placeholder.png}
+\caption{Placeholder supplémentaire}
+\label{fig:program_cs}
+\end{figure}
+
+\section{Description des Composants}
+
+\subsection{Backend (Spring Boot)}
+\begin{itemize}
+\item \textbf{controllers/} : Points d'entrée de l'API REST
+\item \textbf{models/} : Entités JPA et objets de transfert de données
+\item \textbf{repositories/} : Interfaces d'accès aux données
+\item \textbf{services/} : Logique métier et traitement des données
+\end{itemize}
+
+\subsection{Frontend (Angular)}
+\begin{itemize}
+\item \textbf{components/} : Composants réutilisables de l'interface
+\item \textbf{pages/} : Pages principales de l'application
+\item \textbf{services/} : Services d'appel à l'API
+\item \textbf{utils/} : Fonctions utilitaires et constantes
+\end{itemize}
+
+\section{Annexe A — APIs principales}
+Extraits d’API REST (exemples):
+\begin{itemize}
+  \item \textbf{/api/projects} — CRUD projets, pagination, filtres.
+  \item \textbf{/api/sprints} — créer/éditer, lier US.
+  \item \textbf{/api/user-stories} — CRUD, priorisation, état.
+  \item \textbf{/api/tasks} — CRUD, assignation, changement d’état.
+  \item \textbf{/api/phases}, \textbf{/api/milestones} — gouvernance.
+  \item \textbf{/api/deliverables}, \textbf{/api/validations}, \textbf{/api/comments}.
+  \item \textbf{/api/changes} — demandes de changement.
+  \item \textbf{/api/resources}, \textbf{/api/assignments} — ressources et affectations.
+  \item \textbf{/api/client-inquiries}, \textbf{/api/contracts} — demande→contrat.
+  \item \textbf{/api/dashboard}, \textbf{/api/analytics}, \textbf{/api/powerbi} — KPI/BI.
+\end{itemize}
+
+\section{Annexe B — Schéma conceptuel (vue synthétique)}
+Les entités clés et relations (à illustrer par un ERD):
+\begin{itemize}
+  \item \texttt{Projet} 1..* \texttt{Phase, Sprint, UserStory, Tache, Jalon, Changement}
+  \item \texttt{Utilisateur} *..* \texttt{Projet} via \texttt{Affectation}(rôle)
+  \item \texttt{Backlog} — versions, liens vers \texttt{UserStory}
+  \item \texttt{Livrable} → \texttt{Validation} (workflow)
+  \item \texttt{ClientInquiry} → \texttt{Contrat} → \texttt{Projet}
+\end{itemize}
+
+\section{Architecture MVC}
+
+Le projet suit l'architecture Modèle-Vue-Contrôleur (MVC) :
+
+\begin{itemize}
+\item \textbf{Modèle} : Représente les données et la logique métier
+  \begin{itemize}
+  \item Entités JPA pour la persistance
+  \item Services pour le traitement des données
+  \item Repositories pour l'accès aux données
+  \end{itemize}
+
+\item \textbf{Vue} : Interface utilisateur Angular
+  \begin{itemize}
+  \item Composants réutilisables
+  \item Pages et layouts
+  \item Styles et assets
+  \end{itemize}
+
+\item \textbf{Contrôleur} : Gestion des requêtes et coordination
+  \begin{itemize}
+  \item Controllers REST
+  \item Routing
+  \item Validation des données
+  \end{itemize}
+\end{itemize}
+
+Cette architecture assure :
+\begin{itemize}
+\item Une séparation claire des responsabilités
+\item Une maintenance facilitée
+\item Une évolutivité du code
+\item Une réutilisation des composants
+\item Une testabilité améliorée
+\end{itemize} 

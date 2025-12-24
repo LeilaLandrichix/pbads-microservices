@@ -32,6 +32,9 @@ public class Alert {
     @Column(name = "contributing_factors", columnDefinition = "TEXT")
     private String contributingFactors; // JSON string
     
+    @Column(name = "recommendation", columnDefinition = "TEXT")
+    private String recommendation; // AI-generated recommendation for improving habits
+    
     @Column(name = "status", nullable = false, length = 20)
     private String status = "ACTIVE"; // ACTIVE, ACKNOWLEDGED, RESOLVED
     
@@ -107,6 +110,14 @@ public class Alert {
     
     public void setContributingFactors(String contributingFactors) {
         this.contributingFactors = contributingFactors;
+    }
+    
+    public String getRecommendation() {
+        return recommendation;
+    }
+    
+    public void setRecommendation(String recommendation) {
+        this.recommendation = recommendation;
     }
     
     public String getStatus() {

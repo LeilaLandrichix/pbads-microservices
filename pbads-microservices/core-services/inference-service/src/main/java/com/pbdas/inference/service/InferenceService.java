@@ -3,6 +3,7 @@ package com.pbdas.inference.service;
 import com.pbdas.data.model.event.DataLoggedEvent;
 import com.pbdas.inference.model.dto.AnomalyResult;
 import com.pbdas.inference.kafka.producer.AnomalyEventProducer;
+import com.pbdas.inference.client.RecommendationServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class InferenceService {
     
     @Autowired
     private AlertServiceClient alertServiceClient;
+    
+    @Autowired
+    private RecommendationServiceClient recommendationServiceClient;
     
     @Value("${inference.model.default-threshold:0.5}")
     private double defaultThreshold;
@@ -57,12 +61,29 @@ public class InferenceService {
                 logger.warn("*** ANOMALY DETECTED *** User: {}, Score: {}, Level: {}, Message: {}",
                     event.getUserId(), result.getAnomalyScore(), result.getLevel(), result.getMessage());
                 
+                // Get AI recommendation for this alert
+                String recommendation = null;
+                try {
+                    logger.info("Requesting AI recommendation for user: {}", event.getUserId());
+                    recommendation = recommendationServiceClient.getRecommendationForAlert(
+                        event.getUserId(), event, result);
+                    if (recommendation != null && !recommendation.isEmpty()) {
+                        logger.info("✓ Received AI recommendation for alert");
+                    } else {
+                        logger.warn("No recommendation received from recommendation service");
+                    }
+                } catch (Exception e) {
+                    logger.error("Failed to get recommendation, continuing with alert creation", e);
+                    // Don't fail alert creation if recommendation fails
+                }
+                
                 // ALWAYS try direct HTTP call first (more reliable than Kafka)
                 logger.info("Creating alert directly via HTTP for user: {}", event.getUserId());
                 alertServiceClient.createAlertDirectly(
                     event.getUserId(),
                     event.getDate(),
-                    result
+                    result,
+                    recommendation
                 );
                 logger.info("✓ Alert created directly via HTTP");
                 

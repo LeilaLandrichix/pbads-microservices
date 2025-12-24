@@ -1,0 +1,55 @@
+Ce chapitre détaille les aspects d'implémentation de la plateforme de gestion de projets, en se concentrant sur l'architecture technique, les décisions de conception et le processus de développement alignés avec le code source.
+
+\section{Architecture Backend}
+\begin{itemize}
+  \item \textbf{Couches} : \texttt{controller}, \texttt{service}, \texttt{repository}, \texttt{entity}, \texttt{dto}, \texttt{config}, \texttt{exception} sous le package \texttt{com.example.pmapp}.
+  \item \textbf{Sécurité} : Spring Security avec JWT (JJWT) et OAuth2 Microsoft (SSO). Rôles en payload (scope), extraction côté frontend.
+  \item \textbf{Persistance} : Spring Data JPA (MySQL), stratégie \texttt{update}, pagination des listes (Spring Page<T>), enums persistés pour états/priorités/types.
+  \item \textbf{WebSocket} : Notifications temps réel.
+  \item \textbf{Intégrations} : Power BI via contrôleur dédié; PDFBox disponible pour génération/lecture de PDF.
+\end{itemize}
+
+\section{Modèle de Données}
+\begin{itemize}
+  \item \textbf{Projets} : \texttt{Projet} avec \texttt{typeProjet}, \texttt{etat}, budget, dates, relations vers \texttt{Phase}, \texttt{Sprint}, \texttt{Tache}.
+  \item \textbf{Gestion Agile} : \texttt{Sprint} (objectif, dates, user stories), \texttt{UserStory} (état, rattachements), \texttt{Tache} (priorité, état, critique, obstacles, assignation, userStoryId/sprintId/phaseId).
+  \item \textbf{Gouvernance} : \texttt{Livrable} (type, version, étatValidation, fichierUrl), \texttt{Validation}, \texttt{Commentaire} (type), \texttt{Changement} (statut, priorité, coûts/délais/impacts), \texttt{Notification}.
+  \item \textbf{Organisation} : \texttt{Ressource} (type, quantité), \texttt{Affectation} (rôles projet), \texttt{PartiePrenante}.
+  \item \textbf{Avant-Vente} : \texttt{ClientInquiry} (workflow de statuts), \texttt{Contrat}.
+\end{itemize}
+
+\section{API REST}
+Les contrôleurs exposent des endpoints REST cohérents (CRUD et opérations métier). Exemples :
+\begin{itemize}
+  \item \textbf{ProjetController} : création/mise à jour, listes paginées, état et type de projet.
+  \item \textbf{SprintController, UserStoryController, TacheController} : planification de sprint, gestion Kanban, affectation.
+  \item \textbf{BacklogController, PhaseController, JalonController} : backlog versionné, phases du projet, milestones.
+  \item \textbf{LivrableController, ValidationController, CommentaireController} : dépôt, cycle de validation, échanges.
+  \item \textbf{ChangementController} : demandes de changement et validations.
+  \item \textbf{RessourceController, AffectationController} : ressources et rôles projet.
+  \item \textbf{ClientInquiryController, ContratController} : demandes client et contrats associés.
+  \item \textbf{DashboardController, AnalyticsController, PowerBIController} : indicateurs, analytics et intégration Power BI.
+\end{itemize}
+
+\section{Frontend Angular}
+\begin{itemize}
+  \item \textbf{State \/ Services} : Services pour projets, user stories, notifications temps réel, ressources, analytics, Power BI.
+  \item \textbf{Routing par fonctionnalités} : modules \texttt{project}, \texttt{sprint}, \texttt{tache}, \texttt{dashboard}, \texttt{advanced-reporting}, etc.
+  \item \textbf{Composants clés} : planification de sprint, kanban des tâches, backlog, gestion des phases, milestones, formulaires de création.
+  \item \textbf{Modèles} : Interfaces TypeScript \texttt{Projet}, \texttt{Sprint}, \texttt{UserStory}, \texttt{Tache}, etc., alignées avec la pagination Spring (\texttt{PagedResponse<T>}).
+\end{itemize}
+
+\section{Qualité, Validation et Erreurs}
+\begin{itemize}
+  \item \textbf{Validation} : Bean Validation backend; services de validation frontend.
+  \item \textbf{Gestion des erreurs} : Intercepteurs HTTP, gestion centralisée des erreurs et messages utilisateur.
+  \item \textbf{CORS et Sécurité} : CORS configuré sur \texttt{http://localhost:4200}, stockage local du JWT et décodage sécurisé.
+\end{itemize}
+
+\section{Découplage et Extensibilité}
+\begin{itemize}
+  \item \textbf{Séparation des préoccupations} : couches nettes et modèles API stables pour itérer sur l’UI sans impacter l’API.
+  \item \textbf{Extensibilité} : Ajout de nouveaux types de livrables, rôles et KPI sans casser les contrats existants.
+\end{itemize}
+
+Cette implémentation fournit une base solide, modulaire et extensible pour la gestion de projets, tout en intégrant des capacités analytiques avancées et un temps réel efficace pour la collaboration d'équipe. 

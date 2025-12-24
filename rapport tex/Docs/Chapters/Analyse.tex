@@ -1,0 +1,46 @@
+Ce chapitre présente l'analyse et la conception détaillée de notre plateforme de gestion de projets.
+
+\section{Besoins Fonctionnels}
+\begin{itemize}
+  \item Gestion des projets : création, suivi, types (Scrum/Itératif), états et budgets.
+  \item Phases et jalons : planification, exécution, maîtrise, clôture avec milestones.
+  \item Gestion agile : sprints, user stories, tâches avec priorités, états et affectations.
+  \item Backlog et cahier des charges : gestion versionnée et documents contractuels.
+  \item Ressources et affectations : rôles projet et composition d'équipe.
+  \item Livrables et validations : workflow de validation et commentaires.
+  \item Changements : demandes, priorisation, approbation/rejet et implémentation.
+  \item Tableau de bord et analytics : KPI, vélocité, burndown, répartition des tâches.
+  \item Notifications : événements clés en temps réel.
+\end{itemize}
+
+\section{Acteurs}
+\begin{itemize}
+  \item \textbf{Administrateur} : gouvernance globale, gestion des utilisateurs et paramètres.
+  \item \textbf{Chef de projet / Product Owner} : création et pilotage des projets, sprints, backlog.
+  \item \textbf{Scrum Master} : facilitation agile, suivi d'avancement, gestion des obstacles.
+  \item \textbf{Développeur/Testeur} : exécution des tâches, mise à jour des statuts, commentaires.
+  \item \textbf{Direction/Client} : validation des livrables, revue des KPI et décisions.
+\end{itemize}
+
+\section{Contraintes et Règles}
+\begin{itemize}
+  \item Cohérence des dates (phase/sprint/tâche) et états synchronisés.
+  \item Permissions basées sur les rôles et la participation au projet.
+  \item Traçabilité des changements d'état, validations et commentaires.
+  \item Performance des listes paginées et filtrage.
+\end{itemize}
+
+\section{Modèles et Diagrammes}
+\begin{itemize}
+  \item Diagramme de cas d'utilisation : gestion de projet, sprint, backlog, livrable, validation.
+  \item Diagramme de classes : entités \texttt{Projet, Phase, Sprint, UserStory, Tache, Ressource, Affectation, Livrable, Validation, Changement, Notification} et relations.
+  \item Diagrammes de séquence : planification de sprint, création de tâche, validation de livrable.
+\end{itemize}
+
+\section{Règles Métier Illustratives}
+\begin{itemize}
+  \item Une tâche \texttt{critique=true} doit être visible en priorité et signalée dans les KPI.
+  \item Un sprint ne peut être clôturé que si toutes les user stories sont terminées ou replanifiées.
+  \item Un livrable ne peut passer à “Approuvé” qu'après validation par un rôle habilité.
+  \item Une demande de changement “Approuvée” doit créer un suivi d'implémentation.
+\end{itemize} 

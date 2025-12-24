@@ -86,6 +86,7 @@ public class AlertController {
             
             @SuppressWarnings("unchecked")
             Map<String, Object> contributingFactors = (Map<String, Object>) request.get("contributingFactors");
+            String recommendation = (String) request.get("recommendation");
             
             if (userId == null || date == null || anomalyScore == null) {
                 return ResponseEntity.badRequest().body(Map.of("error", "Missing required fields"));
@@ -97,7 +98,8 @@ public class AlertController {
                 anomalyScore,
                 anomalyLevel != null ? anomalyLevel : "MEDIUM",
                 message != null ? message : "Anomaly detected",
-                contributingFactors
+                contributingFactors,
+                recommendation
             );
             
             return ResponseEntity.ok(convertToMap(alert));
@@ -131,6 +133,7 @@ public class AlertController {
         map.put("anomalyLevel", alert.getAnomalyLevel());
         map.put("message", alert.getMessage());
         map.put("status", alert.getStatus());
+        map.put("recommendation", alert.getRecommendation());
         map.put("createdAt", alert.getCreatedAt() != null ? alert.getCreatedAt().toString() : null);
         map.put("timestamp", alert.getCreatedAt() != null ? alert.getCreatedAt().toString() : null);
         

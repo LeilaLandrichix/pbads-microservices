@@ -1,0 +1,6 @@
+com\pbdas\recommendation\controller\RecommendationController.class
+com\pbdas\recommendation\model\dto\RecommendationRequest.class
+com\pbdas\recommendation\service\GeminiService.class
+com\pbdas\recommendation\RecommendationApplication.class
+com\pbdas\recommendation\config\EnvConfig.class
+com\pbdas\recommendation\model\dto\RecommendationResponse.class

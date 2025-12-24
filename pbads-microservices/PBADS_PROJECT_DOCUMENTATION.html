@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBADS - Personal Behavior Anomaly Detection System - Complete Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #8E1616;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            border-bottom: 4px solid #8E1616;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #1D1616;
+            font-size: 2em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-left: 5px solid #8E1616;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            color: #8E1616;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #1D1616;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .service-card {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #8E1616;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .service-card h4 {
+            color: #8E1616;
+            margin-top: 0;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .tech-item {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border: 2px solid #8E1616;
+        }
+        
+        .tech-item strong {
+            color: #8E1616;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #8E1616;
+        }
+        
+        .diagram-container {
+            background: white;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 2px solid #8E1616;
+            overflow-x: auto;
+        }
+        
+        .workflow-step {
+            background: #EEEEEE;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #A6B28B;
+            border-radius: 5px;
+        }
+        
+        .workflow-step strong {
+            color: #1C352D;
+        }
+        
+        .algorithm-box {
+            background: #D9CFC7;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px solid #8E1616;
+        }
+        
+        .highlight {
+            background: #C890A7;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #8E1616;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .port-badge {
+            display: inline-block;
+            background: #8E1616;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        
+        .toc {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+            color: #8E1616;
+        }
+        
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .toc a {
+            color: #8E1616;
+            text-decoration: none;
+            display: block;
+            padding: 5px 0;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Personal Behavior Anomaly Detection System (PBADS)</h1>
+        <p style="font-size: 1.2em; color: #666; margin-bottom: 30px;">
+            A comprehensive microservices architecture for detecting anomalies in personal daily behaviors using machine learning.
+        </p>
+        
+        <div class="toc">
+            <h3>Table of Contents</h3>
+            <ul>
+                <li><a href="#overview">1. Project Overview</a></li>
+                <li><a href="#architecture">2. Architecture & Workflow</a></li>
+                <li><a href="#microservices">3. Microservices Details</a></li>
+                <li><a href="#model">4. Machine Learning Model</a></li>
+                <li><a href="#communication">5. Service Communication</a></li>
+                <li><a href="#technologies">6. Technologies Used</a></li>
+                <li><a href="#diagram">7. Architecture Diagram</a></li>
+                <li><a href="#updates">9. Recent Updates & Features</a></li>
+            </ul>
+        </div>
+        
+        <section id="overview" class="section">
+            <h2>1. Project Overview</h2>
+            <p>
+                PBADS is a full-stack microservices system designed to analyze personal habit data (sleep, diet, activity, mood) 
+                and detect behavioral anomalies in real-time. The system uses machine learning algorithms to identify patterns 
+                and deviations from normal behavior, providing users with timely alerts, AI-powered recommendations, and insights.
+            </p>
+            <p>
+                The system follows a <strong>13-service microservices architecture</strong> with clear separation of concerns, 
+                enabling scalability, maintainability, and fault tolerance. It combines synchronous HTTP communication for 
+                immediate responses with asynchronous Kafka messaging for event-driven processing. The system integrates Google 
+                Gemini AI for generating personalized recommendations based on detected anomalies.
+            </p>
+        </section>
+        
+        <section id="architecture" class="section">
+            <h2>2. Architecture & Workflow</h2>
+            
+            <h3>2.1 System Architecture Layers</h3>
+            <p>The PBADS architecture is organized into four main layers:</p>
+            
+            <div class="service-card">
+                <h4>🌐 Frontend Layer</h4>
+                <p><strong>Frontend Service (Port 3000)</strong> - Thymeleaf-based web application providing user interface for:</p>
+                <ul>
+                    <li>User authentication and registration</li>
+                    <li>Daily habit data entry</li>
+                    <li>Dashboard with statistics and charts</li>
+                    <li>Alert viewing and management</li>
+                    <li>User management (Admin only)</li>
+                </ul>
+            </div>
+            
+            <div class="service-card">
+                <h4>🚪 API Gateway Layer</h4>
+                <p><strong>API Gateway (Port 8080)</strong> - Spring Cloud Gateway serving as:</p>
+                <ul>
+                    <li>Single entry point for all client requests</li>
+                    <li>Request routing to appropriate microservices</li>
+                    <li>Authentication and authorization</li>
+                    <li>Rate limiting and circuit breaking</li>
+                    <li>CORS handling</li>
+                </ul>
+            </div>
+            
+            <div class="service-card">
+                <h4>🏗️ Infrastructure Layer</h4>
+                <ul>
+                    <li><strong>Eureka Server (Port 8761)</strong> - Service discovery and registry</li>
+                    <li><strong>Config Server (Port 8888)</strong> - Centralized configuration management</li>
+                    <li><strong>Kafka</strong> - Asynchronous message broker for event-driven communication</li>
+                    <li><strong>PostgreSQL</strong> - Relational databases (one per service for data isolation)</li>
+                    <li><strong>Redis</strong> - Caching and session management</li>
+                    <li><strong>MLflow (Port 5000)</strong> - ML experiment tracking and model versioning</li>
+                </ul>
+            </div>
+            
+            <div class="service-card">
+                <h4>⚙️ Core Services Layer</h4>
+                <ul>
+                    <li><strong>Auth Service (Port 8081)</strong> - Authentication, authorization, and user management</li>
+                    <li><strong>Data Service (Port 8082)</strong> - Habit data CRUD operations</li>
+                    <li><strong>Model Service (Port 8083)</strong> - ML model training and management</li>
+                    <li><strong>Inference Service (Port 8084)</strong> - Real-time anomaly detection</li>
+                    <li><strong>Alert Service (Port 8085)</strong> - Alert generation and notification management</li>
+                    <li><strong>Monitoring Service (Port 8086)</strong> - Observability with Prometheus/Grafana</li>
+                    <li><strong>Recommendation Service (Port 8087)</strong> - AI-powered recommendations using Google Gemini</li>
+                </ul>
+            </div>
+            
+            <h3>2.2 Complete Workflow</h3>
+            <p>The system follows this workflow when processing user data:</p>
+            
+            <div class="workflow-step">
+                <strong>Step 1: User Authentication</strong><br>
+                User logs in through Frontend Service → Frontend calls Auth Service via Gateway → 
+                Auth Service validates credentials → Returns JWT token → Frontend stores token in session
+            </div>
+            
+            <div class="workflow-step">
+                <strong>Step 2: Data Entry</strong><br>
+                User submits daily habit data (sleep, steps, calories, water, study hours, mood) → 
+                Frontend Service sends POST request to Data Service via Gateway → Data Service validates and persists data in PostgreSQL
+            </div>
+            
+            <div class="workflow-step">
+                <strong>Step 3: Event Publishing (Dual Mode)</strong><br>
+                Data Service publishes <code>DataLoggedEvent</code> to Kafka topic <code>data.logged.events</code> 
+                <span class="highlight">AND</span> makes direct HTTP call to Inference Service (fallback mechanism)
+            </div>
+            
+            <div class="workflow-step">
+                <strong>Step 4: Anomaly Detection</strong><br>
+                Inference Service receives event (via Kafka consumer or HTTP endpoint) → 
+                Loads ML model from Model Service or cache → Prepares feature vector → 
+                Runs anomaly detection algorithm → Calculates anomaly score (0-1) → Determines anomaly level (NORMAL/LOW/MEDIUM/HIGH)
+            </div>
+            
+            <div class="workflow-step">
+                <strong>Step 5: AI Recommendation Generation (If Anomaly Detected)</strong><br>
+                Inference Service detects anomaly → Builds data summary with anomaly details and user habits → 
+                Calls Recommendation Service via HTTP → Recommendation Service sends prompt to Google Gemini AI → 
+                Gemini generates personalized recommendations → Recommendation Service returns recommendation to Inference Service
+            </div>
+            
+            <div class="workflow-step">
+                <strong>Step 6: Alert Generation with Recommendation</strong><br>
+                Inference Service creates <code>AnomalyDetectedEvent</code> with recommendation → 
+                Publishes to Kafka topic <code>anomaly.detected.events</code> 
+                <span class="highlight">AND</span> makes direct HTTP call to Alert Service with recommendation → 
+                Alert Service persists alert with AI recommendation in database
+            </div>
+            
+            <div class="workflow-step">
+                <strong>Step 7: User Notification</strong><br>
+                Alert Service stores alert with recommendation → Frontend Service polls Alert Service every 5 seconds for new alerts → 
+                Push notification (toast) appears in dashboard when new alert detected → Dashboard displays alerts with severity levels → 
+                User can view recommendations and acknowledge/resolve alerts
+            </div>
+        </section>
+        
+        <section id="microservices" class="section">
+            <h2>3. Microservices Details</h2>
+            
+            <div class="service-card">
+                <h4>🔐 Auth Service <span class="port-badge">8081</span></h4>
+                <p><strong>Purpose:</strong> Handles all authentication, authorization, and user management operations.</p>
+                <p><strong>Key Features:</strong></p>
+                <ul>
+                    <li>JWT token generation and validation</li>
+                    <li>User registration and login</li>
+                    <li>Password encryption using BCrypt</li>
+                    <li>Role-based access control (ADMIN, USER)</li>
+                    <li>User CRUD operations (Admin only)</li>
+                    <li>Account enable/disable functionality</li>
+                </ul>
+                <p><strong>Database:</strong> PostgreSQL database <code>pbads_auth</code></p>
+                <p><strong>Technologies:</strong> Spring Security, JWT (HS512), BCrypt, Spring Data JPA</p>
+            </div>
+            
+            <div class="service-card">
+                <h4>📊 Data Service <span class="port-badge">8082</span></h4>
+                <p><strong>Purpose:</strong> Manages all daily habit data operations.</p>
+                <p><strong>Key Features:</strong></p>
+                <ul>
+                    <li>CRUD operations for daily habit data</li>
+                    <li>Data validation and persistence</li>
+                    <li>Kafka event publishing (<code>data.logged.events</code>)</li>
+                    <li>Direct HTTP fallback to Inference Service</li>
+                    <li>Query by user, date, and date range</li>
+                </ul>
+                <p><strong>Data Model:</strong></p>
+                <ul>
+                    <li>User_ID, Date, Wake_Up_Time</li>
+                    <li>Sleep_Hours, Steps, Calories_Burned</li>
+                    <li>Water_Intake_ml, Study_Hours, Mood_Score</li>
+                </ul>
+                <p><strong>Database:</strong> PostgreSQL database <code>pbads_data</code></p>
+                <p><strong>Technologies:</strong> Spring Data JPA, Kafka Producer, Spring Cloud OpenFeign</p>
+            </div>
+            
+            <div class="service-card">
+                <h4>🤖 Model Service <span class="port-badge">8083</span></h4>
+                <p><strong>Purpose:</strong> Handles machine learning model training and management.</p>
+                <p><strong>Key Features:</strong></p>
+                <ul>
+                    <li>Model training orchestration (Java/Python hybrid)</li>
+                    <li>Python script execution for model training</li>
+                    <li>Model versioning and storage</li>
+                    <li>MLflow integration for experiment tracking</li>
+                    <li>Model metadata management</li>
+                </ul>
+                <p><strong>Training Process:</strong></p>
+                <ol>
+                    <li>Loads CSV data from configured path</li>
+                    <li>Preprocesses features (scaling, normalization)</li>
+                    <li>Trains model using selected algorithm</li>
+                    <li>Evaluates model performance</li>
+                    <li>Saves model and metadata to disk</li>
+                </ol>
+                <p><strong>Technologies:</strong> Python (scikit-learn), Java ProcessBuilder, MLflow</p>
+            </div>
+            
+            <div class="service-card">
+                <h4>🔍 Inference Service <span class="port-badge">8084</span></h4>
+                <p><strong>Purpose:</strong> Performs real-time anomaly detection on incoming data.</p>
+                <p><strong>Key Features:</strong></p>
+                <ul>
+                    <li>Kafka consumer for <code>data.logged.events</code></li>
+                    <li>HTTP endpoint for direct data processing</li>
+                    <li>ML model loading and inference</li>
+                    <li>Rule-based fallback detection</li>
+                    <li>Anomaly score calculation (0-1 scale)</li>
+                    <li>Anomaly level determination (NORMAL/LOW/MEDIUM/HIGH)</li>
+                    <li>Integration with Recommendation Service for AI-powered recommendations</li>
+                    <li>Builds data summaries for Gemini AI prompts</li>
+                    <li>Kafka producer for <code>anomaly.detected.events</code></li>
+                    <li>Direct HTTP alert creation with recommendations (fallback)</li>
+                </ul>
+                <p><strong>Detection Logic:</strong></p>
+                <ul>
+                    <li>First attempts ML model prediction</li>
+                    <li>Falls back to rule-based detection if model unavailable</li>
+                    <li>Rule thresholds: Sleep (6-10h), Steps (≥5000), Water (≥1500ml), Mood (≥3/10), Study (≤12h)</li>
+                </ul>
+                <p><strong>Recommendation Integration:</strong></p>
+                <ul>
+                    <li>When anomaly detected, calls Recommendation Service with anomaly details</li>
+                    <li>Receives AI-generated recommendations from Gemini</li>
+                    <li>Includes recommendations in alert creation</li>
+                </ul>
+                <p><strong>Technologies:</strong> Kafka Consumer/Producer, scikit-learn (via Java bridge), Spring Cloud OpenFeign, RestTemplate</p>
+            </div>
+            
+            <div class="service-card">
+                <h4>🚨 Alert Service <span class="port-badge">8085</span></h4>
+                <p><strong>Purpose:</strong> Manages alerts generated from anomaly detection.</p>
+                <p><strong>Key Features:</strong></p>
+                <ul>
+                    <li>Alert creation and persistence</li>
+                    <li>Kafka consumer for <code>anomaly.detected.events</code></li>
+                    <li>HTTP endpoint for direct alert creation</li>
+                    <li>Alert status management (ACTIVE/ACKNOWLEDGED/RESOLVED)</li>
+                    <li>Query alerts by user, status, date range</li>
+                    <li>Contributing factors storage (JSON)</li>
+                    <li>AI recommendation storage (TEXT field for Gemini-generated recommendations)</li>
+                </ul>
+                <p><strong>Alert Model:</strong></p>
+                <ul>
+                    <li>User ID, Date, Anomaly Score, Anomaly Level</li>
+                    <li>Message, Contributing Factors (JSON)</li>
+                    <li><strong>Recommendation</strong> - AI-generated suggestions from Gemini</li>
+                    <li>Status, Created At timestamp</li>
+                </ul>
+                <p><strong>Database:</strong> PostgreSQL database <code>pbads_alerts</code></p>
+                <p><strong>Technologies:</strong> Kafka Consumer, Spring Data JPA, Jackson JSON</p>
+            </div>
+            
+            <div class="service-card">
+                <h4>📈 Monitoring Service <span class="port-badge">8086</span></h4>
+                <p><strong>Purpose:</strong> Provides observability and monitoring capabilities.</p>
+                <p><strong>Key Features:</strong></p>
+                <ul>
+                    <li>Prometheus metrics collection</li>
+                    <li>Grafana dashboard integration</li>
+                    <li>Service health monitoring</li>
+                    <li>Performance metrics tracking</li>
+                </ul>
+                <p><strong>Technologies:</strong> Prometheus, Grafana, Spring Boot Actuator</p>
+            </div>
+            
+            <div class="service-card">
+                <h4>🌐 Frontend Service <span class="port-badge">3000</span></h4>
+                <p><strong>Purpose:</strong> Provides web-based user interface.</p>
+                <p><strong>Key Features:</strong></p>
+                <ul>
+                    <li>User login and registration pages</li>
+                    <li>Dashboard with statistics and interactive charts (Chart.js)</li>
+                    <li>Time-based filtering (Week, Month, Year, All) for dashboard charts</li>
+                    <li>Data entry form</li>
+                    <li>Alerts viewing page</li>
+                    <li>User management (Admin only)</li>
+                    <li>Real-time push notifications (toast system) for new alerts</li>
+                    <li>Resilience4j integration for fault tolerance</li>
+                    <li>Dark theme UI with custom color scheme</li>
+                </ul>
+                <p><strong>Technologies:</strong> Thymeleaf, Spring MVC, Chart.js, Resilience4j, Spring Cloud OpenFeign, JavaScript (ES6+)</p>
+            </div>
+            
+            <div class="service-card">
+                <h4>🤖 Recommendation Service <span class="port-badge">8087</span></h4>
+                <p><strong>Purpose:</strong> Generates personalized AI-powered recommendations using Google Gemini.</p>
+                <p><strong>Key Features:</strong></p>
+                <ul>
+                    <li>Integration with Google Gemini AI API</li>
+                    <li>Generates personalized recommendations based on anomaly data</li>
+                    <li>Receives data summaries with anomaly details and user habits</li>
+                    <li>Constructs prompts for Gemini AI with context</li>
+                    <li>Returns actionable recommendations for improving user habits</li>
+                    <li>Environment variable configuration (.env file support)</li>
+                    <li>Error handling for API rate limiting</li>
+                </ul>
+                <p><strong>Endpoints:</strong></p>
+                <ul>
+                    <li><code>POST /api/recommendations/generate</code> - Generate recommendation with full request body</li>
+                    <li><code>GET /api/recommendations/user/{userId}?dataSummary=...</code> - Get recommendation for a user</li>
+                </ul>
+                <p><strong>Configuration:</strong> Uses <code>GEMINI_API_KEY</code> from environment variables or .env file</p>
+                <p><strong>Technologies:</strong> Spring Boot Web, Spring WebFlux, Google Gemini API, dotenv-java, Eureka Client</p>
+            </div>
+        </section>
+        
+        <section id="model" class="section">
+            <h2>4. Machine Learning Model</h2>
+            
+            <h3>4.1 Model Training Process</h3>
+            <p>
+                The PBADS system uses <strong>unsupervised anomaly detection</strong> algorithms to identify deviations 
+                from normal behavior patterns. The model is trained on historical habit data without requiring labeled 
+                anomaly examples.
+            </p>
+            
+            <div class="algorithm-box">
+                <h4>Training Pipeline</h4>
+                <ol>
+                    <li><strong>Data Loading:</strong> Reads CSV file containing historical daily habit data</li>
+                    <li><strong>Feature Extraction:</strong> Extracts 7 features:
+                        <ul>
+                            <li>Sleep_Hours</li>
+                            <li>Steps</li>
+                            <li>Calories_Burned</li>
+                            <li>Water_Intake_ml</li>
+                            <li>Study_Hours</li>
+                            <li>Mood_Score</li>
+                            <li>Wake_Up_Time_Hours (converted from time format)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Data Preprocessing:</strong>
+                        <ul>
+                            <li>Handles missing values</li>
+                            <li>Removes infinite values</li>
+                            <li>Standard scaling (StandardScaler) - normalizes features to mean=0, std=1</li>
+                        </ul>
+                    </li>
+                    <li><strong>Model Training:</strong> Trains selected algorithm on preprocessed data</li>
+                    <li><strong>Model Evaluation:</strong> Calculates metrics (anomaly rate, score distribution)</li>
+                    <li><strong>Model Persistence:</strong> Saves model (.joblib) and metadata (.json) to disk</li>
+                </ol>
+            </div>
+            
+            <h3>4.2 Algorithms Used</h3>
+            
+            <div class="algorithm-box">
+                <h4>🌲 Isolation Forest (Primary Algorithm)</h4>
+                <p><strong>Why Isolation Forest?</strong></p>
+                <ul>
+                    <li>Excellent for high-dimensional data</li>
+                    <li>Fast training and inference</li>
+                    <li>Works well with mixed data types</li>
+                    <li>No need for labeled anomaly data</li>
+                    <li>Handles outliers effectively</li>
+                </ul>
+                <p><strong>How It Works:</strong></p>
+                <p>
+                    Isolation Forest builds an ensemble of isolation trees. Each tree randomly selects a feature and 
+                    randomly selects a split value. Anomalies are points that require fewer splits to isolate, meaning 
+                    they are easier to separate from the rest of the data.
+                </p>
+                <p><strong>Hyperparameters:</strong></p>
+                <ul>
+                    <li><code>contamination</code>: Expected proportion of anomalies (default: 0.1 = 10%)</li>
+                    <li><code>n_estimators</code>: Number of trees in the forest (default: 100)</li>
+                    <li><code>random_state</code>: Seed for reproducibility (42)</li>
+                </ul>
+                <p><strong>Output:</strong> Anomaly score normalized to 0-1 scale (higher = more anomalous)</p>
+            </div>
+            
+            <div class="algorithm-box">
+                <h4>🔷 One-Class SVM (Alternative Algorithm)</h4>
+                <p><strong>Why One-Class SVM?</strong></p>
+                <ul>
+                    <li>Good for non-linear anomaly detection</li>
+                    <li>Effective with RBF kernel for complex patterns</li>
+                    <li>Robust to outliers</li>
+                    <li>Alternative when Isolation Forest doesn't perform well</li>
+                </ul>
+                <p><strong>How It Works:</strong></p>
+                <p>
+                    One-Class SVM learns a decision boundary that encompasses normal data points. Points outside this 
+                    boundary are considered anomalies. Uses RBF (Radial Basis Function) kernel to handle non-linear patterns.
+                </p>
+                <p><strong>Hyperparameters:</strong></p>
+                <ul>
+                    <li><code>nu</code>: Upper bound on fraction of outliers (default: 0.1)</li>
+                    <li><code>gamma</code>: RBF kernel coefficient (default: 'scale')</li>
+                    <li><code>kernel</code>: Kernel type (default: 'rbf')</li>
+                </ul>
+                <p><strong>Output:</strong> Decision function score converted to 0-1 scale using sigmoid transformation</p>
+            </div>
+            
+            <h3>4.3 Model Inference</h3>
+            <p>
+                During inference, the trained model receives a feature vector representing a single day's habits. 
+                The model outputs an anomaly score (0-1), which is then interpreted as:
+            </p>
+            <table>
+                <tr>
+                    <th>Anomaly Score</th>
+                    <th>Level</th>
+                    <th>Interpretation</th>
+                </tr>
+                <tr>
+                    <td>0.0 - 0.3</td>
+                    <td>NORMAL</td>
+                    <td>Behavior is within normal range</td>
+                </tr>
+                <tr>
+                    <td>0.3 - 0.6</td>
+                    <td>LOW</td>
+                    <td>Minor deviation from normal</td>
+                </tr>
+                <tr>
+                    <td>0.6 - 0.8</td>
+                    <td>MEDIUM</td>
+                    <td>Moderate anomaly detected</td>
+                </tr>
+                <tr>
+                    <td>0.8 - 1.0</td>
+                    <td>HIGH</td>
+                    <td>Significant anomaly requiring attention</td>
+                </tr>
+            </table>
+            
+            <h3>4.4 Rule-Based Fallback</h3>
+            <p>
+                When the ML model is unavailable, the system falls back to rule-based detection using predefined thresholds:
+            </p>
+            <ul>
+                <li><strong>Sleep Hours:</strong> Normal range 6-10 hours</li>
+                <li><strong>Steps:</strong> Minimum 5000 steps per day</li>
+                <li><strong>Water Intake:</strong> Minimum 1500ml per day</li>
+                <li><strong>Mood Score:</strong> Minimum 3 out of 10</li>
+                <li><strong>Study Hours:</strong> Maximum 12 hours per day</li>
+            </ul>
+        </section>
+        
+        <section id="communication" class="section">
+            <h2>5. Service Communication</h2>
+            
+            <h3>5.1 Synchronous Communication (HTTP/REST)</h3>
+            <p>
+                Synchronous communication is used for operations requiring immediate responses, such as user authentication, 
+                data retrieval, and direct service calls.
+            </p>
+            <ul>
+                <li><strong>Protocol:</strong> HTTP/REST</li>
+                <li><strong>Client:</strong> Spring Cloud OpenFeign</li>
+                <li><strong>Gateway:</strong> Spring Cloud Gateway (Port 8080)</li>
+                <li><strong>Service Discovery:</strong> Eureka Server</li>
+            </ul>
+            
+            <h4>Communication Patterns:</h4>
+            <ul>
+                <li><strong>Frontend → Gateway → Auth Service:</strong> Login, registration, user management</li>
+                <li><strong>Frontend → Gateway → Data Service:</strong> Data entry, data retrieval</li>
+                <li><strong>Frontend → Gateway → Alert Service:</strong> Alert fetching (polling every 5 seconds)</li>
+                <li><strong>Frontend → Gateway → Recommendation Service:</strong> Dashboard recommendations</li>
+                <li><strong>Data Service → Inference Service:</strong> Direct HTTP fallback when Kafka unavailable</li>
+                <li><strong>Inference Service → Recommendation Service:</strong> AI recommendation generation</li>
+                <li><strong>Inference Service → Alert Service:</strong> Direct HTTP alert creation with recommendations</li>
+                <li><strong>Inference Service → Model Service:</strong> Model loading</li>
+            </ul>
+            
+            <h3>5.2 Asynchronous Communication (Kafka)</h3>
+            <p>
+                Kafka is used for event-driven communication, enabling decoupling and scalability. Services publish events 
+                without waiting for consumers, allowing for better fault tolerance.
+            </p>
+            
+            <h4>Kafka Topics:</h4>
+            <table>
+                <tr>
+                    <th>Topic Name</th>
+                    <th>Publisher</th>
+                    <th>Consumer</th>
+                    <th>Event Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>data.logged.events</code></td>
+                    <td>Data Service</td>
+                    <td>Inference Service</td>
+                    <td>DataLoggedEvent</td>
+                    <td>Published when user submits daily habit data. Contains: userId, date, sleepHours, steps, caloriesBurned, waterIntakeMl, studyHours, moodScore, wakeUpTime</td>
+                </tr>
+                <tr>
+                    <td><code>anomaly.detected.events</code></td>
+                    <td>Inference Service</td>
+                    <td>Alert Service</td>
+                    <td>AnomalyDetectedEvent</td>
+                    <td>Published when anomaly is detected. Contains: userId, date, anomalyScore, anomalyLevel, message, contributingFactors, recommendation (AI-generated)</td>
+                </tr>
+            </table>
+            
+            <h4>Event Structure Details:</h4>
+            <div class="service-card">
+                <h4>DataLoggedEvent</h4>
+                <ul>
+                    <li><code>userId</code> (String) - User identifier</li>
+                    <li><code>date</code> (LocalDate) - Date of the data entry</li>
+                    <li><code>sleepHours</code> (Double) - Hours of sleep</li>
+                    <li><code>steps</code> (Integer) - Number of steps</li>
+                    <li><code>caloriesBurned</code> (Integer) - Calories burned</li>
+                    <li><code>waterIntakeMl</code> (Integer) - Water intake in milliliters</li>
+                    <li><code>studyHours</code> (Double) - Hours of study</li>
+                    <li><code>moodScore</code> (Integer) - Mood score (1-10)</li>
+                    <li><code>wakeUpTime</code> (LocalTime) - Wake up time</li>
+                </ul>
+            </div>
+            
+            <div class="service-card">
+                <h4>AnomalyDetectedEvent</h4>
+                <ul>
+                    <li><code>userId</code> (String) - User identifier</li>
+                    <li><code>date</code> (String) - Date of anomaly</li>
+                    <li><code>anomalyScore</code> (Double) - Anomaly score (0.0-1.0)</li>
+                    <li><code>anomalyLevel</code> (String) - Severity level (NORMAL/LOW/MEDIUM/HIGH)</li>
+                    <li><code>message</code> (String) - Human-readable message</li>
+                    <li><code>contributingFactors</code> (Map&lt;String, Object&gt;) - Factors contributing to anomaly</li>
+                    <li><code>recommendation</code> (String) - AI-generated recommendation from Gemini (optional)</li>
+                </ul>
+            </div>
+            
+            <h4>Complete Event Flow:</h4>
+            <ol>
+                <li><strong>Data Service</strong> publishes <code>DataLoggedEvent</code> to Kafka topic <code>data.logged.events</code> 
+                    <span class="highlight">AND</span> makes direct HTTP call to Inference Service (dual mode)</li>
+                <li><strong>Inference Service</strong> consumes the event (via Kafka consumer OR HTTP endpoint) and performs anomaly detection</li>
+                <li>If anomaly detected:
+                    <ul>
+                        <li><strong>Inference Service</strong> builds data summary with anomaly details and user habits</li>
+                        <li><strong>Inference Service</strong> calls <strong>Recommendation Service</strong> via HTTP with data summary</li>
+                        <li><strong>Recommendation Service</strong> sends prompt to Google Gemini AI API</li>
+                        <li><strong>Gemini AI</strong> generates personalized recommendations</li>
+                        <li><strong>Recommendation Service</strong> returns recommendation to Inference Service</li>
+                        <li><strong>Inference Service</strong> publishes <code>AnomalyDetectedEvent</code> to Kafka topic <code>anomaly.detected.events</code> 
+                            <span class="highlight">AND</span> makes direct HTTP call to Alert Service with recommendation</li>
+                        <li><strong>Alert Service</strong> consumes the anomaly event (via Kafka consumer OR HTTP endpoint) and creates an alert with recommendation</li>
+                    </ul>
+                </li>
+                <li><strong>Frontend Service</strong> polls Alert Service every 5 seconds for new alerts</li>
+                <li>When new alert detected, <strong>Frontend</strong> displays push notification (toast) to user</li>
+                <li>User can view alerts and recommendations on dashboard and alerts page</li>
+            </ol>
+            
+            <h3>5.3 Fallback Mechanism</h3>
+            <p>
+                The system implements a <strong>dual-mode communication strategy</strong> for reliability:
+            </p>
+            <ul>
+                <li><strong>Primary:</strong> Kafka for asynchronous event processing</li>
+                <li><strong>Fallback:</strong> Direct HTTP calls when Kafka is unavailable</li>
+            </ul>
+            <p>
+                This ensures the system continues to function even if Kafka is down, though with reduced decoupling. 
+                The Data Service and Inference Service both attempt Kafka publishing but also make direct HTTP calls 
+                as a failsafe.
+            </p>
+            
+            <h3>5.4 Resilience4j Integration</h3>
+            <p>
+                The Frontend Service uses <strong>Resilience4j</strong> for fault tolerance when calling backend services:
+            </p>
+            <ul>
+                <li><strong>Circuit Breaker:</strong> Prevents cascading failures by opening circuit after 50% failure rate</li>
+                <li><strong>Retry:</strong> Automatically retries failed requests (max 3 attempts, 1s delay)</li>
+                <li><strong>Fallback:</strong> Graceful degradation when services are unavailable</li>
+            </ul>
+            <p><strong>Configuration:</strong></p>
+            <ul>
+                <li>Sliding window size: 10 calls</li>
+                <li>Failure rate threshold: 50%</li>
+                <li>Wait duration in open state: 10 seconds</li>
+                <li>Retry max attempts: 3</li>
+                <li>Retry wait duration: 1000ms</li>
+            </ul>
+        </section>
+        
+        <section id="technologies" class="section">
+            <h2>6. Technologies Used & Rationale</h2>
+            
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <strong>Spring Boot 3.4.12</strong>
+                    <p>Java framework providing auto-configuration, embedded servers, and production-ready features. 
+                    Chosen for rapid development and extensive ecosystem.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Spring Cloud</strong>
+                    <p>Provides microservices patterns: service discovery (Eureka), configuration management (Config Server), 
+                    API gateway, and load balancing. Essential for microservices architecture.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Spring Cloud Netflix Eureka</strong>
+                    <p>Service discovery and registry. Allows services to find each other dynamically without hardcoded URLs. 
+                    Enables load balancing and service health monitoring.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Spring Cloud Gateway</strong>
+                    <p>API Gateway providing routing, filtering, and cross-cutting concerns. Single entry point simplifies 
+                    client interactions and enables centralized authentication/authorization.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Spring Cloud Config</strong>
+                    <p>Centralized configuration management. Allows updating configurations without redeploying services. 
+                    Supports multiple environments (dev, prod).</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Spring Data JPA</strong>
+                    <p>Simplifies database access with repository pattern. Reduces boilerplate code and provides automatic 
+                    query generation. Works seamlessly with PostgreSQL.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>PostgreSQL</strong>
+                    <p>Relational database chosen for ACID compliance, reliability, and rich feature set. Each service 
+                    has its own database for data isolation and independent scaling.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Apache Kafka</strong>
+                    <p>Distributed event streaming platform. Enables asynchronous, decoupled communication between services. 
+                    Provides high throughput and fault tolerance for event-driven architecture.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Spring Security + JWT</strong>
+                    <p>Authentication and authorization framework. JWT tokens enable stateless authentication, perfect for 
+                    microservices. HS512 algorithm provides strong security.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>BCrypt</strong>
+                    <p>Password hashing algorithm. Provides one-way encryption with salt, making passwords secure even if 
+                    database is compromised.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Resilience4j</strong>
+                    <p>Fault tolerance library providing circuit breakers, retries, and rate limiters. Prevents cascading 
+                    failures and improves system resilience.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>scikit-learn (Python)</strong>
+                    <p>Machine learning library providing Isolation Forest and One-Class SVM algorithms. Chosen for 
+                    comprehensive ML capabilities and ease of use.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>MLflow</strong>
+                    <p>ML lifecycle management platform. Tracks experiments, versions models, and manages model registry. 
+                    Essential for MLOps practices.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Thymeleaf</strong>
+                    <p>Server-side Java template engine. Enables dynamic HTML generation with Spring MVC integration. 
+                    Chosen for seamless Spring Boot integration.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Chart.js</strong>
+                    <p>JavaScript charting library. Provides beautiful, responsive charts for dashboard visualization. 
+                    Lightweight and easy to integrate.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Spring Cloud OpenFeign</strong>
+                    <p>Declarative HTTP client. Simplifies service-to-service communication with annotations. Integrates 
+                    with Eureka for service discovery.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Google Gemini AI</strong>
+                    <p>Large language model API for generating personalized recommendations. Provides natural language 
+                    understanding and generation capabilities. Integrated via REST API.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>dotenv-java</strong>
+                    <p>Java library for loading environment variables from .env files. Enables easy configuration management 
+                    without hardcoding sensitive values like API keys.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Spring WebFlux</strong>
+                    <p>Reactive web framework for non-blocking HTTP requests. Used in Recommendation Service for efficient 
+                    API calls to Gemini AI service.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Prometheus + Grafana</strong>
+                    <p>Monitoring and observability stack. Prometheus collects metrics, Grafana visualizes them. Essential 
+                    for production monitoring and alerting.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Redis</strong>
+                    <p>In-memory data store. Used for caching and session management. Provides fast access to frequently 
+                    accessed data, reducing database load.</p>
+                </div>
+                
+                <div class="tech-item">
+                    <strong>Maven</strong>
+                    <p>Build automation and dependency management tool. Manages project dependencies and builds executable 
+                    JAR files. Standard for Java projects.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="diagram" class="section">
+            <h2>7. Architecture Diagram</h2>
+            <p>The following diagram illustrates the complete microservices architecture and communication patterns:</p>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TB
+    subgraph "Frontend Layer"
+        FE[Frontend Service<br/>Thymeleaf UI<br/>Port: 3000]
+    end
+    
+    subgraph "API Gateway Layer"
+        GW[API Gateway<br/>Spring Cloud Gateway<br/>Port: 8080]
+    end
+    
+    subgraph "Infrastructure Layer"
+        EU[Eureka Server<br/>Service Discovery<br/>Port: 8761]
+        CF[Config Server<br/>Centralized Config<br/>Port: 8888]
+        KF[(Kafka<br/>Message Broker<br/>Topics: data.logged.events<br/>anomaly.detected.events)]
+        RD[(Redis<br/>Cache & Session)]
+        PG[(PostgreSQL<br/>Databases<br/>pbads_auth<br/>pbads_data<br/>pbads_alerts)]
+        ML[MLflow<br/>Model Registry<br/>Port: 5000]
+    end
+    
+    subgraph "Core Services Layer"
+        AS[Auth Service<br/>JWT/OAuth2<br/>Port: 8081]
+        DS[Data Service<br/>Data Management<br/>Port: 8082]
+        MS[Model Service<br/>ML Training<br/>Port: 8083]
+        IS[Inference Service<br/>Anomaly Detection<br/>Port: 8084]
+        AL[Alert Service<br/>Notifications<br/>Port: 8085]
+        MO[Monitoring Service<br/>Metrics & Logs<br/>Port: 8086]
+        RS[Recommendation Service<br/>Gemini AI<br/>Port: 8087]
+    end
+    
+    %% Frontend to Gateway
+    FE -->|HTTP/REST| GW
+    
+    %% Gateway to Services
+    GW -->|Route| AS
+    GW -->|Route| DS
+    GW -->|Route| MS
+    GW -->|Route| IS
+    GW -->|Route| AL
+    GW -->|Route| MO
+    GW -->|Route| RS
+    
+    %% Service Discovery
+    AS -.->|Register| EU
+    DS -.->|Register| EU
+    MS -.->|Register| EU
+    IS -.->|Register| EU
+    AL -.->|Register| EU
+    MO -.->|Register| EU
+    RS -.->|Register| EU
+    GW -.->|Discover| EU
+    CF -.->|Register| EU
+    
+    %% Configuration
+    AS -.->|Fetch Config| CF
+    DS -.->|Fetch Config| CF
+    MS -.->|Fetch Config| CF
+    IS -.->|Fetch Config| CF
+    AL -.->|Fetch Config| CF
+    MO -.->|Fetch Config| CF
+    RS -.->|Fetch Config| CF
+    GW -.->|Fetch Config| CF
+    
+    %% Kafka Communication
+    DS -->|Publish Events| KF
+    KF -->|Consume Events| IS
+    IS -->|Publish Alerts| KF
+    KF -->|Consume Alerts| AL
+    
+    %% Direct HTTP Communication (Fallback)
+    DS -.->|Direct HTTP<br/>Fallback| IS
+    IS -.->|Get Recommendations| RS
+    RS -.->|Gemini AI API| EXT[Google Gemini AI<br/>External API]
+    IS -.->|Direct HTTP<br/>with Recommendation| AL
+    IS -.->|Load Model| MS
+    
+    %% Database Connections
+    AS -->|JPA| PG
+    DS -->|JPA| PG
+    AL -->|JPA| PG
+    
+    %% Model Service
+    MS -->|Store Models| ML
+    IS -->|Load Models| ML
+    
+    %% Cache
+    FE -->|Session| RD
+    GW -->|Cache| RD
+    
+    %% Monitoring
+    MO -->|Collect Metrics| AS
+    MO -->|Collect Metrics| DS
+    MO -->|Collect Metrics| IS
+    MO -->|Collect Metrics| AL
+    MO -->|Collect Metrics| RS
+    
+    %% Frontend Polling
+    FE -.->|Poll Alerts<br/>Every 5s| AL
+    FE -.->|Get Recommendations| RS
+    
+    %% Styling
+    classDef frontend fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef gateway fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef service fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef infra fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef data fill:#e0f2f1,stroke:#004d40,stroke-width:2px
+    classDef external fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    
+    class FE frontend
+    class GW gateway
+    class AS,DS,MS,IS,AL,MO,RS service
+    class EU,CF,KF,RD infra
+    class PG,ML data
+    class EXT external
+                </div>
+            </div>
+            
+            <h3>Legend:</h3>
+            <ul>
+                <li><strong>Solid arrows (→):</strong> Synchronous HTTP/REST communication</li>
+                <li><strong>Dashed arrows (-.->):</strong> Asynchronous or configuration-based communication</li>
+                <li><strong>Double-line boxes:</strong> Infrastructure components (databases, message brokers)</li>
+            </ul>
+            
+            <h3>Detailed Event Flow Diagram:</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Gateway
+    participant DataService
+    participant Kafka as Kafka Broker
+    participant InferenceService
+    participant RecommendationService
+    participant Gemini as Google Gemini AI
+    participant AlertService
+    participant Database as PostgreSQL
+    
+    User->>Frontend: Submit Daily Data
+    Frontend->>Gateway: POST /api/data/daily
+    Gateway->>DataService: Forward Request
+    DataService->>Database: Save Data
+    DataService->>Kafka: Publish DataLoggedEvent
+    DataService->>InferenceService: Direct HTTP Call (Fallback)
+    
+    alt Kafka Available
+        Kafka->>InferenceService: Consume DataLoggedEvent
+    else Kafka Unavailable
+        InferenceService: Receive HTTP Request
+    end
+    
+    InferenceService->>InferenceService: Load ML Model
+    InferenceService->>InferenceService: Detect Anomaly
+    
+    alt Anomaly Detected
+        InferenceService->>RecommendationService: GET /api/recommendations/user/{userId}
+        RecommendationService->>Gemini: POST /v1beta/models/gemini-2.5-flash:generateContent
+        Gemini-->>RecommendationService: AI Recommendation
+        RecommendationService-->>InferenceService: Return Recommendation
+        
+        InferenceService->>Kafka: Publish AnomalyDetectedEvent (with recommendation)
+        InferenceService->>AlertService: Direct HTTP POST (with recommendation)
+        
+        alt Kafka Available
+            Kafka->>AlertService: Consume AnomalyDetectedEvent
+        else Kafka Unavailable
+            AlertService: Receive HTTP Request
+        end
+        
+        AlertService->>Database: Save Alert with Recommendation
+        
+        loop Every 5 seconds
+            Frontend->>AlertService: GET /api/alerts?userId={userId}
+            AlertService-->>Frontend: Return Alerts
+            alt New Alert Detected
+                Frontend->>Frontend: Display Toast Notification
+            end
+        end
+        
+        Frontend->>User: Show Push Notification
+        Frontend->>User: Display Alert on Dashboard
+    end
+                </div>
+            </div>
+            
+            <h3>Complete Communication Flow Example:</h3>
+            <ol>
+                <li>User submits data via Frontend → Gateway → Data Service</li>
+                <li>Data Service saves to PostgreSQL</li>
+                <li>Data Service publishes <code>DataLoggedEvent</code> to Kafka topic <code>data.logged.events</code> 
+                    (primary) AND calls Inference Service directly via HTTP (fallback)</li>
+                <li>Inference Service consumes Kafka event OR receives HTTP request</li>
+                <li>Inference Service loads model from Model Service/MLflow</li>
+                <li>Inference Service performs anomaly detection (ML model or rule-based)</li>
+                <li>If anomaly detected:
+                    <ul>
+                        <li>Inference Service builds data summary with anomaly details</li>
+                        <li>Inference Service calls Recommendation Service via HTTP</li>
+                        <li>Recommendation Service sends prompt to Google Gemini AI API</li>
+                        <li>Gemini generates personalized recommendations</li>
+                        <li>Recommendation Service returns recommendation to Inference Service</li>
+                        <li>Inference Service publishes <code>AnomalyDetectedEvent</code> to Kafka topic <code>anomaly.detected.events</code> 
+                            AND calls Alert Service directly via HTTP with recommendation</li>
+                    </ul>
+                </li>
+                <li>Alert Service saves alert with recommendation to PostgreSQL</li>
+                <li>Frontend polls Alert Service every 5 seconds for new alerts</li>
+                <li>When new alert detected, Frontend displays push notification (toast) to user</li>
+                <li>Dashboard displays alerts with recommendations to user</li>
+            </ol>
+        </section>
+        
+        <section class="section">
+            <h2>8. Key Design Decisions</h2>
+            
+            <h3>8.1 Microservices Architecture</h3>
+            <p>
+                <strong>Why microservices?</strong> Enables independent scaling, technology diversity, fault isolation, 
+                and team autonomy. Each service can be developed, deployed, and scaled independently.
+            </p>
+            
+            <h3>8.2 Database per Service</h3>
+            <p>
+                <strong>Why separate databases?</strong> Ensures data isolation, allows independent schema evolution, 
+                prevents tight coupling, and enables service-specific database optimizations.
+            </p>
+            
+            <h3>8.3 Dual Communication Mode</h3>
+            <p>
+                <strong>Why Kafka + HTTP fallback?</strong> Kafka provides decoupling and scalability for event-driven 
+                architecture, while HTTP fallback ensures system continues functioning if Kafka is unavailable. This 
+                hybrid approach balances reliability with architectural benefits.
+            </p>
+            
+            <h3>8.4 Unsupervised Anomaly Detection</h3>
+            <p>
+                <strong>Why unsupervised learning?</strong> No need for labeled anomaly data, which is difficult to 
+                obtain. Isolation Forest and One-Class SVM can learn normal patterns and identify deviations automatically.
+            </p>
+            
+            <h3>8.5 Resilience4j Integration</h3>
+            <p>
+                <strong>Why Resilience4j?</strong> Provides circuit breakers and retries to prevent cascading failures. 
+                When a service is down, the circuit opens, preventing wasted resources and enabling graceful degradation.
+            </p>
+            
+            <h3>8.6 AI-Powered Recommendations</h3>
+            <p>
+                <strong>Why Google Gemini AI?</strong> Provides natural language understanding and generation capabilities 
+                for creating personalized, contextual recommendations. When an anomaly is detected, the system automatically 
+                generates actionable advice tailored to the specific user's situation and detected issues.
+            </p>
+            
+            <h3>8.7 Push Notifications</h3>
+            <p>
+                <strong>Why polling-based notifications?</strong> Simple and reliable approach that works without WebSocket 
+                complexity. Frontend polls Alert Service every 5 seconds, and when a new alert is detected, displays an 
+                ephemeral toast notification. This ensures users are immediately informed of new anomalies.
+            </p>
+            
+            <h3>8.8 Dashboard Filtering</h3>
+            <p>
+                <strong>Why client-side filtering?</strong> Provides instant, responsive filtering without server round-trips. 
+                Chart.js's update() method allows smooth transitions between filtered views (Week, Month, Year, All), enhancing 
+                user experience while reducing server load.
+            </p>
+        </section>
+        
+        <section id="updates" class="section">
+            <h2>9. Recent Updates & Features</h2>
+            
+            <h3>9.1 Recommendation Service (New)</h3>
+            <p>
+                A new microservice has been added to provide AI-powered recommendations using Google Gemini. This service 
+                integrates seamlessly into the anomaly detection workflow, automatically generating personalized suggestions 
+                when anomalies are detected.
+            </p>
+            
+            <h3>9.2 Push Notification System</h3>
+            <p>
+                The frontend now includes a real-time push notification system that displays ephemeral toast notifications 
+                when new alerts are generated. Notifications appear automatically without page refresh, providing immediate 
+                feedback to users.
+            </p>
+            
+            <h3>9.3 Dashboard Enhancements</h3>
+            <ul>
+                <li>Interactive chart filtering (Week, Month, Year, All) with smooth transitions</li>
+                <li>Dark theme UI with custom color scheme</li>
+                <li>Real-time recommendations display</li>
+                <li>Improved data visualization with Chart.js</li>
+            </ul>
+            
+            <h3>9.4 User Management</h3>
+            <ul>
+                <li>User registration functionality</li>
+                <li>Admin user management (CRUD operations)</li>
+                <li>Role-based access control (ADMIN, USER)</li>
+                <li>Account enable/disable features</li>
+            </ul>
+            
+            <h3>9.5 Alert Recommendations</h3>
+            <p>
+                Each alert now includes AI-generated recommendations stored directly in the database. Recommendations are 
+                generated automatically when anomalies are detected, providing users with actionable advice to improve their 
+                habits and lifestyle.
+            </p>
+            
+            <h3>9.6 Environment Configuration</h3>
+            <p>
+                The system now supports <code>.env</code> file configuration for easy environment variable management. The 
+                Recommendation Service automatically loads variables from <code>.env</code> files located in multiple possible 
+                locations (current directory, parent directory, pbads-microservices root).
+            </p>
+            <p><strong>Key Environment Variables:</strong></p>
+            <ul>
+                <li><code>GEMINI_API_KEY</code> - Google Gemini AI API key (required for Recommendation Service)</li>
+                <li><code>DB_USERNAME</code> - PostgreSQL database username</li>
+                <li><code>DB_PASSWORD</code> - PostgreSQL database password</li>
+                <li><code>KAFKA_BOOTSTRAP_SERVERS</code> - Kafka broker address</li>
+                <li><code>JWT_SECRET</code> - Secret key for JWT token generation</li>
+            </ul>
+        </section>
+        
+        <footer style="margin-top: 50px; padding-top: 20px; border-top: 2px solid #8E1616; text-align: center; color: #666;">
+            <p><strong>PBADS - Personal Behavior Anomaly Detection System</strong></p>
+            <p>Complete Microservices Architecture Documentation</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Last Updated: December 2025</p>
+            <p style="margin-top: 5px; font-size: 0.9em;">Version: 2.0 - Includes Recommendation Service, Push Notifications, and Enhanced Dashboard</p>
+        </footer>
+    </div>
+    
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+</body>
+</html>
+

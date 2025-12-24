@@ -45,3 +45,8 @@ kafka:
 alert:
   service:
     url: http://localhost:8085
+
+# Direct Recommendation Service Call
+recommendation:
+  service:
+    url: http://localhost:8087

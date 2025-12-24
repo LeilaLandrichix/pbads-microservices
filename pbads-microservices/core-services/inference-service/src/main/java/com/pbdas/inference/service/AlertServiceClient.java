@@ -33,6 +33,10 @@ public class AlertServiceClient {
     }
     
     public void createAlertDirectly(String userId, LocalDate date, AnomalyResult result) {
+        createAlertDirectly(userId, date, result, null);
+    }
+    
+    public void createAlertDirectly(String userId, LocalDate date, AnomalyResult result, String recommendation) {
         if (!directAlertEnabled) {
             return;
         }
@@ -47,6 +51,9 @@ public class AlertServiceClient {
             request.put("anomalyLevel", result.getLevel().name());
             request.put("message", result.getMessage());
             request.put("contributingFactors", result.getContributingFactors());
+            if (recommendation != null && !recommendation.isEmpty()) {
+                request.put("recommendation", recommendation);
+            }
             
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
