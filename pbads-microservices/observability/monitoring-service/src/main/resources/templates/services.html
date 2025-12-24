@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBADS - Services Monitoring</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .service-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .instance-count {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .instance-info {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .instance-id {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .instance-url {
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+        
+        .actuator-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .actuator-link {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+        
+        .actuator-link:hover {
+            background: #5568d3;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .status-up {
+            background: #28a745;
+            color: white;
+        }
+        
+        .status-down {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .refresh-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        
+        .refresh-btn:hover {
+            background: #5568d3;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+        
+        .empty-state h2 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 PBADS Services Monitoring</h1>
+            <p>Liste des microservices enregistrés dans Eureka avec leurs endpoints Actuator</p>
+        </div>
+        
+        <div th:if="${services != null and !services.isEmpty()}" class="services-grid">
+            <div th:each="serviceEntry : ${services}" class="service-card">
+                <div class="service-header">
+                    <span class="service-name" th:text="${serviceEntry.key}">Service Name</span>
+                    <span class="instance-count" th:text="${serviceEntry.value.size()} + ' instance(s)'">0 instances</span>
+                </div>
+                
+                <div th:each="instance : ${serviceEntry.value}" class="instance-info">
+                    <div class="instance-id">
+                        <strong>Instance ID:</strong> <span th:text="${instance.instanceId}">N/A</span>
+                        <span class="status-badge status-up" th:classappend="${instance.status == 'UP'} ? 'status-up' : 'status-down'" 
+                              th:text="${instance.status}">UP</span>
+                    </div>
+                    <div class="instance-url">
+                        <strong>URL:</strong> <span th:text="${instance.baseUrl}">N/A</span>
+                    </div>
+                    <div class="actuator-links">
+                        <a th:if="${instance.actuatorHealthUrl != null}" 
+                           th:href="${instance.actuatorHealthUrl}" 
+                           target="_blank" 
+                           class="actuator-link">Health</a>
+                        <a th:if="${instance.actuatorInfoUrl != null}" 
+                           th:href="${instance.actuatorInfoUrl}" 
+                           target="_blank" 
+                           class="actuator-link">Info</a>
+                        <a th:if="${instance.actuatorMetricsUrl != null}" 
+                           th:href="${instance.actuatorMetricsUrl}" 
+                           target="_blank" 
+                           class="actuator-link">Metrics</a>
+                        <a th:if="${instance.actuatorPrometheusUrl != null}" 
+                           th:href="${instance.actuatorPrometheusUrl}" 
+                           target="_blank" 
+                           class="actuator-link">Prometheus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div th:if="${services == null or services.isEmpty()}" class="empty-state">
+            <h2>⚠️ Aucun service trouvé</h2>
+            <p>Vérifiez que Eureka est démarré et que les services sont enregistrés.</p>
+        </div>
+    </div>
+    
+    <button class="refresh-btn" onclick="location.reload()">🔄 Actualiser</button>
+</body>
+</html>
+

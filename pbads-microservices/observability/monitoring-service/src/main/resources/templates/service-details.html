@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Service: ' + ${service.name}">Service Details</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .service-name {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .instance-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .instance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .instance-id {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-up {
+            background: #28a745;
+            color: white;
+        }
+        
+        .status-down {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .info-row {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #666;
+            margin-right: 10px;
+        }
+        
+        .actuator-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .actuator-section h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        
+        .actuator-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .actuator-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        .actuator-link:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/api/monitoring/services" class="back-link">← Retour à la liste des services</a>
+            <h1 class="service-name" th:text="${service.name}">Service Name</h1>
+        </div>
+        
+        <div th:if="${service != null and service.instances != null}">
+            <div th:each="instance : ${service.instances}" class="instance-card">
+                <div class="instance-header">
+                    <span class="instance-id" th:text="${instance.instanceId}">Instance ID</span>
+                    <span class="status-badge" 
+                          th:classappend="${instance.status == 'UP'} ? 'status-up' : 'status-down'"
+                          th:text="${instance.status}">UP</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Host:</span>
+                    <span th:text="${instance.hostName}">N/A</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">IP Address:</span>
+                    <span th:text="${instance.ipAddr}">N/A</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Port:</span>
+                    <span th:text="${instance.port != null ? instance.port.port : 'N/A'}">N/A</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">Base URL:</span>
+                    <span th:text="${instance.baseUrl}">N/A</span>
+                </div>
+                
+                <div class="actuator-section">
+                    <h3>Actuator Endpoints</h3>
+                    <div class="actuator-links">
+                        <a th:if="${instance.actuatorHealthUrl != null}" 
+                           th:href="${instance.actuatorHealthUrl}" 
+                           target="_blank" 
+                           class="actuator-link">Health</a>
+                        <a th:if="${instance.actuatorInfoUrl != null}" 
+                           th:href="${instance.actuatorInfoUrl}" 
+                           target="_blank" 
+                           class="actuator-link">Info</a>
+                        <a th:if="${instance.actuatorMetricsUrl != null}" 
+                           th:href="${instance.actuatorMetricsUrl}" 
+                           target="_blank" 
+                           class="actuator-link">Metrics</a>
+                        <a th:if="${instance.actuatorPrometheusUrl != null}" 
+                           th:href="${instance.actuatorPrometheusUrl}" 
+                           target="_blank" 
+                           class="actuator-link">Prometheus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div th:if="${service == null or service.instances == null or service.instances.isEmpty()}" 
+             class="instance-card">
+            <p>Aucune instance trouvée pour ce service.</p>
+        </div>
+    </div>
+</body>
+</html>
+

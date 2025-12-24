@@ -2,12 +2,17 @@ spring:
   application:
     name: config-server
   profiles:
-    active: native
+    active: git
   cloud:
     config:
       server:
-        native:
-          search-locations: classpath:/config-repo
+        git:
+          uri: https://github.com/LeilaLandrichix/pbads-microservices.git
+          search-paths: pbads-microservices/config-repo
+          default-label: main
+          clone-on-start: true
+          force-pull: true
+          timeout: 10
 
 server:
   port: 8888

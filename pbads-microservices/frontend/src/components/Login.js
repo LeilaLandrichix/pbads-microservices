@@ -76,7 +76,7 @@ function Login() {
         // Server responded with error status
         const status = err.response.status;
         if (status === 401) {
-          errorMessage += 'Invalid username or password. Please check your credentials.';
+          errorMessage += 'Credentials not working';
         } else if (status === 503 || status === 502) {
           errorMessage += 'Service unavailable. Please check if Auth Service (port 8081) and API Gateway (port 8080) are running.';
         } else if (status === 429) {

@@ -68,7 +68,7 @@ public class LoginController {
             
             return "redirect:/dashboard";
         } else {
-            redirectAttributes.addFlashAttribute("error", "Invalid username or password. Please check your credentials and ensure the Auth Service is running.");
+            redirectAttributes.addFlashAttribute("error", "Credentials not working");
             return "redirect:/login";
         }
     }

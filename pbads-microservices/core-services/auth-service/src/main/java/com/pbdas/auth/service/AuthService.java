@@ -32,13 +32,13 @@ public class AuthService {
         Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
         
         if (userOpt.isEmpty()) {
-            throw new RuntimeException("Invalid username or password");
+            throw new RuntimeException("Credentials not working");
         }
         
         User user = userOpt.get();
         
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid username or password");
+            throw new RuntimeException("Credentials not working");
         }
         
         if (!user.isEnabled()) {
